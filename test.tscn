@@ -1,12 +1,24 @@
-[gd_scene load_steps=3 format=3 uid="uid://bwkqlcpk8d3b6"]
+[gd_scene load_steps=4 format=3 uid="uid://bwkqlcpk8d3b6"]
 
 [ext_resource type="PackedScene" uid="uid://jluoaxxepfrv" path="res://platform.tscn" id="1_18mqm"]
+[ext_resource type="Script" path="res://test.cs" id="1_ioc0v"]
 [ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="2_8rov2"]
 
 [node name="Node2D" type="Node2D"]
+script = ExtResource("1_ioc0v")
 
-[node name="StaticBody2D" parent="." instance=ExtResource("1_18mqm")]
-position = Vector2(549, 445)
+[node name="platform" parent="." instance=ExtResource("1_18mqm")]
+position = Vector2(0, 198)
 
-[node name="CharacterBody2D" parent="." instance=ExtResource("2_8rov2")]
-position = Vector2(549, 271)
+[node name="player" parent="." instance=ExtResource("2_8rov2")]
+position = Vector2(0, -133)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(2, -3)
+zoom = Vector2(0.5, 0.5)
+
+[node name="platform2" parent="." instance=ExtResource("1_18mqm")]
+position = Vector2(608, -384)
+
+[node name="platform3" parent="." instance=ExtResource("1_18mqm")]
+position = Vector2(-653, -380)
