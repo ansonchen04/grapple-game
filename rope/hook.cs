@@ -3,7 +3,7 @@ using System;
 
 public partial class hook : RigidBody2D
 {
-	public const float Speed = 50f; // The speed with which the chain moves
+	public const float Speed = 999f; // The speed with which the chain moves
 	private Vector2 direction = new Vector2(0, 0);
 	private Vector2 tip = new Vector2(0, 0);
 
@@ -32,6 +32,7 @@ public partial class hook : RigidBody2D
 		
 		//Vector2 playerPos = player.GlobalPosition;
 		direction = (TargetPosition - GlobalPosition).Normalized();
+		GlobalPosition += direction * 105;
 		// Set the raycast's target position relative to the character's position
 		rayCast.TargetPosition = direction;
 		
