@@ -1,12 +1,57 @@
-[gd_scene load_steps=3 format=3 uid="uid://bwkqlcpk8d3b6"]
+[gd_scene load_steps=8 format=3 uid="uid://bwkqlcpk8d3b6"]
 
 [ext_resource type="PackedScene" uid="uid://jluoaxxepfrv" path="res://platform.tscn" id="1_18mqm"]
 [ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="2_8rov2"]
+[ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="4_75edt"]
+[ext_resource type="Script" path="res://AnimationPlayer.cs" id="5_klxc1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l41iw"]
+size = Vector2(127.625, 124.875)
+
+[sub_resource type="Animation" id="Animation_pa0ob"]
+resource_name = "PlatformMovement"
+length = 5.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2, 5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(791, 462), Vector2(1067, 460), Vector2(791, 460)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fmt24"]
+_data = {
+"PlatformMovement": SubResource("Animation_pa0ob")
+}
 
 [node name="Node2D" type="Node2D"]
 
-[node name="StaticBody2D" parent="." instance=ExtResource("1_18mqm")]
+[node name="StaticPlatform" parent="." instance=ExtResource("1_18mqm")]
 position = Vector2(549, 445)
 
-[node name="CharacterBody2D" parent="." instance=ExtResource("2_8rov2")]
+[node name="Character" parent="." instance=ExtResource("2_8rov2")]
 position = Vector2(549, 271)
+
+[node name="AnimatableBody2D" type="AnimatableBody2D" parent="."]
+position = Vector2(791, 462)
+
+[node name="Sprite2D" type="Sprite2D" parent="AnimatableBody2D"]
+texture = ExtResource("4_75edt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatableBody2D"]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_l41iw")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="AnimatableBody2D"]
+deterministic = true
+libraries = {
+"": SubResource("AnimationLibrary_fmt24")
+}
+autoplay = "PlatformMovement"
+script = ExtResource("5_klxc1")
