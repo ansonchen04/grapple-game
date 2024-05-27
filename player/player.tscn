@@ -1,16 +1,42 @@
-[gd_scene load_steps=4 format=3 uid="uid://cneiixvf5cb8u"]
+[gd_scene load_steps=8 format=3 uid="uid://cneiixvf5cb8u"]
 
-[ext_resource type="Script" path="res://player/player.cs" id="1_58q48"]
+[ext_resource type="Script" path="res://player/Player.cs" id="1_x3368"]
 [ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="2_s60mg"]
+[ext_resource type="Script" path="res://addons/ropesim/Rope.gd" id="3_w1cac"]
+[ext_resource type="Script" path="res://addons/ropesim/RopeRendererLine2D.gd" id="4_ukak1"]
+[ext_resource type="Script" path="res://addons/ropesim/RopeAnchor.gd" id="5_ddwmq"]
+[ext_resource type="PackedScene" uid="uid://dx0nkg6khbjmo" path="res://player/hook.tscn" id="6_syvht"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1ybm1"]
 size = Vector2(128, 128)
 
-[node name="CharacterBody2D" type="CharacterBody2D"]
-script = ExtResource("1_58q48")
+[node name="CharacterBody2D" type="CharacterBody2D" groups=["NotHookable"]]
+script = ExtResource("1_x3368")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_s60mg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_1ybm1")
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+
+[node name="RopeAnchor" type="Marker2D" parent="."]
+script = ExtResource("5_ddwmq")
+
+[node name="Rope" type="Node2D" parent="RopeAnchor"]
+script = ExtResource("3_w1cac")
+
+[node name="RopeRendererLine2D" type="Line2D" parent="RopeAnchor/Rope"]
+texture_repeat = 2
+points = PackedVector2Array(0, 0, 0, 10, 0, 20, 0, 30, 0, 40, 0, 50, 0, 60, 0, 70, 0, 80, 0, 90, 0, 100)
+texture = ExtResource("2_s60mg")
+texture_mode = 1
+script = ExtResource("4_ukak1")
+
+[node name="RopeAnchor2" type="Marker2D" parent="RopeAnchor/Rope"]
+position = Vector2(0, 100)
+script = ExtResource("5_ddwmq")
+rope_path = NodePath("..")
+
+[node name="Hook" parent="RopeAnchor/Rope/RopeAnchor2" instance=ExtResource("6_syvht")]

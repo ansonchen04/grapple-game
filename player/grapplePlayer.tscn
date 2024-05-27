@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://dvhgywpjmnfth"]
+
+[ext_resource type="Script" path="res://addons/ropesim/Rope.gd" id="1_k5ilg"]
+[ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="2_nv1ac"]
+[ext_resource type="Script" path="res://addons/ropesim/RopeRendererLine2D.gd" id="3_hjrt0"]
+
+[node name="GrapplePlayer" type="Node2D"]
+
+[node name="Rope" type="Node2D" parent="."]
+script = ExtResource("1_k5ilg")
+
+[node name="RopeRendererLine2D" type="Line2D" parent="Rope"]
+texture_repeat = 2
+points = PackedVector2Array(0, 0, 0, 10, 0, 20, 0, 30, 0, 40, 0, 50, 0, 60, 0, 70, 0, 80, 0, 90, 0, 100)
+texture = ExtResource("2_nv1ac")
+texture_mode = 1
+script = ExtResource("3_hjrt0")
