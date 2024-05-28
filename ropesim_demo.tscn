@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://addons/ropesim/RopeHandle.gd" id="1_3v13b"]
 [ext_resource type="Script" path="res://addons/ropesim/RopeAnchor.gd" id="2_60osf"]
-[ext_resource type="Texture2D" uid="uid://criwv6nuivcxy" path="res://icon.svg" id="3_t3x7v"]
+[ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="3_t3x7v"]
 [ext_resource type="Script" path="res://addons/ropesim/Rope.gd" id="4_ytdbs"]
 [ext_resource type="Script" path="res://addons/ropesim/RopeRendererLine2D.gd" id="5_8a6rj"]
 
@@ -15,7 +15,7 @@ rope_path = NodePath("../Rope")
 rope_position = 0.62
 
 [node name="RopeAnchor" type="Marker2D" parent="."]
-position = Vector2(93.0733, 72.1881)
+position = Vector2(251.727, 41.0044)
 script = ExtResource("2_60osf")
 rope_path = NodePath("../Rope")
 rope_position = 0.25
@@ -26,7 +26,7 @@ scale = Vector2(0.5, 0.5)
 texture = ExtResource("3_t3x7v")
 
 [node name="RopeAnchor2" type="Marker2D" parent="."]
-position = Vector2(155.257, 122.217)
+position = Vector2(171.787, 119.237)
 script = ExtResource("2_60osf")
 rope_path = NodePath("../Rope")
 
@@ -37,7 +37,7 @@ texture = ExtResource("3_t3x7v")
 
 [node name="Rope" type="Node2D" parent="."]
 texture_repeat = 2
-position = Vector2(295, 46)
+position = Vector2(304, 17)
 script = ExtResource("4_ytdbs")
 num_segments = 20
 rope_length = 200.0

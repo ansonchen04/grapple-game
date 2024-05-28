@@ -14,12 +14,17 @@ public partial class Player : CharacterBody2D
 	private const float RaycastLength = 105.0f;
 	private bool isGrappled = false;
 
-	[Export] public PackedScene HookScene; // Reference to the Hook scene
+	private RigidBody2D hook;
+	private Node2D rope;
+	private Marker2D handle;
 	
 	public override void _Ready() {
 		rayCast = GetNode<RayCast2D>("RayCast2D");
 		rayCast.Enabled = false;  // disabled by default, we'll turn it on when we clck
-		HookScene = (PackedScene) GD.Load("res://player/hook.tscn");
+		hook = GetNode<RigidBody2D>("Rope/RopeAnchor/Hook");
+		rope = GetNode<Node2D>("Rope");
+		handle = GetNode<Marker2D>("Rope/RopeHandle");
+		hideRope();
 	}
 
 	public override void _PhysicsProcess(double delta) {
@@ -49,7 +54,7 @@ public partial class Player : CharacterBody2D
 		MoveAndSlide();
 	}
 
-	/*
+	
 	public override void _Input(InputEvent @event) {
 		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left) {
 			// i will probably need this raycast later to check if there's an object in between the starting pos of the gun and the player
@@ -72,7 +77,12 @@ public partial class Player : CharacterBody2D
 				GD.Print("did not collide with anything.");
 			}
 			rayCast.Enabled = false;
-			
+
+			hook.Call("Shoot", mousePosition, GlobalPosition);
+			showRope();
+			RotateRopeTowards(mousePosition);
+
+			/*
 			if (HookScene == null) {
 				GD.PrintErr("HookScene is not set in the Player node.");
 				return;
@@ -89,7 +99,32 @@ public partial class Player : CharacterBody2D
 
 			// Shoot the Hook towards the target position
 			hook.Call("Shoot", mousePosition);
+			*/
 		}
 	}
-	*/
+
+	private void hideRope() {
+		rope.Hide();
+		rope.SetPhysicsProcess(false);
+		rope.SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
+	}
+
+	private void showRope() {
+		rope.Show();
+		rope.SetPhysicsProcess(true);
+		rope.SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
+	}
+
+	private void RotateRopeTowards(Vector2 targetPosition) {
+		if (rope == null) {
+			return;
+		}
+
+		// Calculate the direction vector from the rope to the target position
+		Vector2 direction = (targetPosition - rope.GlobalPosition).Normalized();
+		direction *= RaycastLength;
+
+		handle.GlobalPosition = GlobalPosition + direction;		
+	}
+	
 }

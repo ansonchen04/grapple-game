@@ -9,8 +9,7 @@
 position = Vector2(549, 445)
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("2_8rov2")]
-position = Vector2(549, 271)
+position = Vector2(549, 54)
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(594, 140)
-zoom = Vector2(0.5, 0.5)
+position = Vector2(563, 267)
