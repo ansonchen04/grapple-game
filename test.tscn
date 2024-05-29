@@ -1,15 +1,28 @@
-[gd_scene load_steps=3 format=3 uid="uid://bwkqlcpk8d3b6"]
+[gd_scene load_steps=4 format=3 uid="uid://bwkqlcpk8d3b6"]
 
 [ext_resource type="PackedScene" uid="uid://jluoaxxepfrv" path="res://platform.tscn" id="1_18mqm"]
 [ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="2_8rov2"]
+[ext_resource type="PackedScene" uid="uid://dx0nkg6khbjmo" path="res://player/hook.tscn" id="3_p1ick"]
 
-[node name="Node2D" type="Node2D"]
+[node name="Level" type="Node2D"]
 
 [node name="StaticBody2D" parent="." instance=ExtResource("1_18mqm")]
-position = Vector2(549, 445)
+position = Vector2(650, 699)
 
-[node name="CharacterBody2D" parent="." instance=ExtResource("2_8rov2")]
-position = Vector2(549, 54)
+[node name="Player" parent="." instance=ExtResource("2_8rov2")]
+position = Vector2(637, 406)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(563, 267)
+zoom = Vector2(0.5, 0.5)
+
+[node name="StaticBody2D2" parent="." instance=ExtResource("1_18mqm")]
+position = Vector2(1301, 9)
+
+[node name="StaticBody2D3" parent="." instance=ExtResource("1_18mqm")]
+position = Vector2(569, 18)
+
+[node name="StaticBody2D4" parent="." instance=ExtResource("1_18mqm")]
+position = Vector2(275, 18)
+
+[node name="Hook" parent="." instance=ExtResource("3_p1ick")]

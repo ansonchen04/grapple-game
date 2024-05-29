@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dx0nkg6khbjmo"]
+[gd_scene load_steps=6 format=3 uid="uid://dx0nkg6khbjmo"]
 
 [ext_resource type="Script" path="res://player/hook.cs" id="1_bqsvh"]
 [ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="2_4v30u"]
+[ext_resource type="Script" path="res://addons/ropesim/RopeAnchor.gd" id="3_p04ug"]
+[ext_resource type="Script" path="res://addons/ropesim/RopeHandle.gd" id="4_ikskb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rqdvu"]
 
@@ -25,5 +27,11 @@ shape = SubResource("CircleShape2D_rqdvu")
 [node name="Collision" type="CollisionShape2D" parent="." groups=["NotHookable"]]
 scale = Vector2(1.75, 1.75)
 shape = SubResource("CircleShape2D_rqdvu")
+
+[node name="RopeAnchor" type="Marker2D" parent="."]
+script = ExtResource("3_p04ug")
+
+[node name="RopeHandle" type="Marker2D" parent="."]
+script = ExtResource("4_ikskb")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

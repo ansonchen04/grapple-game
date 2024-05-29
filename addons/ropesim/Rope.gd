@@ -277,6 +277,8 @@ func get_color(index: int) -> Color:
 func get_segment_lengths() -> PackedFloat32Array:
 	return _seg_lengths
 
+func get_length() -> float:
+	return rope_length
 
 # Setters
 

@@ -35,6 +35,9 @@ func set_rope_path(value: NodePath):
 	rope_path = value
 	if is_inside_tree():
 		_helper.target_rope = get_node(rope_path) as Rope
+		
+func get_rope_path() -> NodePath:
+	return rope_path
 
 
 func set_enable(value: bool):
