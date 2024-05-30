@@ -15,13 +15,7 @@ public partial class hook : RigidBody2D
 	private bool connected = false;
 	
 	[Signal] public delegate void HookCollisionEventHandler();
-
-	public enum HookState {  
-		Hidden,
-		Shot,
-		Hooked,
-		Retracting
-	}
+	
 	private HookState hookState;	
 
 
@@ -71,6 +65,10 @@ public partial class hook : RigidBody2D
 			hookState = HookState.Shot;
 			showHook();
 		}
+	}
+
+	public HookState GetHookState() {
+		return hookState;
 	}
 
 	// this function is called when the hook hits something

@@ -16,8 +16,9 @@ public partial class Player : CharacterBody2D
 
 	private RigidBody2D hook;
 	private Node2D rope;
-
-	bool bruh = false;
+	private Marker2D ropeDir;
+	private float ropeStr;
+	bool ropeGrow = false;
 	
 	public override void _Ready() {
 		rayCast = GetNode<RayCast2D>("RayCast2D");
@@ -25,6 +26,8 @@ public partial class Player : CharacterBody2D
 		hook = GetNode<RigidBody2D>("../Hook");
 		hook.Connect("HookCollision", new Callable(this, nameof(OnHookCollision)));
 		rope = GetNode<Node2D>("Rope");
+		ropeDir = GetNode<Marker2D>("Rope/RopeDir");
+		ropeStr = 10.0f;
 		hideRope();
 	}
 
@@ -32,8 +35,23 @@ public partial class Player : CharacterBody2D
 		Vector2 velocity = Velocity;
 
 		// Add the gravity.
-		if (!IsOnFloor())
-			velocity.Y += gravity * (float)delta;
+		if (!IsOnFloor()) {
+			float grav = gravity * (float) delta;
+			if (velocity.Y < 500) {  // so the fall speed doesn't become infinite
+				velocity.Y += gravity * (float) delta;
+			}
+
+			GD.Print("gravity: " + grav);
+			HookState currentState = (HookState) (int) hook.Call("GetHookState");
+			if (currentState == HookState.Hooked) {
+				//float stretch = GlobalPosition.DistanceTo(ropeDir.GlobalPosition);
+				Vector2 ropeForce = ropeDir.GlobalPosition - GlobalPosition;
+				velocity.X += ropeStr * ropeForce.X * (float) delta;  // cos
+				float sin = ropeStr * ropeForce.Y * (float) delta;
+				velocity.Y -= sin;  // sin
+				GD.Print("rope force: " + sin);
+			}
+		}
 
 		// Handle Jump.
 		if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
@@ -51,9 +69,9 @@ public partial class Player : CharacterBody2D
 		Velocity = velocity;
 		MoveAndSlide();
 
-		if (bruh) {
+		if (ropeGrow) {
 			float len = (float) rope.Call("get_length");
-			rope.Call("_set_length", len + 2f);
+			rope.Call("_set_length", len + 1f);
 		}
 	}
 
@@ -82,7 +100,7 @@ public partial class Player : CharacterBody2D
 			// shoot and show the rope + hook
 			hook.Call("Shoot", mousePosition, GlobalPosition);
 			showRope();
-			bruh = true;
+			ropeGrow = true;
 			// technically i'm not supposed to call this as it's a private func but idc
 			//float len = 100.0f;
 
@@ -108,8 +126,7 @@ public partial class Player : CharacterBody2D
 
 	private void OnHookCollision() {
         GD.Print("Hook collided with something!");
-        bruh = false;
-        // Additional code based on game requirements
+        ropeGrow = false;
     }
 	
 }

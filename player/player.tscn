@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://cneiixvf5cb8u"]
+[gd_scene load_steps=7 format=3 uid="uid://cneiixvf5cb8u"]
 
 [ext_resource type="Script" path="res://player/Player.cs" id="1_x3368"]
 [ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="2_s60mg"]
 [ext_resource type="Script" path="res://addons/ropesim/Rope.gd" id="3_w1cac"]
 [ext_resource type="Script" path="res://addons/ropesim/RopeRendererLine2D.gd" id="4_ukak1"]
+[ext_resource type="Script" path="res://addons/ropesim/RopeAnchor.gd" id="5_nywxb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1ybm1"]
 size = Vector2(128, 128)
@@ -28,3 +29,8 @@ points = PackedVector2Array(0, 0, 0, 10, 0, 20, 0, 30, 0, 40, 0, 50, 0, 60, 0, 7
 texture = ExtResource("2_s60mg")
 texture_mode = 1
 script = ExtResource("4_ukak1")
+
+[node name="RopeDir" type="Marker2D" parent="Rope"]
+script = ExtResource("5_nywxb")
+rope_path = NodePath("..")
+rope_position = 0.1
