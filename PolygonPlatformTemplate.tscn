@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bl5pfeh3knwaq"]
+
+[ext_resource type="Script" path="res://Sprite.cs" id="1_lrvwl"]
+
+[node name="StartingPlatform" type="StaticBody2D"]
+position = Vector2(0, 380)
+
+[node name="Sprite" type="Polygon2D" parent="."]
+color = Color(1, 0.423529, 0, 1)
+polygon = PackedVector2Array(0, 0, 602, 0, 841, -170, 1180, -170, 1180, -115, 903, -115, 668, 76, 632, 270, 0, 270)
+script = ExtResource("1_lrvwl")
