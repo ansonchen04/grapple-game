@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://dc1wr6y2tpakk"]
+[gd_scene load_steps=4 format=3 uid="uid://jp83d74t8m5a"]
 
 [ext_resource type="Script" path="res://PolyPlatSprite.cs" id="2_qkefx"]
 [ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="2_wuunj"]
