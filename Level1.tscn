@@ -1,18 +1,42 @@
-[gd_scene load_steps=4 format=3 uid="uid://jp83d74t8m5a"]
+[gd_scene load_steps=11 format=3 uid="uid://jp83d74t8m5a"]
 
 [ext_resource type="Script" path="res://PolyPlatSprite.cs" id="2_qkefx"]
 [ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="2_wuunj"]
 [ext_resource type="Script" path="res://DropDownSprite.cs" id="3_3ceoo"]
+[ext_resource type="Script" path="res://CurvedPlatform.cs" id="4_hk5ll"]
+[ext_resource type="Script" path="res://PathPlatform.cs" id="5_6y5t0"]
+[ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="6_4hrry"]
 
-[node name="Node2D" type="Node2D"]
+[sub_resource type="Curve2D" id="Curve2D_i6v66"]
+bake_interval = 35.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -57, 65, -152.218, 34.487, 152.218, -34.487, 216, -175, 0, 0, 0, 0, 410, -200, 0, 0, 0, 0, 410, -300, 0, 0, 0, 0, 675, -425, 0, 0, 0, 0, 675, 225, 0, 0, 0, 0, -57, 225, 0, 0, 0, 0, -57, 65)
+}
+point_count = 8
+
+[sub_resource type="Curve2D" id="Curve2D_y4rks"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 600, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 3
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kdjij"]
+size = Vector2(122.602, 119.074)
+
+[sub_resource type="Curve2D" id="Curve2D_efjtf"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -450, 0, 0, 0, 0, 0, 0)
+}
+point_count = 3
+
+[node name="World" type="Node2D"]
 
 [node name="Character" parent="." instance=ExtResource("2_wuunj")]
-position = Vector2(134, 300)
+position = Vector2(134, 252)
+scale = Vector2(0.6, 0.6)
 
 [node name="Camera2D" type="Camera2D" parent="Character"]
-offset = Vector2(250, -80)
 zoom = Vector2(1.5, 1.5)
-position_smoothing_enabled = true
 position_smoothing_speed = 10.0
 
 [node name="StartingPlatform" type="StaticBody2D" parent="."]
@@ -32,10 +56,126 @@ polygon = PackedVector2Array(0, 0, 225, 0, 225, 55, 0, 55)
 script = ExtResource("3_3ceoo")
 
 [node name="Platform" type="StaticBody2D" parent="."]
-position = Vector2(1095, 410)
+position = Vector2(1223, 479)
 
 [node name="PolyPlatSprite" type="Polygon2D" parent="Platform"]
-position = Vector2(79, -22)
 color = Color(1, 0.423529, 0, 1)
-polygon = PackedVector2Array(0, 0, 250, 0, 250, 50, 0, 50)
+polygon = PackedVector2Array(0, 0, 300, 0, 250, 50, 0, 50)
+script = ExtResource("2_qkefx")
+
+[node name="CurvedPlatform" type="StaticBody2D" parent="."]
+position = Vector2(1664, 514)
+script = ExtResource("4_hk5ll")
+
+[node name="Path2D" type="Path2D" parent="CurvedPlatform"]
+position = Vector2(-4, 18)
+curve = SubResource("Curve2D_i6v66")
+
+[node name="Line2D" type="Line2D" parent="CurvedPlatform"]
+
+[node name="Polygon2D" type="Polygon2D" parent="CurvedPlatform"]
+
+[node name="MovingPlatform1" type="Node2D" parent="."]
+position = Vector2(2890, 275)
+script = ExtResource("5_6y5t0")
+Speed = 250
+
+[node name="PlatformPath" type="Path2D" parent="MovingPlatform1"]
+curve = SubResource("Curve2D_y4rks")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="MovingPlatform1/PlatformPath"]
+rotation = -0.830919
+rotates = false
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="MovingPlatform1/PlatformPath/PathFollow2D"]
+remote_path = NodePath("../../PlatformBody")
+update_rotation = false
+
+[node name="_Timer_17557" type="Timer" parent="MovingPlatform1/PlatformPath/PathFollow2D"]
+wait_time = 0.2
+one_shot = true
+
+[node name="PlatformBody" type="AnimatableBody2D" parent="MovingPlatform1/PlatformPath"]
+
+[node name="Sprite2D" type="Sprite2D" parent="MovingPlatform1/PlatformPath/PlatformBody"]
+texture = ExtResource("6_4hrry")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovingPlatform1/PlatformPath/PlatformBody"]
+position = Vector2(7.62939e-06, -1.30849)
+shape = SubResource("RectangleShape2D_kdjij")
+
+[node name="MovingPlatform2" type="Node2D" parent="."]
+position = Vector2(3994, 401)
+script = ExtResource("5_6y5t0")
+
+[node name="PlatformPath" type="Path2D" parent="MovingPlatform2"]
+curve = SubResource("Curve2D_efjtf")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="MovingPlatform2/PlatformPath"]
+rotation = -0.830919
+rotates = false
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="MovingPlatform2/PlatformPath/PathFollow2D"]
+remote_path = NodePath("../../PlatformBody")
+update_rotation = false
+
+[node name="_Timer_17557" type="Timer" parent="MovingPlatform2/PlatformPath/PathFollow2D"]
+wait_time = 0.2
+one_shot = true
+
+[node name="PlatformBody" type="AnimatableBody2D" parent="MovingPlatform2/PlatformPath"]
+
+[node name="Sprite2D" type="Sprite2D" parent="MovingPlatform2/PlatformPath/PlatformBody"]
+texture = ExtResource("6_4hrry")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovingPlatform2/PlatformPath/PlatformBody"]
+position = Vector2(7.62939e-06, -1.30849)
+shape = SubResource("RectangleShape2D_kdjij")
+
+[node name="Platform3" type="StaticBody2D" parent="."]
+position = Vector2(2484, 274)
+
+[node name="PolyPlatSprite" type="Polygon2D" parent="Platform3"]
+color = Color(1, 0.423529, 0, 1)
+polygon = PackedVector2Array(0, 0, 250, 0, 250, 250, 0, 250)
+script = ExtResource("2_qkefx")
+
+[node name="Platform4" type="StaticBody2D" parent="."]
+position = Vector2(3618, 284)
+
+[node name="PolyPlatSprite" type="Polygon2D" parent="Platform4"]
+color = Color(1, 0.423529, 0, 1)
+polygon = PackedVector2Array(0, 0, 250, 0, 250, 250, 0, 250)
+script = ExtResource("2_qkefx")
+
+[node name="Platform5" type="StaticBody2D" parent="."]
+position = Vector2(3636, -132)
+
+[node name="PolyPlatSprite" type="Polygon2D" parent="Platform5"]
+color = Color(1, 0.423529, 0, 1)
+polygon = PackedVector2Array(0, 0, 250, 0, 250, 150, 0, 150)
+script = ExtResource("2_qkefx")
+
+[node name="Platform6" type="StaticBody2D" parent="."]
+position = Vector2(3286, -307)
+
+[node name="PolyPlatSprite" type="Polygon2D" parent="Platform6"]
+color = Color(1, 0.423529, 0, 1)
+polygon = PackedVector2Array(0, 0, 250, 0, 250, 150, 0, 150)
+script = ExtResource("2_qkefx")
+
+[node name="Platform7" type="StaticBody2D" parent="."]
+position = Vector2(3718, -452)
+
+[node name="PolyPlatSprite" type="Polygon2D" parent="Platform7"]
+color = Color(1, 0.423529, 0, 1)
+polygon = PackedVector2Array(0, 0, 250, 0, 250, 150, 0, 150)
+script = ExtResource("2_qkefx")
+
+[node name="Platform8" type="StaticBody2D" parent="."]
+position = Vector2(4081, -612)
+
+[node name="PolyPlatSprite" type="Polygon2D" parent="Platform8"]
+color = Color(1, 0.423529, 0, 1)
+polygon = PackedVector2Array(0, 0, 250, 0, 250, 150, 0, 150)
 script = ExtResource("2_qkefx")
