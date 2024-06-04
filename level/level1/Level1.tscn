@@ -10,7 +10,7 @@
 [sub_resource type="Curve2D" id="Curve2D_i6v66"]
 bake_interval = 35.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, -57, 65, -152.218, 34.487, 152.218, -34.487, 216, -175, 0, 0, 0, 0, 410, -200, 0, 0, 0, 0, 410, -300, 0, 0, 0, 0, 675, -425, 0, 0, 0, 0, 675, 225, 0, 0, 0, 0, -57, 225, 0, 0, 0, 0, -57, 65)
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -100, 0, 0, 0, 0, 46, -137, 0, 0, 0, 0, 97, -158, 0, 0, 0, 0, 150, -150, 0, 0, 0, 0, 150, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2, 0)
 }
 point_count = 8
 
@@ -72,7 +72,6 @@ position = Vector2(1664, 515)
 script = ExtResource("4_bo2c2")
 
 [node name="Path2D" type="Path2D" parent="CurvedPlatform"]
-position = Vector2(-4, 18)
 curve = SubResource("Curve2D_i6v66")
 
 [node name="Line2D" type="Line2D" parent="CurvedPlatform"]
@@ -80,7 +79,7 @@ curve = SubResource("Curve2D_i6v66")
 [node name="Polygon2D" type="Polygon2D" parent="CurvedPlatform"]
 
 [node name="MovingPlatform1" type="Node2D" parent="."]
-position = Vector2(2890, 275)
+position = Vector2(2890, 276)
 script = ExtResource("5_yoi6j")
 Speed = 250
 

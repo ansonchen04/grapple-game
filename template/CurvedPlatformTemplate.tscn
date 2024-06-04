@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://dcu48rqxtd0y2"]
+
+[ext_resource type="Script" path="res://level/level1/CurvedPlatform.cs" id="1_j0i3d"]
+
+[sub_resource type="Curve2D" id="Curve2D_i6v66"]
+bake_interval = 35.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -100, 0, 0, 0, 0, 46, -137, 0, 0, 0, 0, 97, -158, 0, 0, 0, 0, 150, -150, 0, 0, 0, 0, 150, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 7
+
+[node name="CurvedPlatform" type="StaticBody2D"]
+script = ExtResource("1_j0i3d")
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource("Curve2D_i6v66")
+
+[node name="Line2D" type="Line2D" parent="."]
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
