@@ -20,12 +20,6 @@ public partial class CurvedPlatform : Node2D
         // Create a new CollisionPolygon2D
         var collisionPoly = new CollisionPolygon2D();
 		collisionPoly.Polygon = polygon;
-		
-		// Print every vector in the polygon to the console
-        foreach (Vector2 point in polygon)
-        {
-            GD.Print(point);
-        }
 
         // Add the CollisionPolygon2D as a child of this node
         AddChild(collisionPoly);
