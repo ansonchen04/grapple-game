@@ -6,12 +6,15 @@ using System.Threading;
 
 public partial class player : CharacterBody2D
 {
+	//How fast the player moves and how high they can jump
 	public const float Speed = 300.0f;
 	public const float JumpVelocity = -600.0f;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
+	//Ray is in the center of the player model, checking what platform the player is on
 	private RayCast2D _downwardRaycast;
+	//Booleans to check if we are on a special surface, if we have different movement options
 	bool onClimbableSurface = false;
 	bool onOneWaySurface = false;
     public override void _Ready()
@@ -24,41 +27,13 @@ public partial class player : CharacterBody2D
         // Check if the player is on the floor or a specific platform using the raycast
         if (_downwardRaycast.IsColliding())
         {
-			GD.Print(_downwardRaycast.GetCollider());
             var collider = _downwardRaycast.GetCollider();
+			//Likely will have to constrain this more
             if (collider is Node2D platform)
             {	
-				//TODO Fix this portion of the code
-                GD.Print($"Standing on platform: {platform.Name}");
-				Node[] children = platform.FindChildren("*","CollisionPolygon2D",false,false).ToArray();
-				if(children.Length == 0){
-					children = platform.FindChildren("*","CollisionShape2D",true,false).ToArray();
-					CollisionShape2D collisionPolygon = (CollisionShape2D)children[0];
-				if (collisionPolygon != null)
-                {
-					if(collisionPolygon.OneWayCollision == true){
-						onOneWaySurface = true;
-					}
-					else{
-						onOneWaySurface = false;
-					}
-				}
-				}
-				else{
-					CollisionPolygon2D collisionPolygon = (CollisionPolygon2D)children[0];
-					if (collisionPolygon != null)
-                {
-					if(collisionPolygon.OneWayCollision == true){
-						onOneWaySurface = true;
-					}
-					else{
-						onOneWaySurface = false;
-					}
-				}
-				}
-				
+				GD.Print($"Standing on platform: {platform.Name}");
+				this.setOneWay(this.checkOneway(platform));
             }
-
 		}
 		//Gets the current velocity
 		Vector2 newVelocity = Velocity;
@@ -68,7 +43,7 @@ public partial class player : CharacterBody2D
 			newVelocity.Y += gravity * (float)delta;
 		//Checking which movement option, if any, is being used
 		if(onOneWaySurface){
-				onewaydropMovement(newVelocity);
+			onewaydropMovement(newVelocity);
 		}
 		else if(onClimbableSurface){
 
@@ -109,6 +84,28 @@ public partial class player : CharacterBody2D
             Position += new Vector2(0, 1);
         }
 		return velocity;
+	}
+	private Boolean checkOneway(Node2D platform){
+		//Gets the collision polygon or collision shape of the platform
+		Node[] children = platform.FindChildren("*","CollisionPolygon2D",false,false).ToArray();
+		if(children.Length == 0){
+			children = platform.FindChildren("*","CollisionShape2D",true,false).ToArray();
+			CollisionShape2D collisionPolygon = (CollisionShape2D)children[0];
+			if (collisionPolygon != null && collisionPolygon.OneWayCollision == true)
+            {
+				return true;
+			}
+			}
+		else{
+			CollisionPolygon2D collisionPolygon = (CollisionPolygon2D)children[0];
+				if (collisionPolygon != null)
+				{
+					if(collisionPolygon.OneWayCollision == true){
+						return true;
+					}
+				}
+				}
+		return false;
 	}
 	public void setClimbing(bool onClimbableSurface){
         this.onClimbableSurface = onClimbableSurface;
