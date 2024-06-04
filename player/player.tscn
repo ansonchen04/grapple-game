@@ -6,7 +6,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1ybm1"]
 size = Vector2(128, 128)
 
-[node name="CharacterBody2D" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" groups=["Player"]]
 script = ExtResource("1_58q48")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -14,3 +14,11 @@ texture = ExtResource("2_s60mg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_1ybm1")
+
+[node name="DampedSpringJoint2D" type="DampedSpringJoint2D" parent="."]
+node_a = NodePath("..")
+rest_length = 50.0
+stiffness = 64.0
+damping = 16.0
+
+[node name="RayCast2D" type="RayCast2D" parent="."]

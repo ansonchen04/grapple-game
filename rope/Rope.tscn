@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://6yotxco8qhu"]
+
+[ext_resource type="Script" path="res://rope/Rope.cs" id="1_wcf07"]
+[ext_resource type="PackedScene" uid="uid://b8debkwn61e2y" path="res://rope/hook.tscn" id="2_3mvsj"]
+
+[node name="Rope" type="Node2D"]
+script = ExtResource("1_wcf07")
+
+[node name="Hook" parent="." instance=ExtResource("2_3mvsj")]
