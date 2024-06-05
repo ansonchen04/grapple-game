@@ -10,7 +10,7 @@
 [sub_resource type="Curve2D" id="Curve2D_i6v66"]
 bake_interval = 35.0
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, -57, 65, -152.218, 34.487, 152.218, -34.487, 216, -175, 0, 0, 0, 0, 416, -203, 0, 0, 0, 0, 410, -425, 0, 0, 0, 0, 675, -425, 0, 0, 0, 0, 675, 225, 0, 0, 0, 0, -57, 225, 0, 0, 0, 0, -57, 65)
+"points": PackedVector2Array(0, 0, 0, 0, -57, 65, -152.218, 34.487, 152.218, -34.487, 216, -175, 0, 0, 0, 0, 420, -200, 0, 0, 0, 0, 420, -425, 0, 0, 0, 0, 675, -425, 0, 0, 0, 0, 675, 225, 0, 0, 0, 0, -57, 225, 0, 0, 0, 0, -57, 65)
 }
 point_count = 8
 
@@ -77,6 +77,11 @@ curve = SubResource("Curve2D_i6v66")
 [node name="Line2D" type="Line2D" parent="CurvedPlatform"]
 
 [node name="Polygon2D" type="Polygon2D" parent="CurvedPlatform"]
+
+[node name="ClimbArea" type="Area2D" parent="CurvedPlatform"]
+
+[node name="ClimbPolygon" type="CollisionPolygon2D" parent="CurvedPlatform/ClimbArea"]
+polygon = PackedVector2Array(400, -200, 400, -435, 430, -435, 430, -200)
 
 [node name="MovingPlatform1" type="Node2D" parent="."]
 position = Vector2(2890, 276)

@@ -9,7 +9,7 @@ public partial class player : CharacterBody2D
 	//How fast the player moves and how high they can jump
 	public const float Speed = 300.0f;
 	public const float JumpVelocity = -600.0f;
-
+	public const float ClimbVelocity = -200.0f;
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 	//Ray is in the center of the player model, checking what platform the player is on
@@ -31,51 +31,70 @@ public partial class player : CharacterBody2D
 			//Likely will have to constrain this more
             if (collider is Node2D platform)
             {	
-				GD.Print($"Standing on platform: {platform.Name}");
+				//GD.Print($"Standing on platform: {platform.Name}");
 				this.setOneWay(this.checkOneway(platform));
             }
 		}
 		//Gets the current velocity
 		Vector2 newVelocity = Velocity;
 
-		// Add the gravity.
-		if (!IsOnFloor())
-			newVelocity.Y += gravity * (float)delta;
-		//Checking which movement option, if any, is being used
+		//Checking which movement option, if any, is being used. Will convert this into a switch case
 		if(onOneWaySurface){
 			onewaydropMovement(newVelocity);
+			newVelocity = baseMovement(newVelocity);
 		}
 		else if(onClimbableSurface){
-
+			newVelocity = climbMovement(newVelocity);
 		}
+		else{
 		//If nothing fancy, just use base movement vectors
 		newVelocity = baseMovement(newVelocity);
+		}
+		// Add the gravity.
+		if (!IsOnFloor() && !onClimbableSurface)
+			newVelocity.Y += gravity * (float)delta;
 		//Updates to the new velocity
 		Velocity = newVelocity;
 		//Moves the sprite at the end
 		MoveAndSlide();
 	}
-	private Vector2 baseMovement(Vector2 newVelocity)
+	private Vector2 baseMovement(Vector2 velocity)
 	{
 		// Get the input direction and handle the movement/deceleration.
-		// As good practice, you should replace UI actions with custom gameplay actions.
 		Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
 		if (direction != Vector2.Zero)
 		{
-			newVelocity.X = direction.X * Speed;
+			velocity.X = direction.X * Speed;
 		}
 		else
 		{
-			newVelocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
+			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
 		}
 		// Handle Jump.
 		if (Input.IsActionJustPressed("Up") && IsOnFloor())
-			newVelocity.Y = JumpVelocity;
-		return newVelocity;
+			velocity.Y = JumpVelocity;
+		return velocity;
 	}
-	/*private Vector2 climbMovement(Vector2 velocity){
-
-	}*/
+	private Vector2 climbMovement(Vector2 velocity){
+		// Get the input direction and handle the movement/deceleration.
+		Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
+		if (direction != Vector2.Zero)
+		{
+			velocity.X = direction.X * Speed;
+		}
+		else
+		{
+			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
+		}
+		// Handle Jump.
+		if (Input.IsActionPressed("Up"))
+			velocity.Y = ClimbVelocity;
+		else if (Input.IsActionPressed("Down"))
+			velocity.Y = -ClimbVelocity;
+		else
+			velocity.Y = 0;
+		return velocity;
+	}
 	private Vector2 onewaydropMovement(Vector2 velocity){
 		// Drop the player down 1 pixel if standing on a one-way collision platform and "ui_drop_down" is pressed
         //TODO verify this actually does ^
