@@ -11,19 +11,21 @@ public partial class player : CharacterBody2D
 	private float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
 	private RayCast2D rayCast; 
-	private const float RaycastLength = 5000.0f;
+	private const float RaycastLength = 105.0f;
 	private bool isGrappled = false;
 
-	public PackedScene HookScene; // Reference to the Hook scene
-	private DampedSpringJoint2D rope;
+	Node2D rope;
+	RigidBody2D hook;
 	
 	public override void _Ready() {
 		rayCast = GetNode<RayCast2D>("RayCast2D");
-		rayCast.Enabled = true;  // disabled by default, we'll turn it on when we clck
-		rope = GetNode<DampedSpringJoint2D>("DampedSpringJoint2D");
+		rayCast.Enabled = true;  // disabled by default, we'll turn it on when we click
+		rope = GetNode<Node2D>("../Rope");
+		hook = GetNode<RigidBody2D>("../Rope/Hook");
 	}
 
 	public override void _PhysicsProcess(double delta) {
+		
 		Vector2 velocity = Velocity;
 
 		// Add the gravity.
@@ -48,21 +50,22 @@ public partial class player : CharacterBody2D
 
 		Velocity = velocity;
 		MoveAndSlide();
+		
 	}
 
 	public override void _Input(InputEvent @event) {
 		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left) {
-			// i will probably need this raycast later to check if there's an object in between the starting pos of the gun and the player
 			// Get the global position of the mouse click
-			
 			Vector2 mousePosition = GetGlobalMousePosition();
 			Vector2 direction = (mousePosition - GlobalPosition).Normalized();
-			direction *= RaycastLength;  // need to rename this later!!!
+
+			// Set the hook position and shoot in the calculated direction
+			hook.GlobalPosition = GlobalPosition + direction * RaycastLength;
+			hook.Rotation = direction.Angle() + (float) Math.PI / 2;  // for some reason, angle is off by 90 degrees.
+			hook.Call("Shoot", direction);
 			
-			// Set the raycast's target position relative to the character's position
-			rayCast.TargetPosition = direction;  
-			
-			// Optionally update the raycast (not needed if auto_update is true)
+			// Optionally, set the raycast's target position relative to the character's position
+			rayCast.TargetPosition = direction * RaycastLength;  
 			rayCast.ForceRaycastUpdate();
 
 			if (rayCast.IsColliding()) {
@@ -70,12 +73,7 @@ public partial class player : CharacterBody2D
 			} else {
 				GD.Print("did not collide with anything.");
 			}
-			
-			if (HookScene == null) {
-				GD.PrintErr("HookScene is not set in the Player node.");
-				return;
-			}
-
 		}
 	}
 }
+

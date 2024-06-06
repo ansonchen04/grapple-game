@@ -2,61 +2,86 @@ using Godot;
 using System;
 
 public partial class Rope : Node2D {
-    // Called when the node enters the scene tree for the first time.
     RigidBody2D hook;
+    RigidBody2D firstPiece;
     RigidBody2D lastPiece;
+	CharacterBody2D player;
+    bool connectedToPlayer = false;
     RopeState ropeState;
     int len = 0;
-    const int MaxLength = 10;  // max num links in the rope
-    float distToHook = 0;
+    const int MaxLength = 100;  // max num links in the rope
+	RigidBody2D[] ropePieces;
     float moveSpeed = 300f;  // Speed of the rope movement
 
     public override void _Ready() {
         hook = GetNode<RigidBody2D>("Hook");
+		player = GetNode<CharacterBody2D>("../Player");  // assuming the player is always in the scene
+        firstPiece = hook;
         lastPiece = hook;
         ropeState = RopeState.Hidden;
+		ropePieces = new RigidBody2D[MaxLength];
     }
 
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta) {
-        // Handle input for moving the rope
-        HandleMovement(delta);
-
         switch (ropeState) {
             case RopeState.Hidden:
-                ropeState = RopeState.Shot;  // for testing!
+                if (len > 1) {
+                    ClearRope();
+                }
+                hook.Call("HideHook");
                 break;
             case RopeState.Shot:
-                // check if maxlength or if the rope (not hook) collides with something, if it does go to slack
-                // otherwise, just keep extending the rope length
-                if (len < MaxLength) {  // add the rope collision thing later
-                    // todo later: update positions of rope pieces to be a straight line
-
-                    // for now, i'll just call it once - but need to figure out the distance from hook 
-                    // and use that to determine number of times to call this
+                float dist = player.GlobalPosition.DistanceTo(hook.GlobalPosition);
+                while (len < dist / 30 && len < MaxLength) {  // add the rope collision thing later
                     lastPiece.Call("SetId", len);
-                    lastPiece = (RigidBody2D) lastPiece.Call("AddNewPiece");
+                    lastPiece = (RigidBody2D) lastPiece.Call("AddNewPiece", new Vector2(0, 10));
+                    if (len == 1) {
+                        //lastPiece.GlobalPosition = hook.GlobalPosition;
+                        firstPiece = lastPiece;
+                    }
+					ropePieces[len] = lastPiece;
                     len++;
-                } else {  
-                    ropeState = RopeState.Slack;
+                    connectedToPlayer = false;
+                } 
+
+                if (!connectedToPlayer) {
+                    lastPiece.Call("ConnectToPlayer", player);
+                    lastPiece.GlobalPosition = player.GlobalPosition;
+                    connectedToPlayer = true;
+                }
+
+                firstPiece.GlobalPosition = hook.GlobalPosition;
+                lastPiece.GlobalPosition = player.GlobalPosition;
+				
+				if (Input.IsActionJustPressed("ui_accept")) {  
+                    ClearRope();
                 }
                 break;
             case RopeState.Hooked:
                 // stop growing the rope. lock the hook in place.
                 break;
             case RopeState.Retracting:
-                // while holding right click and is hooked, retract
-                // can also experiment with just clicking right click and automatically retracting the whole thing
-                // also play w diff speeds
                 break;
             case RopeState.Slack:
-                // gravity starts working on the whole rope + hook. stop extending the rope.
-                // if the hook hits something switch states to hooked
                 break;
         }
     }
+    
+    public override void _Input(InputEvent @event) {
+		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left) {
+			switch (ropeState) {
+                case RopeState.Hidden:
+                    hook.Call("ShowHook");
+                    ropeState = RopeState.Shot;
+                    break;
+                case RopeState.Hooked:
+                    ropeState = RopeState.Retracting;
+                    break;
+            }
+		}
+	}
 
-    private void HandleMovement(double delta) {
+	private void HandleMovement(double delta) {
         Vector2 direction = Vector2.Zero;
 
         if (Input.IsActionPressed("ui_right")) {
@@ -73,15 +98,26 @@ public partial class Rope : Node2D {
         }
 
         direction = direction.Normalized();
-
         Position += direction * moveSpeed * (float)delta;
+    } 
+
+	public void MakeRopeStraight() {
+        Vector2 direction = (hook.GlobalPosition - player.GlobalPosition).Normalized();
+        float totalDistance = player.GlobalPosition.DistanceTo(hook.GlobalPosition);
+        float interval = totalDistance / (len + 1);
+
+        for (int i = 0; i < len; i++) {
+            Vector2 position = player.GlobalPosition + direction * interval * (i + 1);
+            ropePieces[i].GlobalPosition = position;
+        	ropePieces[i].Rotation = direction.Angle();
+        }
     }
 
-    public void MakeRopeStraight() {
-        // make the rope straight from the hook to the player
-    }
-
-    public void ClearRope() {
-        // clear the rope.
+	public void ClearRope() {
+        for (int i = 1; i < len; i++) {
+            ropePieces[i].QueueFree();
+        }
+        len = 1;
+        lastPiece = hook;
     }
 }
