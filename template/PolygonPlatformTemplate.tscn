@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bl5pfeh3knwaq"]
+
+[ext_resource type="Script" path="res://template/scripts/PolyPlatTemplate.cs" id="1_k7pgc"]
+
+[node name="StartingPlatform" type="StaticBody2D"]
+position = Vector2(0, 380)
+
+[node name="PolyPlatSprite" type="Polygon2D" parent="."]
+color = Color(1, 0.423529, 0, 1)
+polygon = PackedVector2Array(0, 0, 250, 0, 250, 250, 0, 250)
+script = ExtResource("1_k7pgc")
