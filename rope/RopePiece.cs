@@ -21,16 +21,19 @@ public partial class RopePiece : RigidBody2D {
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta) {
-		
+		// add tension code here probably
 	}
 
-	public RigidBody2D AddNewPiece(Vector2 offset) {
+	public RigidBody2D AddNewPiece(float offset, Vector2 direction) {
 		// make a new RopePiece here, and then i want to connect pinJoint.NodeB to it
 		//GD.Print("summoned a new piece");
 		PackedScene ropePieceScene = (PackedScene) ResourceLoader.Load("res://rope/rope_piece.tscn");
 		RigidBody2D newPiece = (RigidBody2D) ropePieceScene.Instantiate();
 		GetParent().AddChild(newPiece);
-		newPiece.GlobalPosition = GlobalPosition + offset;
+
+		direction = direction.Normalized();
+		newPiece.GlobalPosition = GlobalPosition + offset * direction;
+		newPiece.Rotation = direction.Angle();
 
 		// set position? do it here if we need to
 

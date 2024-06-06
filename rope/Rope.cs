@@ -32,9 +32,9 @@ public partial class Rope : Node2D {
                 break;
             case RopeState.Shot:
                 float dist = player.GlobalPosition.DistanceTo(hook.GlobalPosition);
-                while (len < dist / 30 && len < MaxLength) {  // add the rope collision thing later
+                while (len < dist / 10 && len < MaxLength) {  // add the rope collision thing later
                     lastPiece.Call("SetId", len);
-                    lastPiece = (RigidBody2D) lastPiece.Call("AddNewPiece", new Vector2(0, 10));
+                    lastPiece = (RigidBody2D) lastPiece.Call("AddNewPiece", 10.0f, new Vector2(0, 1));
                     if (len == 1) {
                         //lastPiece.GlobalPosition = hook.GlobalPosition;
                         firstPiece = lastPiece;

@@ -10,7 +10,7 @@
 collision_layer = 4
 collision_mask = 5
 mass = 0.01
-linear_damp = 17.476
+linear_damp = 34.653
 angular_damp = 15.802
 script = ExtResource("1_r6brj")
 

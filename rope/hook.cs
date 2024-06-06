@@ -60,19 +60,21 @@ public partial class hook : RigidBody2D
 		// Additional logic when the hook hits something can go here
 	}
 
-	private RigidBody2D AddNewPiece(Vector2 offset) {
-		PackedScene ropePieceScene = (PackedScene)ResourceLoader.Load("res://rope/rope_piece.tscn");
-		RigidBody2D ropePiece = (RigidBody2D)ropePieceScene.Instantiate();
+	private RigidBody2D AddNewPiece(Vector2 offset, Vector2 dir) {
+		//GD.Print("summoned a new piece (hook)");
+		PackedScene ropePieceScene = (PackedScene) ResourceLoader.Load("res://rope/rope_piece.tscn");
+		RigidBody2D newPiece = (RigidBody2D) ropePieceScene.Instantiate();
+		GetParent().AddChild(newPiece);
 
-		GD.Print("summoned a new piece (hook)");
-		
-		// Add the rope piece to the scene
-		GetParent().AddChild(ropePiece);
-		ropePiece.GlobalPosition += offset;
+		direction = direction.Normalized();
+		newPiece.GlobalPosition = GlobalPosition + offset * dir;
+		newPiece.Rotation = direction.Angle();
+
+		// set position? do it here if we need to
 
 		pinJoint.NodeA = GetPath();
-		pinJoint.NodeB = ropePiece.GetPath();
-		return ropePiece;
+		pinJoint.NodeB = newPiece.GetPath();
+		return newPiece;
 	}
 
 	public void ConnectToPlayer(CharacterBody2D player) {
