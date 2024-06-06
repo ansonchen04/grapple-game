@@ -32,7 +32,7 @@ point_count = 3
 [node name="World" type="Node2D"]
 
 [node name="Character" parent="." instance=ExtResource("1_ukvsu")]
-position = Vector2(134, 252)
+position = Vector2(135, 250)
 scale = Vector2(0.6, 0.6)
 
 [node name="Camera2D" type="Camera2D" parent="Character"]

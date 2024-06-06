@@ -10,6 +10,8 @@ public partial class player : CharacterBody2D
 	public const float Speed = 300.0f;
 	public const float JumpVelocity = -600.0f;
 	public const float ClimbVelocity = -200.0f;
+	//Starting Position, should be updated whenever player enters a new scene
+	private Vector2 startPosition;
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 	//Ray is in the center of the player model, checking what platform the player is on
@@ -21,9 +23,15 @@ public partial class player : CharacterBody2D
     {
         // Initialize the RayCast2D node
         _downwardRaycast = GetNode<RayCast2D>("DownwardRaycast");
+		startPosition = this.GlobalPosition;
+		GD.Print(startPosition);
     }
 	public override void _PhysicsProcess(double delta)
 	{
+		if(Input.IsActionJustPressed("Restart")){
+			Position = startPosition;
+			Velocity = Vector2.Zero;
+		}
         // Check if the player is on the floor or a specific platform using the raycast
         if (_downwardRaycast.IsColliding())
         {
@@ -31,14 +39,15 @@ public partial class player : CharacterBody2D
 			//Likely will have to constrain this more
             if (collider is Node2D platform)
             {	
-				//GD.Print($"Standing on platform: {platform.Name}");
+				//Will likely have to safeguard this if we collide with platforms without a collision box. 
+				//Not sure when that would happen though
 				this.setOneWay(this.checkOneway(platform));
             }
 		}
 		//Gets the current velocity
 		Vector2 newVelocity = Velocity;
 
-		//Checking which movement option, if any, is being used. Will convert this into a switch case
+		//Checking which movement option, if any, is being used. Will convert this into a switch case in a future commit
 		if(onOneWaySurface){
 			onewaydropMovement(newVelocity);
 			newVelocity = baseMovement(newVelocity);
