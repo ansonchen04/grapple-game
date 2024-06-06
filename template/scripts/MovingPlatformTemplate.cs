@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class PathPlatform : Node2D
+public partial class MovingPlatformTemplate : Node2D
 {
 	private PathFollow2D pathFollow;
 	[Export]

@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://c3upih1e6jt1w"]
+
+[ext_resource type="Script" path="res://template/scripts/MovingPlatformTemplate.cs" id="1_cln1s"]
+[ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="2_2o1ah"]
+
+[sub_resource type="Curve2D" id="Curve2D_y4rks"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 400, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 3
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kdjij"]
+size = Vector2(122.602, 119.074)
+
+[node name="MovingPlatformPath" type="Node2D"]
+script = ExtResource("1_cln1s")
+Speed = null
+
+[node name="PlatformPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_y4rks")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="PlatformPath"]
+rotation = -0.830919
+rotates = false
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="PlatformPath/PathFollow2D"]
+remote_path = NodePath("../../PlatformBody")
+update_rotation = false
+
+[node name="_Timer_17557" type="Timer" parent="PlatformPath/PathFollow2D"]
+wait_time = 0.2
+one_shot = true
+
+[node name="PlatformBody" type="AnimatableBody2D" parent="PlatformPath"]
+
+[node name="Sprite2D" type="Sprite2D" parent="PlatformPath/PlatformBody"]
+texture = ExtResource("2_2o1ah")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformPath/PlatformBody"]
+shape = SubResource("RectangleShape2D_kdjij")
