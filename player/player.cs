@@ -12,6 +12,7 @@ public partial class player : CharacterBody2D
 	public const float ClimbVelocity = -200.0f;
 	//Starting Position, should be updated whenever player enters a new scene
 	private Vector2 startPosition;
+	private Vector2 OOB = new Vector2(4500,2500);
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 	//Ray is in the center of the player model, checking what platform the player is on
@@ -28,9 +29,9 @@ public partial class player : CharacterBody2D
     }
 	public override void _PhysicsProcess(double delta)
 	{
-		if(Input.IsActionJustPressed("Restart")){
-			Position = startPosition;
-			Velocity = Vector2.Zero;
+		//This is shit code and will be replaced once I figure out resources
+		if(Position.X > OOB.X || Position.Y > OOB.Y || Input.IsActionJustPressed("Restart")){
+		this.restart();
 		}
         // Check if the player is on the floor or a specific platform using the raycast
         if (_downwardRaycast.IsColliding())
@@ -134,6 +135,11 @@ public partial class player : CharacterBody2D
 				}
 				}
 		return false;
+	}
+	public void restart(){
+		//If restart button pressed, reset the positon to the start and zero out the velocity
+			Position = startPosition;
+			Velocity = Vector2.Zero;
 	}
 	public void setClimbing(bool onClimbableSurface){
         this.onClimbableSurface = onClimbableSurface;
