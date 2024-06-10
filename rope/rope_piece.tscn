@@ -27,3 +27,6 @@ node_a = NodePath("..")
 position = Vector2(-5.96046e-08, 3.57628e-07)
 scale = Vector2(4, 16)
 texture = SubResource("PlaceholderTexture2D_u6pii")
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(0, -8)

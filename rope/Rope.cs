@@ -7,13 +7,16 @@ public partial class Rope : Node2D {
     RigidBody2D lastPiece;
     CharacterBody2D player;
     RopeState ropeState;
+
     int len = 0;
     const float MaxLength = 200.0f;  // max num links in the rope
     float distToHook = 0;
     float moveSpeed = 300f;  // Speed of the rope movement
     const float PieceLen = 16.0f;
     bool ropeBuilt = false;
+
     Vector2 playerPull;  // the pull of the rope on the player
+    const float PullMult = 1;
 
     public override void _Ready() {
         hook = GetNode<RigidBody2D>("Hook");
@@ -45,6 +48,7 @@ public partial class Rope : Node2D {
                     BuildRope(hook.GlobalPosition, player.GlobalPosition);
                     ropeBuilt = true;
                 }
+                CalculateRopePull();
                 break;
             case RopeState.Retracting:
                 // while holding right click and is hooked, retract
@@ -99,11 +103,23 @@ public partial class Rope : Node2D {
         lastPiece.Call("ConnectToPlayer", player);
     }
 
-    public void MakeRopeStraight() {
-        // make the rope straight from the hook to the player
+    public void CalculateRopePull() {
+        RigidBody2D lpParent = (RigidBody2D) lastPiece.Call("GetPieceParent");
+        Vector2 lpMarkerPos = (Vector2) lastPiece.Call("GetMarkerPos");  // last piece parker pos
+        Vector2 lppJointPos = (Vector2) lpParent.Call("GetJointPos");  // last piece parent joint pos
+
+        float jmDist = lpMarkerPos.DistanceTo(lppJointPos);  // distance between pieces, basically
+        Vector2 lppDir = (lppJointPos - lpMarkerPos).Normalized();
+
+        playerPull = lppDir * jmDist * PullMult;
+        //GD.Print(playerPull);
     }
 
     public void ClearRope() {
         // clear the rope.
+    }
+
+    public Vector2 GetPull() {
+        return playerPull;
     }
 }

@@ -10,10 +10,12 @@ public partial class RopePiece : RigidBody2D {
 	int id;
 	const float PieceLen = 16;
 	RigidBody2D parent;
+	Marker2D marker;
 
 
 	public override void _Ready() {
 		pinJoint = GetNode<PinJoint2D>("PinJoint2D");
+		marker = GetNode<Marker2D>("Marker2D");
 		//ropePieceScene = (PackedScene) ResourceLoader.Load("res://rope/rope_piece.tscn");
 		++len;
 		id = len;
@@ -21,7 +23,7 @@ public partial class RopePiece : RigidBody2D {
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta) {
-		
+		//GD.Print(marker.GlobalPosition.DistanceTo((Vector2) parent.Call("GetJointPos")));
 	}
 
 	public RigidBody2D AddNewPiece(float angle) {
@@ -70,5 +72,13 @@ public partial class RopePiece : RigidBody2D {
 
 	public RigidBody2D GetPieceParent() {
 		return parent;
+	}
+
+	public Vector2 GetJointPos() {
+		return pinJoint.GlobalPosition;
+	}
+
+	public Vector2 GetMarkerPos() {
+		return marker.GlobalPosition;
 	}
 }

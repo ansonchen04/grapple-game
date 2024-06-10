@@ -15,16 +15,20 @@ public partial class player : CharacterBody2D
 	private bool isGrappled = false;
 
 	Node2D rope;
+	Vector2 ropePull;
 	
 	public override void _Ready() {
 		rayCast = GetNode<RayCast2D>("RayCast2D");
 		rayCast.Enabled = true;  // disabled by default, we'll turn it on when we click
 		rope = GetNode<Node2D>("../Rope");  // you need a rope in each scene with a player
+		ropePull = Vector2.Zero;
 	}
 
 	public override void _PhysicsProcess(double delta) {
 		
 		Vector2 velocity = Velocity;
+		ropePull = (Vector2) rope.Call("GetPull");
+		velocity += ropePull;
 
 		// Add the gravity.
 
@@ -75,6 +79,10 @@ public partial class player : CharacterBody2D
 				GD.Print("did not collide with anything.");
 			}
 		}
+	}
+
+	public void SetRopePull(Vector2 newRopePull) {
+		ropePull = newRopePull;
 	}
 
 	public Vector2 GetRaycastPos() {
