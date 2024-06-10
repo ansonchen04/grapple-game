@@ -13,12 +13,14 @@ public partial class Rope : Node2D {
     float moveSpeed = 300f;  // Speed of the rope movement
     const float PieceLen = 16.0f;
     bool ropeBuilt = false;
+    Vector2 playerPull;  // the pull of the rope on the player
 
     public override void _Ready() {
         hook = GetNode<RigidBody2D>("Hook");
         player = GetNode<CharacterBody2D>("../Player");
         lastPiece = hook;
         ropeState = RopeState.Hidden;
+        playerPull = Vector2.Zero;
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -87,7 +89,8 @@ public partial class Rope : Node2D {
         hook.Rotation = angle - (float) Math.PI / 2;
         float dist = playerPos.DistanceTo(hookPos);
 
-        int numPieces = (int) (dist / PieceLen);
+        // i'm not actually sure why i have to subtract 2 here. but if i don't it's not centered.
+        int numPieces = (int) (dist / PieceLen) - 2;  
         for (int i = 0; i < numPieces; i++) {
             lastPiece = (RigidBody2D) lastPiece.Call("AddNewPiece", angle);  // get the position working???
         }

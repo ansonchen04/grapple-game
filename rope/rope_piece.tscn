@@ -12,7 +12,7 @@ height = 16.0
 collision_layer = 2
 collision_mask = 249
 linear_damp = 0.25
-angular_damp = 0.01
+angular_damp = 0.1
 script = ExtResource("1_r6brj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

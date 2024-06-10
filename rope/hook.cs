@@ -77,6 +77,8 @@ public partial class hook : RigidBody2D
 		//ropePiece.GlobalPosition = pinJoint.GlobalPosition;
 		ropePiece.Rotation = angle - (float) Math.PI / 2;
 
+		ropePiece.Call("SetParent", this);
+
 		// set position? do it here if we need to
 
 		pinJoint.NodeA = GetPath();

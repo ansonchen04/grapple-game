@@ -14,21 +14,24 @@ public partial class player : CharacterBody2D
 	private const float RaycastLength = 105.0f;
 	private bool isGrappled = false;
 
-	public PackedScene HookScene; // Reference to the Hook scene
+	Node2D rope;
 	
 	public override void _Ready() {
 		rayCast = GetNode<RayCast2D>("RayCast2D");
-		rayCast.Enabled = true;  // disabled by default, we'll turn it on when we clck
+		rayCast.Enabled = true;  // disabled by default, we'll turn it on when we click
+		rope = GetNode<Node2D>("../Rope");  // you need a rope in each scene with a player
 	}
 
 	public override void _PhysicsProcess(double delta) {
-		/*
+		
 		Vector2 velocity = Velocity;
 
 		// Add the gravity.
-		if (!IsOnFloor())
-			velocity.Y += gravity * (float)delta;
 
+		//if (!IsOnFloor())
+		//	velocity.Y += gravity * (float)delta;
+		
+		/*
 		// Handle Jump.
 		if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
 			velocity.Y = JumpVelocity;
@@ -44,10 +47,11 @@ public partial class player : CharacterBody2D
 		{
 			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
 		}
+		*/
 
 		Velocity = velocity;
 		MoveAndSlide();
-		*/
+		
 	}
 
 	public override void _Input(InputEvent @event) {
@@ -70,12 +74,6 @@ public partial class player : CharacterBody2D
 			} else {
 				GD.Print("did not collide with anything.");
 			}
-			
-			if (HookScene == null) {
-				GD.PrintErr("HookScene is not set in the Player node.");
-				return;
-			}
-
 		}
 	}
 

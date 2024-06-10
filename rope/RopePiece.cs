@@ -9,6 +9,7 @@ public partial class RopePiece : RigidBody2D {
 	static int len;
 	int id;
 	const float PieceLen = 16;
+	RigidBody2D parent;
 
 
 	public override void _Ready() {
@@ -36,6 +37,8 @@ public partial class RopePiece : RigidBody2D {
 		// set position? do it here if we need to
         newPiece.Rotation = angle - (float) Math.PI / 2;
 
+		newPiece.Call("SetParent", this);
+
 		pinJoint.NodeA = GetPath();
 		pinJoint.NodeB = newPiece.GetPath();
 		return newPiece;
@@ -57,7 +60,15 @@ public partial class RopePiece : RigidBody2D {
 		id = newId;
 	}
 
+	public void SetParent(RigidBody2D newParent) {
+		parent = newParent;
+	}
+
 	public int GetId() {
 		return id;
+	}
+
+	public RigidBody2D GetPieceParent() {
+		return parent;
 	}
 }
