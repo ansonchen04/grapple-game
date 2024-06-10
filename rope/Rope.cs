@@ -11,7 +11,7 @@ public partial class Rope : Node2D {
     const float MaxLength = 200.0f;  // max num links in the rope
     float distToHook = 0;
     float moveSpeed = 300f;  // Speed of the rope movement
-    const float PieceLen = 8.0f;
+    const float PieceLen = 16.0f;
     bool ropeBuilt = false;
 
     public override void _Ready() {

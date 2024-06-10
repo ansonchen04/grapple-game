@@ -8,6 +8,7 @@ public partial class RopePiece : RigidBody2D {
 	//PackedScene ropePieceScene;
 	static int len;
 	int id;
+	const float PieceLen = 16;
 
 
 	public override void _Ready() {
@@ -28,7 +29,7 @@ public partial class RopePiece : RigidBody2D {
 		PackedScene ropePieceScene = (PackedScene) ResourceLoader.Load("res://rope/rope_piece.tscn");
 		RigidBody2D newPiece = (RigidBody2D) ropePieceScene.Instantiate();
 		GetParent().AddChild(newPiece);
-		Vector2 vector8 = CreateVector(8.0f, angle);
+		Vector2 vector8 = CreateVector(PieceLen, angle);
 		newPiece.GlobalPosition = GlobalPosition + vector8;
 		//newPiece.GlobalPosition = pinJoint.GlobalPosition;  // might have to fix the positioning
 

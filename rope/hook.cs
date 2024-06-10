@@ -21,6 +21,7 @@ public partial class hook : RigidBody2D
 
 	int tempMax = 5;
 	private CharacterBody2D player;
+	const float PieceLen = 16;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
@@ -71,7 +72,7 @@ public partial class hook : RigidBody2D
 		
 		// Add the rope piece to the scene
 		GetParent().AddChild(ropePiece);
-		Vector2 vector22 = CreateVector(22.0f, angle);
+		Vector2 vector22 = CreateVector(18 + PieceLen / 2, angle);
 		ropePiece.GlobalPosition += vector22;  // 18 is the size of the hitbox + 4 for half the len of the ropepiece
 		//ropePiece.GlobalPosition = pinJoint.GlobalPosition;
 		ropePiece.Rotation = angle - (float) Math.PI / 2;
