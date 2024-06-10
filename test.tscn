@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://bwkqlcpk8d3b6"]
+[gd_scene load_steps=4 format=3 uid="uid://bwkqlcpk8d3b6"]
 
 [ext_resource type="PackedScene" uid="uid://jluoaxxepfrv" path="res://platform.tscn" id="2_idijl"]
+[ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="3_h035g"]
 [ext_resource type="PackedScene" uid="uid://6yotxco8qhu" path="res://rope/Rope.tscn" id="3_wpmqo"]
 
 [node name="Node2D" type="Node2D"]
@@ -10,4 +11,7 @@
 [node name="Camera2D" type="Camera2D" parent="."]
 
 [node name="StaticBody2D" parent="." instance=ExtResource("2_idijl")]
-position = Vector2(310, 100)
+position = Vector2(157, 219)
+
+[node name="Player" parent="." instance=ExtResource("3_h035g")]
+position = Vector2(152, 97)

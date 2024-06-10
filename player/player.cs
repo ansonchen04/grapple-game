@@ -11,19 +11,18 @@ public partial class player : CharacterBody2D
 	private float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
 	private RayCast2D rayCast; 
-	private const float RaycastLength = 5000.0f;
+	private const float RaycastLength = 105.0f;
 	private bool isGrappled = false;
 
 	public PackedScene HookScene; // Reference to the Hook scene
-	private DampedSpringJoint2D rope;
 	
 	public override void _Ready() {
 		rayCast = GetNode<RayCast2D>("RayCast2D");
 		rayCast.Enabled = true;  // disabled by default, we'll turn it on when we clck
-		rope = GetNode<DampedSpringJoint2D>("DampedSpringJoint2D");
 	}
 
 	public override void _PhysicsProcess(double delta) {
+		/*
 		Vector2 velocity = Velocity;
 
 		// Add the gravity.
@@ -48,6 +47,7 @@ public partial class player : CharacterBody2D
 
 		Velocity = velocity;
 		MoveAndSlide();
+		*/
 	}
 
 	public override void _Input(InputEvent @event) {
@@ -77,5 +77,9 @@ public partial class player : CharacterBody2D
 			}
 
 		}
+	}
+
+	public Vector2 GetRaycastPos() {
+		return rayCast.GlobalPosition;
 	}
 }

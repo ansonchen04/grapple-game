@@ -30,7 +30,7 @@ public partial class hook : RigidBody2D
 		collisionArea.Connect("body_entered", new Callable(this, nameof(OnBodyEntered)));
 		lastRopePiece = this;
 		lastPos = GlobalPosition;
-		player = GetParent().GetNode<CharacterBody2D>("player"); // Adjust the path to your player node
+		//player = GetParent().GetNode<CharacterBody2D>("player"); // Adjust the path to your player node
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -63,7 +63,7 @@ public partial class hook : RigidBody2D
 		// Additional logic when the hook hits something can go here
 	}
 
-	private RigidBody2D AddNewPiece() {
+	private RigidBody2D AddNewPiece(float angle) {
 		PackedScene ropePieceScene = (PackedScene)ResourceLoader.Load("res://rope/rope_piece.tscn");
 		RigidBody2D ropePiece = (RigidBody2D)ropePieceScene.Instantiate();
 
@@ -71,7 +71,10 @@ public partial class hook : RigidBody2D
 		
 		// Add the rope piece to the scene
 		GetParent().AddChild(ropePiece);
-		ropePiece.GlobalPosition += new Vector2(0, 50);
+		Vector2 vector22 = CreateVector(22.0f, angle);
+		ropePiece.GlobalPosition += vector22;  // 18 is the size of the hitbox + 4 for half the len of the ropepiece
+		//ropePiece.GlobalPosition = pinJoint.GlobalPosition;
+		ropePiece.Rotation = angle - (float) Math.PI / 2;
 
 		// set position? do it here if we need to
 
@@ -79,6 +82,13 @@ public partial class hook : RigidBody2D
 		pinJoint.NodeB = ropePiece.GetPath();
 		return ropePiece;
 	}
+
+	private Vector2 CreateVector(float length, float angleInRadians) {
+        float x = length * Mathf.Cos(angleInRadians);
+        float y = length * Mathf.Sin(angleInRadians);
+
+        return new Vector2(x, y);
+    }
 
 	public bool IsFlying() {
 		return flying;

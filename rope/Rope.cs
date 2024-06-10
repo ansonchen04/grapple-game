@@ -5,14 +5,18 @@ public partial class Rope : Node2D {
     // Called when the node enters the scene tree for the first time.
     RigidBody2D hook;
     RigidBody2D lastPiece;
+    CharacterBody2D player;
     RopeState ropeState;
     int len = 0;
-    const int MaxLength = 10;  // max num links in the rope
+    const float MaxLength = 200.0f;  // max num links in the rope
     float distToHook = 0;
     float moveSpeed = 300f;  // Speed of the rope movement
+    const float PieceLen = 8.0f;
+    bool ropeBuilt = false;
 
     public override void _Ready() {
         hook = GetNode<RigidBody2D>("Hook");
+        player = GetNode<CharacterBody2D>("../Player");
         lastPiece = hook;
         ropeState = RopeState.Hidden;
     }
@@ -29,20 +33,16 @@ public partial class Rope : Node2D {
             case RopeState.Shot:
                 // check if maxlength or if the rope (not hook) collides with something, if it does go to slack
                 // otherwise, just keep extending the rope length
-                if (len < MaxLength) {  // add the rope collision thing later
-                    // todo later: update positions of rope pieces to be a straight line
-
-                    // for now, i'll just call it once - but need to figure out the distance from hook 
-                    // and use that to determine number of times to call this
-                    lastPiece.Call("SetId", len);
-                    lastPiece = (RigidBody2D) lastPiece.Call("AddNewPiece");
-                    len++;
-                } else {  
-                    ropeState = RopeState.Slack;
-                }
+                if (player.GlobalPosition.DistanceTo(hook.GlobalPosition) > MaxLength) {  
+                    ropeState = RopeState.Hooked;
+                } 
                 break;
             case RopeState.Hooked:
-                // stop growing the rope. lock the hook in place.
+                // summon the rope. lock the hook in place.
+                if (!ropeBuilt) {
+                    BuildRope(hook.GlobalPosition, player.GlobalPosition);
+                    ropeBuilt = true;
+                }
                 break;
             case RopeState.Retracting:
                 // while holding right click and is hooked, retract
@@ -61,7 +61,7 @@ public partial class Rope : Node2D {
 
         if (Input.IsActionPressed("ui_right")) {
             direction.X += 1;
-        }
+        }  
         if (Input.IsActionPressed("ui_left")) {
             direction.X -= 1;
         }
@@ -75,6 +75,25 @@ public partial class Rope : Node2D {
         direction = direction.Normalized();
 
         Position += direction * moveSpeed * (float)delta;
+    }
+
+    public void BuildRope(Vector2 hookCenter, Vector2 playerCenter) {
+        float angle = (playerCenter - hookCenter).Angle();
+        Vector2 dir = (playerCenter - hookCenter).Normalized();
+
+        Vector2 hookPos = hookCenter - dir * 22;
+        Vector2 playerPos = playerCenter;
+
+        hook.Rotation = angle - (float) Math.PI / 2;
+        float dist = playerPos.DistanceTo(hookPos);
+
+        int numPieces = (int) (dist / PieceLen);
+        for (int i = 0; i < numPieces; i++) {
+            lastPiece = (RigidBody2D) lastPiece.Call("AddNewPiece", angle);  // get the position working???
+        }
+
+        // connect to the player
+        lastPiece.Call("ConnectToPlayer", player);
     }
 
     public void MakeRopeStraight() {
