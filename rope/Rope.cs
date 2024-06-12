@@ -106,12 +106,15 @@ public partial class Rope : Node2D {
         float dist = playerPos.DistanceTo(hookPos);
         lastPiece = hook;
 
+        int len = 0;  // ropePieces.Length doesn't give a good value. so i'm using this.
         // i'm not actually sure why i have to subtract 2 here. but if i don't it's not centered.
         int numPieces = (int) (dist / PieceLen) - 2;  
         for (int i = 0; i < numPieces; i++) {
             ropePieces[i] = lastPiece;
             lastPiece = (RigidBody2D) lastPiece.Call("AddNewPiece", angle);  // get the position working???
+            len++;
         }
+        ropePieces[len] = lastPiece;
 
         // connect to the player
         lastPiece.Call("ConnectToPlayer", player);
@@ -143,8 +146,6 @@ public partial class Rope : Node2D {
 
     // clear the rope.
     public void ClearRope() {
-        // Reset the last piece to the hook
-        lastPiece = hook;
         hook.Call("ClearJoint");
 
         // Iterate through the array of rope pieces
@@ -156,6 +157,12 @@ public partial class Rope : Node2D {
                 ropePieces[i] = null;
             }
         }
+        
+        //lastPiece.Call("ClearJoint");
+        //lastPiece.QueueFree();
+
+        // Reset the last piece to the hook
+        lastPiece = hook;
 
         // Reset the rope built flag
         ropeBuilt = false;

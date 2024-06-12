@@ -59,6 +59,8 @@ public partial class RopePiece : RigidBody2D {
 	}
 
 	public void ClearJoint() {
+		pinJoint.NodeA = null;
+		pinJoint.NodeB = null;
 		pinJoint.QueueFree();
 	}
 
