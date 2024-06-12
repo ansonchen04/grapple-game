@@ -12,6 +12,8 @@ public partial class RopePiece : RigidBody2D {
 	RigidBody2D parent;
 	Marker2D marker;
 
+	[Export] public float DragCoefficient { get; set; } = 0.1f;  // Default value, can be adjusted in the editor
+
 
 	public override void _Ready() {
 		pinJoint = GetNode<PinJoint2D>("PinJoint2D");
@@ -22,9 +24,14 @@ public partial class RopePiece : RigidBody2D {
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta) {
-		//GD.Print(marker.GlobalPosition.DistanceTo((Vector2) parent.Call("GetJointPos")));
-	}
+	public override void _PhysicsProcess(double delta) {
+        base._PhysicsProcess(delta);
+
+        // Apply air resistance (drag)
+        Vector2 velocity = LinearVelocity;
+        Vector2 airResistance = -velocity * DragCoefficient;
+        ApplyCentralImpulse(airResistance * Mass * (float)delta);
+    }
 
 	public RigidBody2D AddNewPiece(float angle) {
 		// make a new RopePiece here, and then i want to connect pinJoint.NodeB to it
@@ -49,6 +56,10 @@ public partial class RopePiece : RigidBody2D {
 	public void ConnectToPlayer(CharacterBody2D player) {
 		pinJoint.NodeA = GetPath();
 		pinJoint.NodeB = player.GetPath();
+	}
+
+	public void ClearJoint() {
+		pinJoint.QueueFree();
 	}
 
 	private Vector2 CreateVector(float length, float angleInRadians) {

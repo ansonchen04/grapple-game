@@ -93,6 +93,11 @@ public partial class hook : RigidBody2D
         return new Vector2(x, y);
     }
 
+	public void ClearJoint() {
+		pinJoint.NodeA = GetPath();
+		pinJoint.NodeB = null;
+	}
+
 	public bool IsFlying() {
 		return flying;
 	}
@@ -103,5 +108,9 @@ public partial class hook : RigidBody2D
 
 	public int GetId() {
 		return id;
+	}
+
+	public Vector2 GetJointPos() {
+		return pinJoint.GlobalPosition;
 	}
 }

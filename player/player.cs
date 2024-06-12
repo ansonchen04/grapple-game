@@ -32,8 +32,8 @@ public partial class player : CharacterBody2D
 
 		// Add the gravity.
 
-		//if (!IsOnFloor())
-		//	velocity.Y += gravity * (float)delta;
+		if (!IsOnFloor())
+			velocity.Y += gravity * (float)delta;
 		
 		/*
 		// Handle Jump.
@@ -52,6 +52,11 @@ public partial class player : CharacterBody2D
 			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
 		}
 		*/
+
+		// Apply air resistance (drag)
+		float dragCoefficient = 0.1f;  // Adjust this value as needed
+		Vector2 airResistance = -velocity * dragCoefficient;
+		velocity += airResistance * (float)delta;
 
 		Velocity = velocity;
 		MoveAndSlide();

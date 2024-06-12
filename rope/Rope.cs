@@ -8,15 +8,14 @@ public partial class Rope : Node2D {
     CharacterBody2D player;
     RopeState ropeState;
 
-    int len = 0;
-    const float MaxLength = 200.0f;  // max num links in the rope
-    float distToHook = 0;
+    const float MaxLength = 200.0f;  // max length of rope
     float moveSpeed = 300f;  // Speed of the rope movement
     const float PieceLen = 16.0f;
     bool ropeBuilt = false;
+    RigidBody2D[] ropePieces;  // 0 is the hook
 
     Vector2 playerPull;  // the pull of the rope on the player
-    const float PullMult = 1;
+    [Export] const float PullMult = 0.01f;
 
     public override void _Ready() {
         hook = GetNode<RigidBody2D>("Hook");
@@ -24,6 +23,7 @@ public partial class Rope : Node2D {
         lastPiece = hook;
         ropeState = RopeState.Hidden;
         playerPull = Vector2.Zero;
+        ropePieces = new RigidBody2D[(int) (MaxLength / PieceLen) + 1];
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -33,7 +33,9 @@ public partial class Rope : Node2D {
 
         switch (ropeState) {
             case RopeState.Hidden:
-                ropeState = RopeState.Shot;  // for testing!
+                if (ropeBuilt) {
+                    ClearRope();
+                }
                 break;
             case RopeState.Shot:
                 // check if maxlength or if the rope (not hook) collides with something, if it does go to slack
@@ -61,6 +63,16 @@ public partial class Rope : Node2D {
                 break;
         }
     }
+
+    public override void _Input(InputEvent @event) {
+		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left) {
+			if (ropeState == RopeState.Hidden) {
+                ropeState = RopeState.Shot;
+            } else if (ropeState == RopeState.Hooked) {
+                ropeState = RopeState.Hidden;
+            }
+		}
+	}
 
     private void HandleMovement(double delta) {
         Vector2 direction = Vector2.Zero;
@@ -92,10 +104,12 @@ public partial class Rope : Node2D {
 
         hook.Rotation = angle - (float) Math.PI / 2;
         float dist = playerPos.DistanceTo(hookPos);
+        lastPiece = hook;
 
         // i'm not actually sure why i have to subtract 2 here. but if i don't it's not centered.
         int numPieces = (int) (dist / PieceLen) - 2;  
         for (int i = 0; i < numPieces; i++) {
+            ropePieces[i] = lastPiece;
             lastPiece = (RigidBody2D) lastPiece.Call("AddNewPiece", angle);  // get the position working???
         }
 
@@ -104,19 +118,55 @@ public partial class Rope : Node2D {
     }
 
     public void CalculateRopePull() {
+        RigidBody2D iter = lastPiece;
+
         RigidBody2D lpParent = (RigidBody2D) lastPiece.Call("GetPieceParent");
-        Vector2 lpMarkerPos = (Vector2) lastPiece.Call("GetMarkerPos");  // last piece parker pos
+        Vector2 lpMarkerPos = (Vector2) lastPiece.Call("GetMarkerPos");  // last piece marker pos
         Vector2 lppJointPos = (Vector2) lpParent.Call("GetJointPos");  // last piece parent joint pos
 
-        float jmDist = lpMarkerPos.DistanceTo(lppJointPos);  // distance between pieces, basically
+        //float totalDist = lpMarkerPos.DistanceTo(lppJointPos);  // distance between pieces, basically
         Vector2 lppDir = (lppJointPos - lpMarkerPos).Normalized();
+        float totalDist = 0;
+        while (lpParent is RopePiece) {  // this doesn't get the hook to rope dist, but it should be small so whatever
+            totalDist += lpMarkerPos.DistanceTo(lppJointPos);
+            iter = (RigidBody2D) iter.Call("GetPieceParent");
+            lpParent = (RigidBody2D) iter.Call("GetPieceParent");
+            lpMarkerPos = (Vector2) lastPiece.Call("GetMarkerPos");  // last piece marker pos
+            lppJointPos = (Vector2) lpParent.Call("GetJointPos");  // last piece parent joint pos
+        }
 
-        playerPull = lppDir * jmDist * PullMult;
+        float maxPullForce = 1000f;  // Maximum force that can be applied
+        playerPull = lppDir * totalDist * PullMult;
+        playerPull = playerPull.LimitLength(maxPullForce);
         //GD.Print(playerPull);
     }
 
+    // clear the rope.
     public void ClearRope() {
-        // clear the rope.
+        // Reset the last piece to the hook
+        lastPiece = hook;
+        hook.Call("ClearJoint");
+
+        // Iterate through the array of rope pieces
+        for (int i = 1; i < ropePieces.Length; i++) {
+            if (ropePieces[i] != null) {
+                // Queue each rope piece for deletion
+                ropePieces[i].Call("ClearJoint");
+                ropePieces[i].QueueFree();
+                ropePieces[i] = null;
+            }
+        }
+
+        // Reset the rope built flag
+        ropeBuilt = false;
+
+        // Reset the player pull vector
+        playerPull = Vector2.Zero;
+
+        // Reset the rope state
+        ropeState = RopeState.Hidden;
+
+        GD.Print("Rope cleared");
     }
 
     public Vector2 GetPull() {
