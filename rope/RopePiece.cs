@@ -58,12 +58,14 @@ public partial class RopePiece : RigidBody2D {
 		pinJoint.NodeB = player.GetPath();
 	}
 
+	// clears the joint - for deleting the rope
 	public void ClearJoint() {
 		pinJoint.NodeA = null;
 		pinJoint.NodeB = null;
 		pinJoint.QueueFree();
 	}
 
+	// helper function that creates a vector of length length and in direction angleInRadians
 	private Vector2 CreateVector(float length, float angleInRadians) {
         float x = length * Mathf.Cos(angleInRadians);
         float y = length * Mathf.Sin(angleInRadians);

@@ -65,11 +65,15 @@ public partial class Rope : Node2D {
     }
 
     public override void _Input(InputEvent @event) {
+        // lmb
 		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left) {
-			if (ropeState == RopeState.Hidden) {
-                ropeState = RopeState.Shot;
-            } else if (ropeState == RopeState.Hooked) {
-                ropeState = RopeState.Hidden;
+			switch (ropeState) {
+                case RopeState.Hidden:
+                    ropeState = RopeState.Shot;
+                    break;
+                case RopeState.Hooked:
+                    ropeState = RopeState.Hidden;
+                    break;
             }
 		}
 	}
@@ -95,6 +99,8 @@ public partial class Rope : Node2D {
         Position += direction * moveSpeed * (float)delta;
     }
 
+    // builds the rope!
+    // make sure the hook is never further than the max dist when building the rope or bad things will happen
     public void BuildRope(Vector2 hookCenter, Vector2 playerCenter) {
         float angle = (playerCenter - hookCenter).Angle();
         Vector2 dir = (playerCenter - hookCenter).Normalized();
@@ -106,12 +112,13 @@ public partial class Rope : Node2D {
         float dist = playerPos.DistanceTo(hookPos);
         lastPiece = hook;
 
-        int len = 0;  // ropePieces.Length doesn't give a good value. so i'm using this.
+        int len = 0;  // ropePieces.Length doesn't give a good value for whatever reason. so i'm using this.
+
         // i'm not actually sure why i have to subtract 2 here. but if i don't it's not centered.
         int numPieces = (int) (dist / PieceLen) - 2;  
         for (int i = 0; i < numPieces; i++) {
             ropePieces[i] = lastPiece;
-            lastPiece = (RigidBody2D) lastPiece.Call("AddNewPiece", angle);  // get the position working???
+            lastPiece = (RigidBody2D) lastPiece.Call("AddNewPiece", angle); 
             len++;
         }
         ropePieces[len] = lastPiece;
@@ -127,8 +134,7 @@ public partial class Rope : Node2D {
         Vector2 lpMarkerPos = (Vector2) lastPiece.Call("GetMarkerPos");  // last piece marker pos
         Vector2 lppJointPos = (Vector2) lpParent.Call("GetJointPos");  // last piece parent joint pos
 
-        //float totalDist = lpMarkerPos.DistanceTo(lppJointPos);  // distance between pieces, basically
-        Vector2 lppDir = (lppJointPos - lpMarkerPos).Normalized();
+        Vector2 lppDir = (lppJointPos - lpMarkerPos).Normalized();  // direction of the parent of the past rope piece
         float totalDist = 0;
         while (lpParent is RopePiece) {  // this doesn't get the hook to rope dist, but it should be small so whatever
             totalDist += lpMarkerPos.DistanceTo(lppJointPos);
@@ -157,9 +163,6 @@ public partial class Rope : Node2D {
                 ropePieces[i] = null;
             }
         }
-        
-        //lastPiece.Call("ClearJoint");
-        //lastPiece.QueueFree();
 
         // Reset the last piece to the hook
         lastPiece = hook;
@@ -173,7 +176,7 @@ public partial class Rope : Node2D {
         // Reset the rope state
         ropeState = RopeState.Hidden;
 
-        GD.Print("Rope cleared");
+        //GD.Print("Rope cleared");
     }
 
     public Vector2 GetPull() {

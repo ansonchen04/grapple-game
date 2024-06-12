@@ -47,6 +47,7 @@ public partial class hook : RigidBody2D
 		GlobalPosition += direction * 105;
 	}
 
+	// when the hook hits something
 	private void OnBodyEntered(Node2D body) {
 		// GD.Print("Collided with: " + body.Name);
 		if (body.IsInGroup("NotHookable")) {
@@ -64,28 +65,27 @@ public partial class hook : RigidBody2D
 		// Additional logic when the hook hits something can go here
 	}
 
+	// adds a new piece attached to this piece
 	private RigidBody2D AddNewPiece(float angle) {
 		PackedScene ropePieceScene = (PackedScene)ResourceLoader.Load("res://rope/rope_piece.tscn");
 		RigidBody2D ropePiece = (RigidBody2D)ropePieceScene.Instantiate();
 
-		GD.Print("summoned a new piece (hook)");
+		//GD.Print("summoned a new piece (hook)");
 		
 		// Add the rope piece to the scene
 		GetParent().AddChild(ropePiece);
 		Vector2 vector22 = CreateVector(18 + PieceLen / 2, angle);
 		ropePiece.GlobalPosition += vector22;  // 18 is the size of the hitbox + 4 for half the len of the ropepiece
-		//ropePiece.GlobalPosition = pinJoint.GlobalPosition;
 		ropePiece.Rotation = angle - (float) Math.PI / 2;
 
 		ropePiece.Call("SetParent", this);
-
-		// set position? do it here if we need to
 
 		pinJoint.NodeA = GetPath();
 		pinJoint.NodeB = ropePiece.GetPath();
 		return ropePiece;
 	}
 
+	// helper function that creates a vector of length length and in direction angleInRadians
 	private Vector2 CreateVector(float length, float angleInRadians) {
         float x = length * Mathf.Cos(angleInRadians);
         float y = length * Mathf.Sin(angleInRadians);

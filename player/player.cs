@@ -86,6 +86,7 @@ public partial class player : CharacterBody2D
 		}
 	}
 
+	// sets the' force the rope should be applying to the player
 	public void SetRopePull(Vector2 newRopePull) {
 		ropePull = newRopePull;
 	}
