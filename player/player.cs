@@ -5,7 +5,7 @@ public partial class player : CharacterBody2D
 {
 	private const float Speed = 300.0f;
 	private const float JumpVelocity = -400.0f;
-	private Vector2 hookDir = Vector2.Zero;
+	Vector2 hookStartPos;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	private float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
@@ -71,6 +71,9 @@ public partial class player : CharacterBody2D
 			Vector2 mousePosition = GetGlobalMousePosition();
 			Vector2 direction = (mousePosition - GlobalPosition).Normalized();
 			direction *= RaycastLength;  // need to rename this later!!!
+
+			hookStartPos = direction;
+			rope.Call("SetMouseLoc", direction);
 			
 			// Set the raycast's target position relative to the character's position
 			rayCast.TargetPosition = direction;  
@@ -78,11 +81,13 @@ public partial class player : CharacterBody2D
 			// Optionally update the raycast (not needed if auto_update is true)
 			rayCast.ForceRaycastUpdate();
 
+			/*
 			if (rayCast.IsColliding()) {
 				GD.Print("collided! distance: " + GlobalPosition.DistanceTo(rayCast.GetCollisionPoint()));
 			} else {
 				GD.Print("did not collide with anything.");
 			}
+			*/
 		}
 	}
 
@@ -93,5 +98,9 @@ public partial class player : CharacterBody2D
 
 	public Vector2 GetRaycastPos() {
 		return rayCast.GlobalPosition;
+	}
+
+	public Vector2 GetHookStartPos() {
+		return hookStartPos + GlobalPosition;
 	}
 }

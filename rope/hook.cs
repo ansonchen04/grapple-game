@@ -31,6 +31,7 @@ public partial class hook : RigidBody2D
 		collisionArea.Connect("body_entered", new Callable(this, nameof(OnBodyEntered)));
 		lastRopePiece = this;
 		lastPos = GlobalPosition;
+		HideHook();
 		//player = GetParent().GetNode<CharacterBody2D>("player"); // Adjust the path to your player node
 	}
 
@@ -41,10 +42,12 @@ public partial class hook : RigidBody2D
 	}
 
 	// Shoot the grapple
-	public void Shoot(Vector2 targetPosition) {
+	public void Shoot(float angle) {
 		flying = true;
-		direction = (targetPosition - GlobalPosition).Normalized();
-		GlobalPosition += direction * 105;
+		//direction = (targetPosition - GlobalPosition).Normalized();
+		direction = -CreateVector(1, angle);
+		LinearVelocity = direction * Speed;
+		//GlobalPosition += direction * 105;
 	}
 
 	// when the hook hits something
@@ -92,6 +95,34 @@ public partial class hook : RigidBody2D
 
         return new Vector2(x, y);
     }
+
+	public void HideHook() {
+    // Make hook invisible
+    Visible = false;
+    collisionShape.Disabled = true;
+
+    // Turn off physics
+    // Mode = ModeEnum.Static;
+    //Mass = 999999999; // Mass is set to a very high value to simulate disabling physics
+    LinearVelocity = Vector2.Zero; // Stop any movement
+    AngularVelocity = 0;
+
+    // Make it not be able to collide with anything
+    collisionArea.SetDeferred("monitoring", false); // Disable monitoring for collisions
+}
+
+public void ShowHook() {
+    // Make hook visible
+    Visible = true;
+    collisionShape.Disabled = false;
+
+    // Turn on physics
+    //Mode = ModeEnum.Rigid;
+    //Mass = 1; // Reset the mass to a reasonable value
+
+    // Enable collision
+    collisionArea.SetDeferred("monitoring", true); // Enable monitoring for collisions
+}
 
 	public void ClearJoint() {
 		pinJoint.NodeA = GetPath();

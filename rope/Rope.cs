@@ -12,9 +12,11 @@ public partial class Rope : Node2D {
     float moveSpeed = 300f;  // Speed of the rope movement
     const float PieceLen = 16.0f;
     bool ropeBuilt = false;
+    bool hookShot = false;
     RigidBody2D[] ropePieces;  // 0 is the hook
 
     Vector2 playerPull;  // the pull of the rope on the player
+    Vector2 mouseLoc;
     [Export] const float PullMult = 0.01f;
 
     public override void _Ready() {
@@ -28,8 +30,8 @@ public partial class Rope : Node2D {
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta) {
-        // Handle input for moving the rope
-        HandleMovement(delta);
+        // Handle input for moving the rope (debug)
+        // HandleMovement(delta);
 
         switch (ropeState) {
             case RopeState.Hidden:
@@ -40,6 +42,9 @@ public partial class Rope : Node2D {
             case RopeState.Shot:
                 // check if maxlength or if the rope (not hook) collides with something, if it does go to slack
                 // otherwise, just keep extending the rope length
+                if (!hookShot) {
+                    ShootHook();
+                }
                 if (player.GlobalPosition.DistanceTo(hook.GlobalPosition) > MaxLength) {  
                     ropeState = RopeState.Hooked;
                 } 
@@ -71,6 +76,9 @@ public partial class Rope : Node2D {
                 case RopeState.Hidden:
                     ropeState = RopeState.Shot;
                     break;
+                case RopeState.Shot:
+                    ropeState = RopeState.Hidden;
+                    break;
                 case RopeState.Hooked:
                     ropeState = RopeState.Hidden;
                     break;
@@ -78,6 +86,7 @@ public partial class Rope : Node2D {
 		}
 	}
 
+    // debug
     private void HandleMovement(double delta) {
         Vector2 direction = Vector2.Zero;
 
@@ -101,7 +110,7 @@ public partial class Rope : Node2D {
 
     // builds the rope!
     // make sure the hook is never further than the max dist when building the rope or bad things will happen
-    public void BuildRope(Vector2 hookCenter, Vector2 playerCenter) {
+    public void BuildRope(Vector2 hookCenter, Vector2 playerCenter) {  // to do ROPE SPAWN NO WORK
         float angle = (playerCenter - hookCenter).Angle();
         Vector2 dir = (playerCenter - hookCenter).Normalized();
 
@@ -109,6 +118,7 @@ public partial class Rope : Node2D {
         Vector2 playerPos = playerCenter;
 
         hook.Rotation = angle - (float) Math.PI / 2;
+
         float dist = playerPos.DistanceTo(hookPos);
         lastPiece = hook;
 
@@ -176,10 +186,38 @@ public partial class Rope : Node2D {
         // Reset the rope state
         ropeState = RopeState.Hidden;
 
+        // hide the hook
+        hook.Call("HideHook");
+
         //GD.Print("Rope cleared");
+    }
+
+    // helper function that creates a vector of length length and in direction angleInRadians
+	private Vector2 CreateVector(float length, float angleInRadians) {
+        float x = length * Mathf.Cos(angleInRadians);
+        float y = length * Mathf.Sin(angleInRadians);
+
+        return new Vector2(x, y);
+    }
+
+    public void ShootHook() {
+        hook.Call("ShowHook");
+
+        hook.GlobalPosition = GlobalPosition;
+        GlobalPosition = (Vector2) player.Call("GetHookStartPos");
+
+        float angle = (player.GlobalPosition - hook.GlobalPosition).Angle();
+        hook.Rotation = angle - (float) Math.PI / 2;
+
+        hook.Call("Shoot", angle);
+        hookShot = true;
     }
 
     public Vector2 GetPull() {
         return playerPull;
+    }
+
+    public void SetMouseLoc(Vector2 clickPos) {
+        mouseLoc = clickPos;
     }
 }
