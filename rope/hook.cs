@@ -5,12 +5,10 @@ using System;
 public partial class hook : RigidBody2D
 {
 	public const float Speed = 100f; // The speed with which the chain moves
+	private float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 	private Vector2 direction = new Vector2(0, 0);
-	private float dist = 0f;
-	private float deltaDist = 0f;
+	bool enableGravity = false;
 
-	private bool flying = false;
-	private bool hooked = false;
 	private Area2D collisionArea;
 	private CollisionShape2D collisionShape;
 	private PinJoint2D pinJoint;
@@ -32,20 +30,30 @@ public partial class hook : RigidBody2D
 		lastRopePiece = this;
 		lastPos = GlobalPosition;
 		HideHook();
-		//player = GetParent().GetNode<CharacterBody2D>("player"); // Adjust the path to your player node
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _PhysicsProcess(double delta) {
-		// Move the hook in the set direction
-
+		if (enableGravity) {
+			Vector2 velocity = LinearVelocity;
+			velocity.Y += gravity * (float) delta;
+			LinearVelocity = velocity; 
+		}
 	}
 
 	// Shoot the grapple
 	public void Shoot(float angle) {
-		flying = true;
 		direction = -CreateVector(1, angle);
 		LinearVelocity = direction * Speed;
+	}
+
+	// makes the hook go slack
+	public void GoSlack() {
+		LinearVelocity = Vector2.Zero;
+
+		// enable gravity on the hook
+		enableGravity = true;
+		Mass = 1;
 	}
 
 	// when the hook hits something
@@ -55,15 +63,10 @@ public partial class hook : RigidBody2D
 			// GD.Print("not hookable!");
 			return; // Ignore this collision
 		}
-		flying = false;
-		hooked = true;
 
 		//Freeze = true;
 		//FreezeMode = FreezeModeEnum.Static;
 		Mass = 999999999;  // freeze is not working so this is the temporary solution
-		//GD.Print("frozen!");
-
-		// Additional logic when the hook hits something can go here
 	}
 
 	// adds a new piece attached to this piece
@@ -95,42 +98,35 @@ public partial class hook : RigidBody2D
     }
 
 	public void HideHook() {
-    // Make hook invisible
-    Visible = false;
-    collisionShape.Disabled = true;
+		// Make hook invisible
+		Visible = false;
+		collisionShape.Disabled = true;
 
-    // Turn off physics
-    // Mode = ModeEnum.Static;
-    //Mass = 999999999; // Mass is set to a very high value to simulate disabling physics
-    LinearVelocity = Vector2.Zero; // Stop any movement
-    AngularVelocity = 0;
+		// Turn off physics
+		LinearVelocity = Vector2.Zero; // Stop any movement
+		AngularVelocity = 0;
 
-    // Make it not be able to collide with anything
-    collisionArea.SetDeferred("monitoring", false); // Disable monitoring for collisions
-}
+		// Make it not be able to collide with anything
+		collisionArea.SetDeferred("monitoring", false); // Disable monitoring for collisions
+	}
 
-public void ShowHook() {
-    // Make hook visible
-    Visible = true;
-    collisionShape.Disabled = false;
+	public void ShowHook() {
+		// Make hook visible
+		Visible = true;
+		collisionShape.Disabled = false;
 
-    // Turn on physics
-    //Mode = ModeEnum.Rigid;
-    //Mass = 1; // Reset the mass to a reasonable value
+		// disable gravity (it's by default disabled)
+		enableGravity = false;
 
-    // Enable collision
-    collisionArea.SetDeferred("monitoring", true); // Enable monitoring for collisions
-}
+		// Enable collision
+		collisionArea.SetDeferred("monitoring", true); // Enable monitoring for collisions
+	}
 
 	public void ClearJoint() {
 		pinJoint.NodeA = GetPath();
 		pinJoint.NodeB = null;
 	}
-
-	public bool IsFlying() {
-		return flying;
-	}
-
+	
 	public void SetId(int newId) {
 		id = newId;
 	}

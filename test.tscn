@@ -11,7 +11,7 @@
 [node name="Camera2D" type="Camera2D" parent="."]
 
 [node name="StaticBody2D" parent="." instance=ExtResource("2_idijl")]
-position = Vector2(157, 219)
+position = Vector2(269, -76)
 
 [node name="Player" parent="." instance=ExtResource("3_h035g")]
-position = Vector2(152, 97)
+position = Vector2(264, -198)

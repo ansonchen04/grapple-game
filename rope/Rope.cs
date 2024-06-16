@@ -8,7 +8,7 @@ public partial class Rope : Node2D {
     CharacterBody2D player;
     RopeState ropeState;
 
-    const float MaxLength = 200.0f;  // max length of rope
+    const float MaxLength = 500.0f;  // max length of rope
     float moveSpeed = 300f;  // Speed of the rope movement
     const float PieceLen = 16.0f;
     bool ropeBuilt = false;
@@ -47,8 +47,8 @@ public partial class Rope : Node2D {
                 if (!hookShot) {
                     ShootHook();
                 }
-                if (player.GlobalPosition.DistanceTo(hook.GlobalPosition) > MaxLength) {  
-                    ropeState = RopeState.Hooked;
+                if (player.GlobalPosition.DistanceTo(hook.GlobalPosition) > MaxLength) {  // add or something hits the rope later
+                    ropeState = RopeState.Slack;
                 } 
                 break;
             case RopeState.Hooked:
@@ -67,6 +67,12 @@ public partial class Rope : Node2D {
             case RopeState.Slack:
                 // gravity starts working on the whole rope + hook. stop extending the rope.
                 // if the hook hits something switch states to hooked
+                if (!ropeBuilt) {
+                    BuildRope(hook.GlobalPosition, player.GlobalPosition);
+                    ropeBuilt = true;
+                }
+                // gravity!
+                hook.Call("GoSlack");
                 break;
         }
     }
@@ -228,5 +234,20 @@ public partial class Rope : Node2D {
 
     public void SetMouseLoc(Vector2 clickPos) {
         mouseLoc = clickPos;
+    }
+
+    // what to do when the hook hits something
+    public void HandleHook() {
+        switch (ropeState) {
+            case RopeState.Shot:
+                ropeState = RopeState.Hooked;
+                break;
+            case RopeState.Retracting:
+                ropeState = RopeState.Hooked;
+                break;
+            case RopeState.Slack:
+                ropeState = RopeState.Hooked;
+                break;
+        }
     }
 }
