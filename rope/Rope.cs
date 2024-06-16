@@ -65,8 +65,7 @@ public partial class Rope : Node2D {
                 // also play w diff speeds
                 break;
             case RopeState.Slack:
-                // gravity starts working on the whole rope + hook. stop extending the rope.
-                // if the hook hits something switch states to hooked
+                // to do: fix slack movement - make it more natural
                 if (!ropeBuilt) {
                     BuildRope(hook.GlobalPosition, player.GlobalPosition);
                     ropeBuilt = true;

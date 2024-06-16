@@ -35,7 +35,7 @@ public partial class player : CharacterBody2D
 		if (!IsOnFloor())
 			velocity.Y += gravity * (float)delta;
 		
-		/*
+		
 		// Handle Jump.
 		if (Input.IsActionJustPressed("ui_accept") && IsOnFloor())
 			velocity.Y = JumpVelocity;
@@ -51,7 +51,7 @@ public partial class player : CharacterBody2D
 		{
 			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
 		}
-		*/
+		
 
 		// Apply air resistance (drag)
 		float dragCoefficient = 0.1f;  // Adjust this value as needed

@@ -58,7 +58,7 @@ public partial class hook : RigidBody2D
 
 	// when the hook hits something
 	private void OnBodyEntered(Node2D body) {
-		// GD.Print("Collided with: " + body.Name);
+		 GD.Print("Collided with: " + body.Name);
 		if (body.IsInGroup("NotHookable")) {
 			// GD.Print("not hookable!");
 			return; // Ignore this collision
@@ -67,6 +67,8 @@ public partial class hook : RigidBody2D
 		//Freeze = true;
 		//FreezeMode = FreezeModeEnum.Static;
 		Mass = 999999999;  // freeze is not working so this is the temporary solution
+		LinearVelocity = Vector2.Zero;
+		GetParent().Call("HandleHook");  // calling HandleHook in Rope
 	}
 
 	// adds a new piece attached to this piece
