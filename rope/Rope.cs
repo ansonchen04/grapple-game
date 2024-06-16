@@ -37,6 +37,8 @@ public partial class Rope : Node2D {
             case RopeState.Hidden:
                 if (ropeBuilt) {
                     ClearRope();
+                } else if (hookShot) {
+                    HideHook();
                 }
                 break;
             case RopeState.Shot:
@@ -111,6 +113,8 @@ public partial class Rope : Node2D {
     // builds the rope!
     // make sure the hook is never further than the max dist when building the rope or bad things will happen
     public void BuildRope(Vector2 hookCenter, Vector2 playerCenter) {  // to do ROPE SPAWN NO WORK
+        GlobalPosition = hook.GlobalPosition;
+        hook.GlobalPosition = GlobalPosition;
         float angle = (playerCenter - hookCenter).Angle();
         Vector2 dir = (playerCenter - hookCenter).Normalized();
 
@@ -211,6 +215,11 @@ public partial class Rope : Node2D {
 
         hook.Call("Shoot", angle);
         hookShot = true;
+    }
+
+    public void HideHook() {
+        hook.Call("HideHook");
+        hookShot = false;
     }
 
     public Vector2 GetPull() {

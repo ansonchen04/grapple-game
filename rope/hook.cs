@@ -44,10 +44,8 @@ public partial class hook : RigidBody2D
 	// Shoot the grapple
 	public void Shoot(float angle) {
 		flying = true;
-		//direction = (targetPosition - GlobalPosition).Normalized();
 		direction = -CreateVector(1, angle);
 		LinearVelocity = direction * Speed;
-		//GlobalPosition += direction * 105;
 	}
 
 	// when the hook hits something
