@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://bqfyvbq7lj3y8"]
+
+[ext_resource type="Script" path="res://rope/RopePiece.cs" id="1_r6brj"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ixfx6"]
+radius = 2.0
+height = 16.0
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_u6pii"]
+
+[node name="RopePiece" type="RigidBody2D" groups=["Player"]]
+collision_layer = 2
+collision_mask = 249
+linear_damp = 0.25
+angular_damp = 0.1
+script = ExtResource("1_r6brj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_ixfx6")
+
+[node name="PinJoint2D" type="PinJoint2D" parent="."]
+position = Vector2(0, 8)
+scale = Vector2(0.2, 0.2)
+node_a = NodePath("..")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-5.96046e-08, 3.57628e-07)
+scale = Vector2(4, 16)
+texture = SubResource("PlaceholderTexture2D_u6pii")
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(0, -8)
