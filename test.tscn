@@ -1,20 +1,109 @@
-[gd_scene load_steps=4 format=3 uid="uid://bwkqlcpk8d3b6"]
+[gd_scene load_steps=11 format=3 uid="uid://bwkqlcpk8d3b6"]
 
-[ext_resource type="PackedScene" uid="uid://jluoaxxepfrv" path="res://platform.tscn" id="2_idijl"]
-[ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="3_h035g"]
-[ext_resource type="PackedScene" uid="uid://6yotxco8qhu" path="res://rope/Rope.tscn" id="3_wpmqo"]
+[ext_resource type="PackedScene" uid="uid://jluoaxxepfrv" path="res://template/platform.tscn" id="1_18mqm"]
+[ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="2_8rov2"]
+[ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="4_75edt"]
+[ext_resource type="Script" path="res://level/level1/PathPlatform.cs" id="4_d6s7j"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l41iw"]
+size = Vector2(127.625, 124.875)
+
+[sub_resource type="Animation" id="Animation_pa0ob"]
+resource_name = "PlatformMovement"
+length = 4.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2, 4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(75, 483), Vector2(334, 483), Vector2(75, 483)]
+}
+
+[sub_resource type="Animation" id="Animation_dcl1p"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(75, 455)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fmt24"]
+_data = {
+"PlatformMovement": SubResource("Animation_pa0ob"),
+"RESET": SubResource("Animation_dcl1p")
+}
+
+[sub_resource type="Curve2D" id="Curve2D_y4rks"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 878.878, 528.638, 0, 0, 0, 0, 1110.31, 397.787, 0, 0, 0, 0, 873.368, -108.606, 0, 0, 0, 0, 659.847, 397.787, 0, 0, 0, 0, 878.878, 528.638)
+}
+point_count = 5
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kdjij"]
+size = Vector2(122.602, 119.074)
 
 [node name="Node2D" type="Node2D"]
 
-[node name="Rope" parent="." instance=ExtResource("3_wpmqo")]
+[node name="StaticPlatform" parent="." instance=ExtResource("1_18mqm")]
+position = Vector2(549, 445)
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Character" parent="." instance=ExtResource("2_8rov2")]
+position = Vector2(549, 271)
 
-[node name="StaticBody2D" parent="." instance=ExtResource("2_idijl")]
-position = Vector2(236, 237)
+[node name="MovingPlatform" type="AnimatableBody2D" parent="."]
+position = Vector2(75, 455)
 
-[node name="Player" parent="." instance=ExtResource("3_h035g")]
-position = Vector2(231, 115)
+[node name="Sprite2D" type="Sprite2D" parent="MovingPlatform"]
+texture = ExtResource("4_75edt")
 
-[node name="StaticBody2D2" parent="." instance=ExtResource("2_idijl")]
-position = Vector2(-13, -183)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovingPlatform"]
+position = Vector2(-3, -1)
+shape = SubResource("RectangleShape2D_l41iw")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MovingPlatform"]
+deterministic = true
+libraries = {
+"": SubResource("AnimationLibrary_fmt24")
+}
+autoplay = "PlatformMovement"
+
+[node name="MovingPlatformPath" type="Node2D" parent="."]
+script = ExtResource("4_d6s7j")
+
+[node name="PlatformPath" type="Path2D" parent="MovingPlatformPath"]
+position = Vector2(295, 123)
+scale = Vector2(0.725926, 0.764228)
+curve = SubResource("Curve2D_y4rks")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="MovingPlatformPath/PlatformPath"]
+position = Vector2(878.878, 528.638)
+rotation = -0.830919
+rotates = false
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="MovingPlatformPath/PlatformPath/PathFollow2D"]
+remote_path = NodePath("../../PlatformBody")
+update_rotation = false
+
+[node name="PlatformBody" type="AnimatableBody2D" parent="MovingPlatformPath/PlatformPath"]
+position = Vector2(878.878, 528.638)
+scale = Vector2(1.02912, 0.972982)
+
+[node name="Sprite2D" type="Sprite2D" parent="MovingPlatformPath/PlatformPath/PlatformBody"]
+texture = ExtResource("4_75edt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovingPlatformPath/PlatformPath/PlatformBody"]
+position = Vector2(7.62939e-06, -1.30849)
+shape = SubResource("RectangleShape2D_kdjij")
