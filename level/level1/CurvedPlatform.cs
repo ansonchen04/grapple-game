@@ -12,7 +12,6 @@ public partial class CurvedPlatform : Node2D
         var polygon = curve.GetBakedPoints();
         
         var climbArea = GetNode<Area2D>("ClimbArea");
-
         // Assign the points to Polygon2D
         GetNode<Polygon2D>("Polygon2D").Polygon = polygon;
         
@@ -25,7 +24,6 @@ public partial class CurvedPlatform : Node2D
 
         // Add the CollisionPolygon2D as a child of this node
         AddChild(collisionPoly);
-
         climbArea.BodyEntered += OnBodyEntered;
         climbArea.BodyExited += OnBodyExited;
     }
@@ -33,6 +31,7 @@ public partial class CurvedPlatform : Node2D
     private void OnBodyEntered(Node body)
     {
         GD.Print("Body entered: ", body.Name);
+
         if (body is player)
         {
             (body as player).setClimbing(true);

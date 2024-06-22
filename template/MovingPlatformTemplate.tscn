@@ -14,7 +14,6 @@ size = Vector2(122.602, 119.074)
 
 [node name="MovingPlatformPath" type="Node2D"]
 script = ExtResource("1_cln1s")
-Speed = null
 
 [node name="PlatformPath" type="Path2D" parent="."]
 curve = SubResource("Curve2D_y4rks")

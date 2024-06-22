@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://jp83d74t8m5a"]
+[gd_scene load_steps=12 format=3 uid="uid://jp83d74t8m5a"]
 
 [ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="1_ukvsu"]
 [ext_resource type="Script" path="res://level/level1/PolyPlatSprite.cs" id="2_02str"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://level/level1/CurvedPlatform.cs" id="4_bo2c2"]
 [ext_resource type="Script" path="res://level/level1/PathPlatform.cs" id="5_yoi6j"]
 [ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="6_vntua"]
+[ext_resource type="PackedScene" uid="uid://6yotxco8qhu" path="res://rope/Rope.tscn" id="7_8ixvg"]
 
 [sub_resource type="Curve2D" id="Curve2D_i6v66"]
 bake_interval = 35.0
@@ -31,17 +32,20 @@ point_count = 3
 
 [node name="World" type="Node2D"]
 
-[node name="Character" parent="." instance=ExtResource("1_ukvsu")]
+[node name="Player" parent="." instance=ExtResource("1_ukvsu")]
 position = Vector2(135, 250)
 scale = Vector2(0.6, 0.6)
+collision_layer = 5
 
-[node name="Camera2D" type="Camera2D" parent="Character"]
+[node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(1.5, 1.5)
 position_smoothing_speed = 10.0
 
-[node name="DownwardRaycast" type="RayCast2D" parent="Character"]
+[node name="DownwardRaycast" type="RayCast2D" parent="Player"]
 position = Vector2(0, 65)
 hit_from_inside = true
+
+[node name="Rope" parent="." instance=ExtResource("7_8ixvg")]
 
 [node name="StartingPlatform" type="StaticBody2D" parent="."]
 position = Vector2(0, 380)

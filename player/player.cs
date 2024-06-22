@@ -14,14 +14,15 @@ public partial class player : CharacterBody2D
 	//Starting Position, should be updated whenever player enters a new scene
 	private Vector2 startPosition;
 	private Vector2 OOB = new Vector2(4500,2500);
-  private Vector2 hookStartPos;
+ 	private Vector2 hookStartPos;
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	private float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 	//Ray is in the center of the player model, checking what platform the player is on
 	private RayCast2D _downwardRaycast;
   //TODO Rename raycast length to a clearer name
   private const float RaycastLength = 105.0f;
-	private bool isGrappled = false;
+  private RayCast2D rayCast;
+  private bool isGrappled = false;
   Node2D rope;
 	Vector2 ropePull;
 	
@@ -32,10 +33,13 @@ public partial class player : CharacterBody2D
     {
         // Initialize the RayCast2D node
         _downwardRaycast = GetNode<RayCast2D>("DownwardRaycast");
-		    startPosition = this.GlobalPosition;
-		    GD.Print(startPosition);
+		startPosition = this.GlobalPosition;
+		GD.Print(startPosition);
+		rayCast = GetNode<RayCast2D>("RayCast2D");
+        rayCast.Enabled = true;  // disabled by default, we'll turn it on when we click
         rope = GetNode<Node2D>("../Rope");  // you need a rope in each scene with a player
-		    ropePull = Vector2.Zero;
+		GD.Print(rope);
+		ropePull = Vector2.Zero;
     }
 	public override void _PhysicsProcess(double delta)
 	{
@@ -72,12 +76,13 @@ public partial class player : CharacterBody2D
 		// Add the gravity.
 		if (!IsOnFloor() && !onClimbableSurface)
 			newVelocity.Y += gravity * (float)delta;
-    ropePull = (Vector2) rope.Call("GetPull");
+    	ropePull = (Vector2) rope.Call("GetPull");
 		newVelocity += ropePull;
 		//Updates to the new velocity
 		Velocity = newVelocity;
 		//Moves the sprite at the end
 		MoveAndSlide();
+		//GD.Print(onClimbableSurface);
 	}
   	public override void _Input(InputEvent @event) {
 		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left) {
@@ -134,6 +139,15 @@ public partial class player : CharacterBody2D
 		{
 			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
 		}
+		// Handle Jump.
+		if (Input.IsActionPressed("Up"))
+			velocity.Y = ClimbVelocity;
+		else if (Input.IsActionPressed("Down"))
+			velocity.Y = -ClimbVelocity;
+		else
+			velocity.Y = 0;
+		return velocity;
+	}
 	private Vector2 onewaydropMovement(Vector2 velocity){
 		// Drop the player down 1 pixel if standing on a one-way collision platform and "ui_drop_down" is pressed
         //TODO verify this actually does ^
@@ -187,13 +201,5 @@ public partial class player : CharacterBody2D
 
 	public Vector2 GetHookStartPos() {
 		return hookStartPos + GlobalPosition;
-		// Handle Jump.
-		if (Input.IsActionPressed("Up"))
-			velocity.Y = ClimbVelocity;
-		else if (Input.IsActionPressed("Down"))
-			velocity.Y = -ClimbVelocity;
-		else
-			velocity.Y = 0;
-		return velocity;
 	}
 }

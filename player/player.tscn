@@ -12,7 +12,6 @@ collision_mask = 253
 script = ExtResource("1_58q48")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-visible = false
 texture = ExtResource("2_s60mg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
