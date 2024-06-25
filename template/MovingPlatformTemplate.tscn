@@ -31,6 +31,7 @@ wait_time = 0.2
 one_shot = true
 
 [node name="PlatformBody" type="AnimatableBody2D" parent="PlatformPath"]
+collision_mask = 5
 
 [node name="Sprite2D" type="Sprite2D" parent="PlatformPath/PlatformBody"]
 texture = ExtResource("2_2o1ah")

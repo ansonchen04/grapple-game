@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://bwkqlcpk8d3b6"]
+[gd_scene load_steps=12 format=3 uid="uid://bwkqlcpk8d3b6"]
 
 [ext_resource type="PackedScene" uid="uid://jluoaxxepfrv" path="res://template/platform.tscn" id="1_18mqm"]
 [ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="2_8rov2"]
+[ext_resource type="PackedScene" uid="uid://6yotxco8qhu" path="res://rope/Rope.tscn" id="2_hk15k"]
 [ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="4_75edt"]
 [ext_resource type="Script" path="res://level/level1/PathPlatform.cs" id="4_d6s7j"]
 
@@ -57,11 +58,14 @@ size = Vector2(122.602, 119.074)
 
 [node name="Node2D" type="Node2D"]
 
+[node name="Player" parent="." instance=ExtResource("2_8rov2")]
+position = Vector2(549, 271)
+collision_mask = 1
+
+[node name="Rope" parent="." instance=ExtResource("2_hk15k")]
+
 [node name="StaticPlatform" parent="." instance=ExtResource("1_18mqm")]
 position = Vector2(549, 445)
-
-[node name="Character" parent="." instance=ExtResource("2_8rov2")]
-position = Vector2(549, 271)
 
 [node name="MovingPlatform" type="AnimatableBody2D" parent="."]
 position = Vector2(75, 455)

@@ -10,6 +10,7 @@ _data = {
 point_count = 7
 
 [node name="CurvedPlatform" type="StaticBody2D"]
+collision_mask = 5
 script = ExtResource("1_b2jxn")
 
 [node name="Path2D" type="Path2D" parent="."]

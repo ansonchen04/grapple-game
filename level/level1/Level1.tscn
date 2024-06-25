@@ -35,20 +35,13 @@ point_count = 3
 [node name="Player" parent="." instance=ExtResource("1_ukvsu")]
 position = Vector2(135, 250)
 scale = Vector2(0.6, 0.6)
-collision_layer = 5
-
-[node name="Camera2D" type="Camera2D" parent="Player"]
-zoom = Vector2(1.5, 1.5)
-position_smoothing_speed = 10.0
-
-[node name="DownwardRaycast" type="RayCast2D" parent="Player"]
-position = Vector2(0, 65)
-hit_from_inside = true
+collision_mask = 5
 
 [node name="Rope" parent="." instance=ExtResource("7_8ixvg")]
 
 [node name="StartingPlatform" type="StaticBody2D" parent="."]
 position = Vector2(0, 380)
+collision_mask = 5
 
 [node name="PolyPlatSprite" type="Polygon2D" parent="StartingPlatform"]
 color = Color(1, 0.423529, 0, 1)
@@ -57,6 +50,7 @@ script = ExtResource("2_02str")
 
 [node name="DropDown" type="StaticBody2D" parent="."]
 position = Vector2(1180, 210)
+collision_mask = 5
 
 [node name="DropDownSprite" type="Polygon2D" parent="DropDown"]
 color = Color(0.972549, 0.815686, 0.847059, 1)
@@ -65,6 +59,7 @@ script = ExtResource("3_be1a3")
 
 [node name="Platform" type="StaticBody2D" parent="."]
 position = Vector2(1223, 478)
+collision_mask = 5
 
 [node name="PolyPlatSprite" type="Polygon2D" parent="Platform"]
 color = Color(1, 0.423529, 0, 1)
@@ -73,6 +68,7 @@ script = ExtResource("2_02str")
 
 [node name="CurvedPlatform" type="StaticBody2D" parent="."]
 position = Vector2(1664, 515)
+collision_mask = 5
 script = ExtResource("4_bo2c2")
 
 [node name="Path2D" type="Path2D" parent="CurvedPlatform"]
@@ -83,6 +79,7 @@ curve = SubResource("Curve2D_i6v66")
 [node name="Polygon2D" type="Polygon2D" parent="CurvedPlatform"]
 
 [node name="ClimbArea" type="Area2D" parent="CurvedPlatform"]
+collision_mask = 5
 
 [node name="ClimbPolygon" type="CollisionPolygon2D" parent="CurvedPlatform/ClimbArea"]
 polygon = PackedVector2Array(400, -200, 400, -435, 430, -435, 430, -200)
@@ -108,6 +105,7 @@ wait_time = 0.2
 one_shot = true
 
 [node name="PlatformBody" type="AnimatableBody2D" parent="MovingPlatform1/PlatformPath"]
+collision_mask = 5
 
 [node name="Sprite2D" type="Sprite2D" parent="MovingPlatform1/PlatformPath/PlatformBody"]
 texture = ExtResource("6_vntua")
@@ -136,6 +134,7 @@ wait_time = 0.2
 one_shot = true
 
 [node name="PlatformBody" type="AnimatableBody2D" parent="MovingPlatform2/PlatformPath"]
+collision_mask = 5
 
 [node name="Sprite2D" type="Sprite2D" parent="MovingPlatform2/PlatformPath/PlatformBody"]
 texture = ExtResource("6_vntua")
@@ -146,6 +145,7 @@ shape = SubResource("RectangleShape2D_kdjij")
 
 [node name="Platform3" type="StaticBody2D" parent="."]
 position = Vector2(2484, 274)
+collision_mask = 5
 
 [node name="PolyPlatSprite" type="Polygon2D" parent="Platform3"]
 color = Color(1, 0.423529, 0, 1)
@@ -154,6 +154,7 @@ script = ExtResource("2_02str")
 
 [node name="Platform4" type="StaticBody2D" parent="."]
 position = Vector2(3618, 284)
+collision_mask = 5
 
 [node name="PolyPlatSprite" type="Polygon2D" parent="Platform4"]
 color = Color(1, 0.423529, 0, 1)
@@ -162,6 +163,7 @@ script = ExtResource("2_02str")
 
 [node name="Platform5" type="StaticBody2D" parent="."]
 position = Vector2(3636, -132)
+collision_mask = 5
 
 [node name="PolyPlatSprite" type="Polygon2D" parent="Platform5"]
 color = Color(1, 0.423529, 0, 1)
@@ -170,6 +172,7 @@ script = ExtResource("2_02str")
 
 [node name="Platform6" type="StaticBody2D" parent="."]
 position = Vector2(3286, -307)
+collision_mask = 5
 
 [node name="PolyPlatSprite" type="Polygon2D" parent="Platform6"]
 color = Color(1, 0.423529, 0, 1)
@@ -178,6 +181,7 @@ script = ExtResource("2_02str")
 
 [node name="Platform7" type="StaticBody2D" parent="."]
 position = Vector2(3718, -452)
+collision_mask = 5
 
 [node name="PolyPlatSprite" type="Polygon2D" parent="Platform7"]
 color = Color(1, 0.423529, 0, 1)
@@ -186,6 +190,7 @@ script = ExtResource("2_02str")
 
 [node name="Platform8" type="StaticBody2D" parent="."]
 position = Vector2(4080, -612)
+collision_mask = 5
 
 [node name="PolyPlatSprite" type="Polygon2D" parent="Platform8"]
 color = Color(1, 0, 0, 1)
