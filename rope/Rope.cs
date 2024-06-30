@@ -54,7 +54,7 @@ public partial class Rope : Node2D {
             case RopeState.Hooked:
                 // summon the rope. lock the hook in place.
                 if (!ropeBuilt) {
-                    BuildRope(hook.GlobalPosition, player.GlobalPosition);
+                    BuildRope();
                     ropeBuilt = true;
                 }
                 CalculateRopePull();
@@ -67,7 +67,7 @@ public partial class Rope : Node2D {
             case RopeState.Slack:
                 // to do: fix slack movement - make it more natural
                 if (!ropeBuilt) {
-                    BuildRope(hook.GlobalPosition, player.GlobalPosition);
+                    BuildRope();
                     ropeBuilt = true;
                 }
                 // gravity!
@@ -117,19 +117,34 @@ public partial class Rope : Node2D {
 
     // builds the rope!
     // make sure the hook is never further than the max dist when building the rope or bad things will happen
-    public void BuildRope(Vector2 hookCenter, Vector2 playerCenter) {  // to do ROPE SPAWN NO WORK
+    public void BuildRope() {  // to do fix the rope dist too big bug
+        if (player.GlobalPosition.DistanceTo(hook.GlobalPosition) > MaxLength) {
+            Vector2 temp = CreateVector(1, (player.GlobalPosition - hook.GlobalPosition).Angle());
+            hook.GlobalPosition = player.GlobalPosition - temp * MaxLength;
+        }
+
         GlobalPosition = hook.GlobalPosition;
         hook.GlobalPosition = GlobalPosition;
-        float angle = (playerCenter - hookCenter).Angle();
-        Vector2 dir = (playerCenter - hookCenter).Normalized();
+        float angle = (player.GlobalPosition - hook.GlobalPosition).Angle();
+        Vector2 dir = (player.GlobalPosition - hook.GlobalPosition).Normalized();
 
-        Vector2 hookPos = hookCenter - dir * 22;
-        Vector2 playerPos = playerCenter;
+        Vector2 hookPos = hook.GlobalPosition - dir * 22;
+        Vector2 playerPos = player.GlobalPosition;
 
         hook.Rotation = angle - (float) Math.PI / 2;
 
         float dist = playerPos.DistanceTo(hookPos);
         lastPiece = hook;
+
+        /*
+        if ((int) (dist / PieceLen) + 1 > (int) (MaxLength / PieceLen) + 1) {
+            Vector2 maxHookDist = CreateVector(MaxLength, angle);
+            //GD.Print(maxHookDist);
+            hook.GlobalPosition = GlobalPosition + maxHookDist * MaxLength;
+            hookPos = hook.GlobalPosition - dir * 22;
+            dist = playerPos.DistanceTo(hookPos);
+        } 
+        */
 
         int len = 0;  // ropePieces.Length doesn't give a good value for whatever reason. so i'm using this.
 

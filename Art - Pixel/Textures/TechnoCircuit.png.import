@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cpdabwg8kgwqv"
-path="res://.godot/imported/TechnoCircuit.png-2b9e4bfd66fe8cfbe2ca8ec10ee9df1c.ctex"
+path="res://.godot/imported/TechnoCircuit.png-ceb659106c43c66573b6772774eba079.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art - Pixel-20240625T055818Z-001/Art - Pixel/Textures/TechnoCircuit.png"
-dest_files=["res://.godot/imported/TechnoCircuit.png-2b9e4bfd66fe8cfbe2ca8ec10ee9df1c.ctex"]
+source_file="res://Art - Pixel/Textures/TechnoCircuit.png"
+dest_files=["res://.godot/imported/TechnoCircuit.png-ceb659106c43c66573b6772774eba079.ctex"]
 
 [params]
 

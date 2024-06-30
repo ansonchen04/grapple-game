@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bpqcss0nr7nnl"
-path="res://.godot/imported/The Cliff.png-3e9dfe3700563e56989566c34c4b3b19.ctex"
+path="res://.godot/imported/The Cliff.png-bfc9fcca3a57cccc5aae4ac1fda6b23b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art - Pixel-20240625T055818Z-001/Art - Pixel/Black Sprites/The Cliff.png"
-dest_files=["res://.godot/imported/The Cliff.png-3e9dfe3700563e56989566c34c4b3b19.ctex"]
+source_file="res://Art - Pixel/Black Sprites/The Cliff.png"
+dest_files=["res://.godot/imported/The Cliff.png-bfc9fcca3a57cccc5aae4ac1fda6b23b.ctex"]
 
 [params]
 

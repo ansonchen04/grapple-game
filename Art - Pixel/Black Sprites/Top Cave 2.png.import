@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://wkl18xo04u2u"
-path="res://.godot/imported/Top Cave 2.png-94bf6e36515136eac116fdcb52b23d22.ctex"
+path="res://.godot/imported/Top Cave 2.png-c1e66822afc6531f2a87b564de8b26d6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art - Pixel-20240625T055818Z-001/Art - Pixel/Black Sprites/Top Cave 2.png"
-dest_files=["res://.godot/imported/Top Cave 2.png-94bf6e36515136eac116fdcb52b23d22.ctex"]
+source_file="res://Art - Pixel/Black Sprites/Top Cave 2.png"
+dest_files=["res://.godot/imported/Top Cave 2.png-c1e66822afc6531f2a87b564de8b26d6.ctex"]
 
 [params]
 

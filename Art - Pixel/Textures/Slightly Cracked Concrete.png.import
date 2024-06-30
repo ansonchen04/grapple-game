@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dm3bkianpgmg6"
-path="res://.godot/imported/Slightly Cracked Concrete.png-fea0c08d35dd6bf923075e8dff93b3c7.ctex"
+path="res://.godot/imported/Slightly Cracked Concrete.png-16832df060cfcd2dd94843fc4a4c72f2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art - Pixel-20240625T055818Z-001/Art - Pixel/Textures/Slightly Cracked Concrete.png"
-dest_files=["res://.godot/imported/Slightly Cracked Concrete.png-fea0c08d35dd6bf923075e8dff93b3c7.ctex"]
+source_file="res://Art - Pixel/Textures/Slightly Cracked Concrete.png"
+dest_files=["res://.godot/imported/Slightly Cracked Concrete.png-16832df060cfcd2dd94843fc4a4c72f2.ctex"]
 
 [params]
 

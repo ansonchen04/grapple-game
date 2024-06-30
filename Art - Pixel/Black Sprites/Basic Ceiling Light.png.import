@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://kt6560kgaftk"
-path="res://.godot/imported/Basic Ceiling Light.png-9b8df51fc7206bca736471998cae548f.ctex"
+path="res://.godot/imported/Basic Ceiling Light.png-7dc7c926c44028c1b84e5929dc73a4db.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art - Pixel-20240625T055818Z-001/Art - Pixel/Black Sprites/Basic Ceiling Light.png"
-dest_files=["res://.godot/imported/Basic Ceiling Light.png-9b8df51fc7206bca736471998cae548f.ctex"]
+source_file="res://Art - Pixel/Black Sprites/Basic Ceiling Light.png"
+dest_files=["res://.godot/imported/Basic Ceiling Light.png-7dc7c926c44028c1b84e5929dc73a4db.ctex"]
 
 [params]
 
