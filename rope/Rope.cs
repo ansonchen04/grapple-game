@@ -89,6 +89,9 @@ public partial class Rope : Node2D {
                 case RopeState.Hooked:
                     ropeState = RopeState.Hidden;
                     break;
+                case RopeState.Slack:
+                    ropeState = RopeState.Hidden;
+                    break;
             }
 		}
 	}
