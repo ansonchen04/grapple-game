@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dyw78roo5grik"
-path="res://.godot/imported/Basic Platform - Long.png-1d3cbf455cadc05aeb0ba77b6d59bd74.ctex"
+path="res://.godot/imported/Basic Platform - Long.png-fab6517733465ef89cc1f3c6c7d0cfec.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art - Pixel-20240625T055818Z-001/Art - Pixel/Black Sprites/Basic Platform - Long.png"
-dest_files=["res://.godot/imported/Basic Platform - Long.png-1d3cbf455cadc05aeb0ba77b6d59bd74.ctex"]
+source_file="res://Art - Pixel/Black Sprites/Basic Platform - Long.png"
+dest_files=["res://.godot/imported/Basic Platform - Long.png-fab6517733465ef89cc1f3c6c7d0cfec.ctex"]
 
 [params]
 

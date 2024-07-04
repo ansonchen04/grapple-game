@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cnaaavu3p8qs8"
-path="res://.godot/imported/Shattered Platform - Short.png-706e9ec30650f7a68cebb01642956c3a.ctex"
+path="res://.godot/imported/Shattered Platform - Short.png-acfac0fe0691d81fa494f4893a00ab07.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art - Pixel-20240625T055818Z-001/Art - Pixel/Black Sprites/Shattered Platform - Short.png"
-dest_files=["res://.godot/imported/Shattered Platform - Short.png-706e9ec30650f7a68cebb01642956c3a.ctex"]
+source_file="res://Art - Pixel/Black Sprites/Shattered Platform - Short.png"
+dest_files=["res://.godot/imported/Shattered Platform - Short.png-acfac0fe0691d81fa494f4893a00ab07.ctex"]
 
 [params]
 
