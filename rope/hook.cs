@@ -20,6 +20,7 @@ public partial class hook : RigidBody2D
 	int tempMax = 5;
 	private CharacterBody2D player;
 	const float PieceLen = 16;
+	bool IsHooked = false;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
@@ -58,7 +59,7 @@ public partial class hook : RigidBody2D
 
 	// when the hook hits something
 	private void OnBodyEntered(Node2D body) {
-		 GD.Print("Collided with: " + body.Name);
+		GD.Print("Collided with: " + body.Name);
 		if (body.IsInGroup("NotHookable")) {
 			// GD.Print("not hookable!");
 			return; // Ignore this collision
@@ -66,6 +67,7 @@ public partial class hook : RigidBody2D
 
 		//Freeze = true;
 		//FreezeMode = FreezeModeEnum.Static;
+		IsHooked = true;
 		Mass = 999999999;  // freeze is not working so this is the temporary solution
 		LinearVelocity = Vector2.Zero;
 		GetParent().Call("HandleHook");  // calling HandleHook in Rope
@@ -110,6 +112,8 @@ public partial class hook : RigidBody2D
 
 		// Make it not be able to collide with anything
 		collisionArea.SetDeferred("monitoring", false); // Disable monitoring for collisions
+
+		IsHooked = false;
 	}
 
 	public void ShowHook() {
@@ -139,5 +143,9 @@ public partial class hook : RigidBody2D
 
 	public Vector2 GetJointPos() {
 		return pinJoint.GlobalPosition;
+	}
+
+	public bool GetIsHooked() {
+		return IsHooked;
 	}
 }

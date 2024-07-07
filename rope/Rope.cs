@@ -78,20 +78,43 @@ public partial class Rope : Node2D {
 
     public override void _Input(InputEvent @event) {
         // lmb
-		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left) {
-			switch (ropeState) {
-                case RopeState.Hidden:
-                    ropeState = RopeState.Shot;
-                    break;
-                case RopeState.Shot:
-                    ropeState = RopeState.Hidden;
-                    break;
-                case RopeState.Hooked:
-                    ropeState = RopeState.Hidden;
-                    break;
-                case RopeState.Slack:
-                    ropeState = RopeState.Hidden;
-                    break;
+		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed) {
+            if (mouseEvent.ButtonIndex == MouseButton.Left) {
+                switch (ropeState) {
+                    case RopeState.Hidden:
+                        ropeState = RopeState.Shot;
+                        break;
+                    case RopeState.Shot:
+                        ropeState = RopeState.Hidden;
+                        break;
+                    case RopeState.Hooked:
+                        ropeState = RopeState.Hidden;
+                        break;
+                    case RopeState.Retracting:
+                        ropeState = RopeState.Hidden;
+                        break;
+                    case RopeState.Slack:
+                        ropeState = RopeState.Hidden;
+                        break;
+                }
+            } 
+
+            if (mouseEvent.ButtonIndex == MouseButton.Right) {
+                switch (ropeState) {
+                    case RopeState.Hooked:
+                        ropeState = RopeState.Retracting;
+                        break;
+                    case RopeState.Retracting:
+                        if ((bool) hook.Call("GetIsHooked")) {
+                            ropeState = RopeState.Hooked;
+                        } else {
+                            ropeState = RopeState.Slack;
+                        }
+                        break;
+                    case RopeState.Slack:
+                        ropeState = RopeState.Retracting;
+                        break;
+                }
             }
 		}
 	}
@@ -266,5 +289,9 @@ public partial class Rope : Node2D {
                 ropeState = RopeState.Hooked;
                 break;
         }
+    }
+
+    public void RetractRope() {
+        // fill this out
     }
 }
