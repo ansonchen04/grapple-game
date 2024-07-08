@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://jp83d74t8m5a"]
+[gd_scene load_steps=17 format=3 uid="uid://jp83d74t8m5a"]
 
 [ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="1_ukvsu"]
 [ext_resource type="Script" path="res://level/level1/PolyPlatSprite.cs" id="2_02str"]
@@ -7,6 +7,11 @@
 [ext_resource type="Script" path="res://level/level1/PathPlatform.cs" id="5_yoi6j"]
 [ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="6_vntua"]
 [ext_resource type="PackedScene" uid="uid://6yotxco8qhu" path="res://rope/Rope.tscn" id="7_8ixvg"]
+[ext_resource type="Texture2D" uid="uid://bpqcss0nr7nnl" path="res://Art - Pixel/Black Sprites/The Cliff.png" id="8_v3pa8"]
+[ext_resource type="Texture2D" uid="uid://cnaaavu3p8qs8" path="res://Art - Pixel/Black Sprites/Shattered Platform - Short.png" id="9_e34ba"]
+[ext_resource type="Texture2D" uid="uid://cauots0j7muom" path="res://Art - Pixel/Black Sprites/Top Cave.png" id="10_p0ai7"]
+[ext_resource type="Texture2D" uid="uid://wkl18xo04u2u" path="res://Art - Pixel/Black Sprites/Top Cave 2.png" id="11_oftx7"]
+[ext_resource type="Texture2D" uid="uid://c0mkqm35dhn37" path="res://Art - Pixel/Black Sprites/Perfect Cube.png" id="12_rnn75"]
 
 [sub_resource type="Curve2D" id="Curve2D_i6v66"]
 bake_interval = 35.0
@@ -45,7 +50,7 @@ collision_mask = 5
 
 [node name="PolyPlatSprite" type="Polygon2D" parent="StartingPlatform"]
 color = Color(1, 0.423529, 0, 1)
-polygon = PackedVector2Array(0, 0, 602, 0, 841, -170, 1180, -170, 1180, -115, 903, -115, 668, 76, 632, 270, 0, 270)
+polygon = PackedVector2Array(0, 0, 602, 0, 851, -100, 1180, -102, 1179, -9, 921, 133, 745, 203, 632, 270, 0, 270)
 script = ExtResource("2_02str")
 
 [node name="DropDown" type="StaticBody2D" parent="."]
@@ -53,8 +58,9 @@ position = Vector2(1180, 210)
 collision_mask = 5
 
 [node name="DropDownSprite" type="Polygon2D" parent="DropDown"]
+position = Vector2(0, 78)
 color = Color(0.972549, 0.815686, 0.847059, 1)
-polygon = PackedVector2Array(0, 0, 225, 0, 225, 55, 0, 55)
+polygon = PackedVector2Array(0, 0, 225, 0, 188, 51, 0, 55)
 script = ExtResource("3_be1a3")
 
 [node name="Platform" type="StaticBody2D" parent="."]
@@ -196,3 +202,33 @@ collision_mask = 5
 color = Color(1, 0, 0, 1)
 polygon = PackedVector2Array(0, 0, 250, 0, 250, 150, 0, 150)
 script = ExtResource("2_02str")
+
+[node name="TheCliff" type="Sprite2D" parent="."]
+position = Vector2(707.75, 427.25)
+scale = Vector2(2.75879, 2.75879)
+texture = ExtResource("8_v3pa8")
+
+[node name="ShatteredPlatform-Short" type="Sprite2D" parent="."]
+position = Vector2(1371, 591)
+scale = Vector2(1.26172, 1.26172)
+texture = ExtResource("9_e34ba")
+
+[node name="TopCave2" type="Sprite2D" parent="."]
+position = Vector2(2218, -614)
+scale = Vector2(2.43848, 2.43848)
+texture = ExtResource("11_oftx7")
+
+[node name="TopCave" type="Sprite2D" parent="."]
+position = Vector2(752.5, -494.5)
+scale = Vector2(2.94727, 2.94727)
+texture = ExtResource("10_p0ai7")
+
+[node name="PerfectCube" type="Sprite2D" parent="."]
+position = Vector2(2610, 406)
+scale = Vector2(1.77344, 1.77344)
+texture = ExtResource("12_rnn75")
+
+[node name="PerfectCube2" type="Sprite2D" parent="."]
+position = Vector2(3746, 412)
+scale = Vector2(1.82031, 1.82031)
+texture = ExtResource("12_rnn75")

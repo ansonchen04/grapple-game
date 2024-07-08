@@ -29,35 +29,35 @@ public partial class player : CharacterBody2D
 	//Booleans to check if we are on a special surface, if we have different movement options
 	private bool onClimbableSurface = false;
 	private bool onOneWaySurface = false;
-    public override void _Ready() {
+	public override void _Ready() {
 		//Hardcoded, TODO make this varible for the level
 		WorldBoundaryShape2D worldBoundary = GD.Load<WorldBoundaryShape2D>("res://level/level1/outotbounds.tres");
 		outOfBounds = worldBoundary.Distance;
-        // Initialize the RayCast2D node
-        _downwardRaycast = GetNode<RayCast2D>("DownwardRaycast");
+		// Initialize the RayCast2D node
+		_downwardRaycast = GetNode<RayCast2D>("DownwardRaycast");
 		startPosition = this.GlobalPosition;
 		GD.Print(startPosition);
 		rayCast = GetNode<RayCast2D>("RayCast2D");
-        rayCast.Enabled = true;  // disabled by default, we'll turn it on when we click
-        rope = GetNode<Node2D>("../Rope");  // you need a rope in each scene with a player
+		rayCast.Enabled = true;  // disabled by default, we'll turn it on when we click
+		rope = GetNode<Node2D>("../Rope");  // you need a rope in each scene with a player
 		GD.Print(rope);
 		ropePull = Vector2.Zero;
-    }
+	}
 	public override void _PhysicsProcess(double delta) {
 		GD.Print(Position.Y);
 		//Check out of bounds from the resource
 		if (Position.Y > outOfBounds || Input.IsActionJustPressed("Restart")) {
 		this.restart();
 		}
-        // Check if the player is on the floor or a specific platform using the raycast
-        if (_downwardRaycast.IsColliding()) {
-            var collider = _downwardRaycast.GetCollider();
+		// Check if the player is on the floor or a specific platform using the raycast
+		if (_downwardRaycast.IsColliding()) {
+			var collider = _downwardRaycast.GetCollider();
 			//Likely will have to constrain this more
-            if (collider is Node2D platform) {	
+			if (collider is Node2D platform) {	
 				//Will likely have to safeguard this if we collide with platforms without a collision box. 
 				//Not sure when that would happen though
 				this.setOneWay(this.checkOneway(platform));
-            }
+			}
 		}
 		//Gets the current velocity
 		Vector2 newVelocity = Velocity;
@@ -76,7 +76,7 @@ public partial class player : CharacterBody2D
 		// Add the gravity.
 		if (!IsOnFloor() && !onClimbableSurface)
 			newVelocity.Y += gravity * (float)delta;
-    	ropePull = (Vector2) rope.Call("GetPull");
+		ropePull = (Vector2) rope.Call("GetPull");
 		newVelocity += ropePull;
 		//Updates to the new velocity
 		Velocity = newVelocity;
@@ -145,10 +145,10 @@ public partial class player : CharacterBody2D
 	}
 	private Vector2 onewaydropMovement(Vector2 velocity) {
 		// Drop the player down 1 pixel if standing on a one-way collision platform and "ui_drop_down" is pressed
-        //TODO verify this actually does ^
+		//TODO verify this actually does ^
 		if (IsOnFloor() && Input.IsActionJustPressed("Down")) {
-            Position += new Vector2(0, 1);
-        }
+			Position += new Vector2(0, 1);
+		}
 		return velocity;
 	}
 	private Boolean checkOneway(Node2D platform) {
@@ -177,7 +177,7 @@ public partial class player : CharacterBody2D
 			Velocity = Vector2.Zero;
 	}
 	public void setClimbing(bool onClimbableSurface) {
-        this.onClimbableSurface = onClimbableSurface;
+		this.onClimbableSurface = onClimbableSurface;
 	}
 	public void setOneWay(bool onOneWaySurface) {
 		this.onOneWaySurface = onOneWaySurface;
