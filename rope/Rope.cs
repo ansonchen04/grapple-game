@@ -293,5 +293,10 @@ public partial class Rope : Node2D {
 
     public void RetractRope() {
         // fill this out
+        if ((Boolean) hook.Call("GetIsHooked")) {
+
+        } else {
+            
+        }
     }
 }
