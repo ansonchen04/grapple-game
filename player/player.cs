@@ -24,8 +24,6 @@ public partial class player : CharacterBody2D
   	private const float raycastLength = 105.0f;
   	private RayCast2D rayCast;
   	private bool isGrappled = false;
-  	Node2D rope;
-	Vector2 ropePull;
 	//Booleans to check if we are on a special surface, if we have different movement options
 	private bool onClimbableSurface = false;
 	private bool onOneWaySurface = false;
@@ -39,9 +37,6 @@ public partial class player : CharacterBody2D
 		GD.Print(startPosition);
 		rayCast = GetNode<RayCast2D>("RayCast2D");
         rayCast.Enabled = true;  // disabled by default, we'll turn it on when we click
-        rope = GetNode<Node2D>("../Rope");  // you need a rope in each scene with a player
-		GD.Print(rope);
-		ropePull = Vector2.Zero;
     }
 	public override void _PhysicsProcess(double delta) {
 		GD.Print(Position.Y);
@@ -76,8 +71,6 @@ public partial class player : CharacterBody2D
 		// Add the gravity.
 		if (!IsOnFloor() && !onClimbableSurface)
 			newVelocity.Y += gravity * (float)delta;
-    	ropePull = (Vector2) rope.Call("GetPull");
-		newVelocity += ropePull;
 		//Updates to the new velocity
 		Velocity = newVelocity;
 		//Moves the sprite at the end
@@ -94,7 +87,6 @@ public partial class player : CharacterBody2D
 			direction *= raycastLength;  // need to rename this later!!!
 
 			hookStartPos = direction;
-			rope.Call("SetMouseLoc", direction);
 			
 			// Set the raycast's target position relative to the character's position
 			rayCast.TargetPosition = direction;  
