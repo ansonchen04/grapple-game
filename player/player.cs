@@ -195,64 +195,72 @@ public partial class player : CharacterBody2D
 
 	void ApplySwingPhysics(ref Vector2 vel, double delta) {
 		Vector2 anchor = rope.GetAnchor();
-		float maxLen = rope.GetEffectiveLength();
+		float maxLen = rope.GetMaxRopeLength();
 		Vector2 toPlayer = GlobalPosition - anchor;
 		float dist = toPlayer.Length();
 		
 		// 1. Gravity (applied first per integration order)
 		vel.Y += gravity * (float)delta;
 		
-		// 2. Strictly Unidirectional Spring/Damping Constraint
-		if (dist > maxLen && dist > 0.001f) {
+		bool isRetracting = rope.ropeState == RopeState.Retracting;
+
+		if (dist > 0.001f) {
 			Vector2 radialDir = toPlayer / dist;
-			float radialSpeed = vel.Dot(radialDir);
-			
-			// Only apply constraint when stretched AND moving outward. 
-			// Moving inward or within limit disables forces completely, allowing natural free-fall/slack.
-			if (radialSpeed > 0) {
-				Vector2 radialVel = radialSpeed * radialDir;
-				
-				// Blend window: 0 to full strength over 10% of maxLen to prevent velocity "pops"
-				float blendStart = maxLen;
-				float blendEnd = maxLen * 1.1f;
-				float blendFactor = Mathf.Clamp((dist - blendStart) / (blendEnd - blendStart), 0.0f, 1.0f);
-				
-				// Hard clamp at 1.3x to prevent infinite stretch/overshoot
-				if (dist > maxLen * 1.3f) {
-					GlobalPosition = anchor + radialDir * (maxLen * 1.3f);
-					toPlayer = GlobalPosition - anchor;
-					dist = maxLen * 1.3f;
-				}
-				
-				// Critically damped spring force
-				float k = 800.0f; 
-				float c = 2.0f * Mathf.Sqrt(k); 
-				
-				float stretch = dist - maxLen;
-				Vector2 springForce = (-k * stretch) * radialDir;
-				Vector2 dampingForce = -c * radialVel;
-				
-				vel += (springForce + dampingForce) * blendFactor * (float)delta;
-				
-				// Remove remaining radial velocity to prevent bouncing
-				vel -= radialVel;
-			}
-		}
-		
-		// 3. Tangential Input with speed cap & falloff
-		if (dist > 0.1f) { // Pole safety: skip if too close to anchor to avoid NaN/tangent flips
-			Vector2 radialDir = toPlayer / dist;
-			// Fixed tangent direction for consistent screen-space left/right mapping in Y-down coords
 			Vector2 tangentDir = new Vector2(radialDir.Y, -radialDir.X);
 			
-			float inputX = Input.GetActionStrength("Right") - Input.GetActionStrength("Left");
+			// Project velocity into radial and tangential components
+			float radialSpeed = vel.Dot(radialDir);
+			float tangentialSpeed = vel.Dot(tangentDir);
+			Vector2 radialVel = radialSpeed * radialDir;
+			Vector2 tangentialVel = tangentialSpeed * tangentDir;
+
+			if (isRetracting) {
+				// Retracting: Direct inward pull, NO damping, preserve tangential velocity
+				float retractForce = 1500.0f; 
+				
+				vel -= radialVel; // Remove radial velocity to prevent fighting the pull
+				vel += tangentialVel; // Explicitly restore tangential velocity
+				
+				// Apply inward force
+				vel -= radialDir * retractForce * (float)delta;
+			} else {
+				// Hooked: Strictly Unidirectional Spring/Damping Constraint
+				if (dist > maxLen && radialSpeed > 0) {
+					Vector2 radialVelCurrent = radialSpeed * radialDir;
+					
+					float blendStart = maxLen;
+					float blendEnd = maxLen * 1.1f;
+					float blendFactor = Mathf.Clamp((dist - blendStart) / (blendEnd - blendStart), 0.0f, 1.0f);
+					
+					if (dist > maxLen * 1.3f) {
+						GlobalPosition = anchor + radialDir * (maxLen * 1.3f);
+						toPlayer = GlobalPosition - anchor;
+						dist = maxLen * 1.3f;
+						radialDir = toPlayer / dist;
+					}
+					
+					float k = 800.0f; 
+					float c = 2.0f * Mathf.Sqrt(k); 
+					float stretch = dist - maxLen;
+					
+					Vector2 springForce = (-k * stretch) * radialDir;
+					Vector2 dampingForce = -c * radialVelCurrent;
+					
+					vel += (springForce + dampingForce) * blendFactor * (float)delta;
+					vel -= radialVelCurrent; // Remove remaining radial velocity
+				}
+			}
 			
-			float currentTangentialSpeed = Mathf.Abs(vel.Dot(tangentDir));
-			float maxTangentialSpeed = 600.0f;
-			// Velocity-dependent acceleration falloff prevents infinite energy pumping
-			float accelFalloff = Mathf.Clamp((maxTangentialSpeed - currentTangentialSpeed) / (maxTangentialSpeed * 0.5f), 0.0f, 1.0f);
-			
-			vel += tangentDir * inputX * speed * accelFalloff * (float)delta * 3.0f;
+			// 3. Tangential Input with speed cap & falloff
+			if (dist > 0.1f) { 
+				float inputX = Input.GetActionStrength("Right") - Input.GetActionStrength("Left");
+				
+				float currentTangentialSpeed = Mathf.Abs(vel.Dot(tangentDir));
+				float maxTangentialSpeed = 600.0f;
+				float accelFalloff = Mathf.Clamp((maxTangentialSpeed - currentTangentialSpeed) / (maxTangentialSpeed * 0.5f), 0.0f, 1.0f);
+				
+				vel += tangentDir * inputX * speed * accelFalloff * (float)delta * 3.0f;
+			}
 		}
 	}
 }
