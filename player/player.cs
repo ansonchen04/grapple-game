@@ -24,7 +24,7 @@ public partial class player : CharacterBody2D
   	private const float raycastLength = 105.0f;
   	private RayCast2D rayCast;
   	private bool isGrappled = false;
-    private Rope rope;
+	private Rope rope;
 	//Booleans to check if we are on a special surface, if we have different movement options
 	private bool onClimbableSurface = false;
 	private bool onOneWaySurface = false;
@@ -38,7 +38,7 @@ public partial class player : CharacterBody2D
 		GD.Print(startPosition);
 		rayCast = GetNode<RayCast2D>("RayCast2D");
 		rayCast.Enabled = true;  // disabled by default, we'll turn it on when we click
-        rope = GetNode<Rope>("../Rope");
+		rope = GetNode<Rope>("../Rope");
 	}
 	public override void _PhysicsProcess(double delta) {
 		GD.Print(Position.Y);
@@ -59,25 +59,25 @@ public partial class player : CharacterBody2D
 		//Gets the current velocity
 		Vector2 newVelocity = Velocity;
 		
-        if (rope.ropeState == RopeState.Hooked) {
-            ApplySwingPhysics(ref newVelocity, delta);
-        } else {
-            //Checking which movement option, if any, is being used. Will convert this into a switch case in a future commit
-            if (onOneWaySurface) {
-                onewaydropMovement(newVelocity);
-                newVelocity = baseMovement(newVelocity);
-            }
-            else if (onClimbableSurface) {
-                newVelocity = climbMovement(newVelocity);
-            }
-            else {
-                //If nothing fancy, just use base movement vectors
-                newVelocity = baseMovement(newVelocity);
-            }
-            // Add the gravity.
-            if (!IsOnFloor() && !onClimbableSurface)
-                newVelocity.Y += gravity * (float)delta;
-        }
+		if (rope.ropeState == RopeState.Hooked) {
+			ApplySwingPhysics(ref newVelocity, delta);
+		} else {
+			//Checking which movement option, if any, is being used. Will convert this into a switch case in a future commit
+			if (onOneWaySurface) {
+				onewaydropMovement(newVelocity);
+				newVelocity = baseMovement(newVelocity);
+			}
+			else if (onClimbableSurface) {
+				newVelocity = climbMovement(newVelocity);
+			}
+			else {
+				//If nothing fancy, just use base movement vectors
+				newVelocity = baseMovement(newVelocity);
+			}
+			// Add the gravity.
+			if (!IsOnFloor() && !onClimbableSurface)
+				newVelocity.Y += gravity * (float)delta;
+		}
 		//Updates to the new velocity
 		Velocity = newVelocity;
 		//Moves the sprite at the end
@@ -189,58 +189,58 @@ public partial class player : CharacterBody2D
 		return hookStartPos + GlobalPosition;
 	}
 
-    void ApplySwingPhysics(ref Vector2 vel, double delta) {
-        Vector2 anchor = rope.GetAnchor();
-        float maxLen = rope.GetMaxRopeLength();
-        Vector2 toPlayer = GlobalPosition - anchor;
-        float dist = toPlayer.Length();
-        
-        // 1. Gravity
-        vel.Y += gravity * (float)delta;
-        
-        // 2. Spring/Damping Constraint
-        if (dist > maxLen && dist > 0.001f) {
-            Vector2 radialDir = toPlayer / dist;
-            Vector2 radialVel = vel.Dot(radialDir) * radialDir;
-            
-            // Blend window: 0 to full strength over 10% of maxLen to prevent velocity "pops"
-            float blendStart = maxLen;
-            float blendEnd = maxLen * 1.1f;
-            float blendFactor = Mathf.Clamp((dist - blendStart) / (blendEnd - blendStart), 0.0f, 1.0f);
-            
-            // Hard clamp at 1.3x to prevent infinite stretch/overshoot
-            if (dist > maxLen * 1.3f) {
-                GlobalPosition = anchor + radialDir * (maxLen * 1.3f);
-                toPlayer = GlobalPosition - anchor;
-                dist = maxLen * 1.3f;
-            }
-            
-            // Critically damped spring force (mass assumed ~1 for simplicity)
-            float k = 800.0f; 
-            float c = 2.0f * Mathf.Sqrt(k); 
-            
-            float stretch = dist - maxLen;
-            Vector2 springForce = (-k * stretch) * radialDir;
-            Vector2 dampingForce = -c * radialVel;
-            
-            vel += (springForce + dampingForce) * blendFactor * (float)delta;
-            
-            // Remove remaining radial velocity to prevent bouncing
-            vel -= radialVel;
-        }
-        
-        // 3. Tangential Input with speed cap & falloff
-        if (dist > 0.001f) {
-            Vector2 radialDir = toPlayer / dist;
-            Vector2 tangentDir = new Vector2(-radialDir.Y, radialDir.X);
-            float inputX = Input.GetActionStrength("Right") - Input.GetActionStrength("Left");
-            
-            float currentTangentialSpeed = Mathf.Abs(vel.Dot(tangentDir));
-            float maxTangentialSpeed = 600.0f;
-            // Velocity-dependent acceleration falloff prevents infinite energy pumping
-            float accelFalloff = Mathf.Clamp((maxTangentialSpeed - currentTangentialSpeed) / (maxTangentialSpeed * 0.5f), 0.0f, 1.0f);
-            
-            vel += tangentDir * inputX * speed * accelFalloff * (float)delta * 3.0f;
-        }
-    }
+	void ApplySwingPhysics(ref Vector2 vel, double delta) {
+		Vector2 anchor = rope.GetAnchor();
+		float maxLen = rope.GetMaxRopeLength();
+		Vector2 toPlayer = GlobalPosition - anchor;
+		float dist = toPlayer.Length();
+		
+		// 1. Gravity
+		vel.Y += gravity * (float)delta;
+		
+		// 2. Spring/Damping Constraint
+		if (dist > maxLen && dist > 0.001f) {
+			Vector2 radialDir = toPlayer / dist;
+			Vector2 radialVel = vel.Dot(radialDir) * radialDir;
+			
+			// Blend window: 0 to full strength over 10% of maxLen to prevent velocity "pops"
+			float blendStart = maxLen;
+			float blendEnd = maxLen * 1.1f;
+			float blendFactor = Mathf.Clamp((dist - blendStart) / (blendEnd - blendStart), 0.0f, 1.0f);
+			
+			// Hard clamp at 1.3x to prevent infinite stretch/overshoot
+			if (dist > maxLen * 1.3f) {
+				GlobalPosition = anchor + radialDir * (maxLen * 1.3f);
+				toPlayer = GlobalPosition - anchor;
+				dist = maxLen * 1.3f;
+			}
+			
+			// Critically damped spring force (mass assumed ~1 for simplicity)
+			float k = 800.0f; 
+			float c = 2.0f * Mathf.Sqrt(k); 
+			
+			float stretch = dist - maxLen;
+			Vector2 springForce = (-k * stretch) * radialDir;
+			Vector2 dampingForce = -c * radialVel;
+			
+			vel += (springForce + dampingForce) * blendFactor * (float)delta;
+			
+			// Remove remaining radial velocity to prevent bouncing
+			vel -= radialVel;
+		}
+		
+		// 3. Tangential Input with speed cap & falloff
+		if (dist > 0.001f) {
+			Vector2 radialDir = toPlayer / dist;
+			Vector2 tangentDir = new Vector2(-radialDir.Y, radialDir.X);
+			float inputX = Input.GetActionStrength("Right") - Input.GetActionStrength("Left");
+			
+			float currentTangentialSpeed = Mathf.Abs(vel.Dot(tangentDir));
+			float maxTangentialSpeed = 600.0f;
+			// Velocity-dependent acceleration falloff prevents infinite energy pumping
+			float accelFalloff = Mathf.Clamp((maxTangentialSpeed - currentTangentialSpeed) / (maxTangentialSpeed * 0.5f), 0.0f, 1.0f);
+			
+			vel += tangentDir * inputX * speed * accelFalloff * (float)delta * 3.0f;
+		}
+	}
 }
