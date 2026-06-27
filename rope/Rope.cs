@@ -79,9 +79,14 @@ public partial class Rope : Node2D {
 		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left) {
 			switch (ropeState) {
 				case RopeState.Hidden:
-					ropeState = RopeState.Shot;
-					break;
-				case RopeState.Shot:
+					// Aim directly at the exact click position to avoid frame-delay mismatches
+					Vector2 direction = (mouseEvent.GlobalPosition - player.GlobalPosition).Normalized();
+					float dist = Mathf.Min(player.GlobalPosition.DistanceTo(mouseEvent.GlobalPosition), MaxLength);
+					
+					aimRaycast.GlobalPosition = player.GlobalPosition;
+					aimRaycast.TargetPosition = direction * dist;
+					aimRaycast.ForceRaycastUpdate();
+					
 					if (aimRaycast.IsColliding()) {
 						currentAnchor = aimRaycast.GetCollisionPoint();
 						ropeState = RopeState.Hooked;
