@@ -60,13 +60,16 @@ public partial class Rope : Node2D {
 		Vector2 direction = (mousePos - player.GlobalPosition).Normalized();
 		float dist = Mathf.Min(player.GlobalPosition.DistanceTo(mousePos), MaxLength);
 		
-		// Offset origin slightly to prevent self-collision with player hitbox
-		Vector2 origin = player.GlobalPosition + direction * 10.0f;
-		Vector2 end = origin + direction * (dist - 10.0f);
+		// Offset origin further to safely clear the player's 128x128 hitbox
+		float offset = 100.0f;
+		Vector2 origin = player.GlobalPosition + direction * offset;
+		Vector2 end = origin + direction * Mathf.Max(dist - offset, 1.0f);
 		
 		var spaceState = GetWorld2D().DirectSpaceState;
 		var query = PhysicsRayQueryParameters2D.Create(origin, end);
 		query.CollisionMask = uint.MaxValue & ~4u;
+		query.HitFromInside = true; // Fixes snapping to center/missing edges when ray starts near colliders
+		query.MaxResults = 1;
 		var result = spaceState.IntersectRay(query);
 		
 		if (result.Count > 0) {
@@ -83,13 +86,16 @@ public partial class Rope : Node2D {
 					Vector2 direction = (mouseEvent.GlobalPosition - player.GlobalPosition).Normalized();
 					float dist = Mathf.Min(player.GlobalPosition.DistanceTo(mouseEvent.GlobalPosition), MaxLength);
 					
-					// Offset origin slightly to prevent self-collision with player hitbox
-					Vector2 origin = player.GlobalPosition + direction * 10.0f;
-					Vector2 end = origin + direction * (dist - 10.0f);
+					// Offset origin further to safely clear the player's 128x128 hitbox
+					float offset = 100.0f;
+					Vector2 origin = player.GlobalPosition + direction * offset;
+					Vector2 end = origin + direction * Mathf.Max(dist - offset, 1.0f);
 					
 					var spaceState = GetWorld2D().DirectSpaceState;
 					var query = PhysicsRayQueryParameters2D.Create(origin, end);
 					query.CollisionMask = uint.MaxValue & ~4u;
+					query.HitFromInside = true; // Fixes snapping to center/missing edges when ray starts near colliders
+					query.MaxResults = 1;
 					var result = spaceState.IntersectRay(query);
 					
 					if (result.Count > 0) {
