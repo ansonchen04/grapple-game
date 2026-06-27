@@ -8,15 +8,15 @@ This plan outlines how we will implement smooth, responsive swinging mechanics u
 - **Why:** `player.cs` needs deterministic access to the hook position and rope limits every physics frame.
 - **Expected Result:** No visual change yet, but player script can query exact swing boundaries.
 
-## Step 2: Critically Damped Spring Attachment (Stretchy Grapple)
-- **What:** Implement a "rope" constraint (zero force inside radius, restoring force only past `MaxLength`). Use a critically damped oscillator (`c = 2 * sqrt(k)`) instead of independent stiffness/damping knobs to guarantee numerical stability. Blend the spring force over a 10% window past `MaxLength` to eliminate velocity "pops". Add a hard position clamp at `1.3x MaxLength` as a safety backstop against high-speed overshoot.
-- **Why:** Bare Hooke springs integrated with Euler steps can oscillate or blow up if tuned poorly. Critical damping collapses tuning into one predictable pair, while the blend window and hard clamp prevent edge-case tunneling or infinite stretch.
-- **Expected Result:** The rope stretches organically under momentum but settles instantly without bouncing. Fast swings feel elastic but never break physics bounds.
+## Step 2: Strictly Unidirectional Rope Constraint (No "Stick" Behavior)
+- **What:** Enforce a strictly unidirectional pull. The spring/damping system will **only** activate when `dist > MaxLength` AND radial velocity is positive (moving outward). If the player is moving inward (`radialVel < 0`) or within `MaxLength`, all constraint forces are disabled completely, allowing gravity and existing momentum to dominate freely. This prevents the "rigid stick" suspension effect when jumping above the anchor.
+- **Why:** Real ropes go slack under compression/inward motion. Applying damping or spring forces during inward movement artificially resists gravity, causing the player to float or hang unnaturally. Strict unidirectionality guarantees natural pendulum arcs and free-fall transitions.
+- **Expected Result:** The rope pulls only when stretched outward. When moving inward or above the anchor, the player falls freely under gravity until the rope naturally tightens again. No artificial suspension or stick-like rigidity.
 
-## Step 3: Tangential Input Mapping with Speed Cap
-- **What:** While hooked, remap horizontal input to apply acceleration along the tangent vector of the swing arc. Apply a velocity-dependent acceleration falloff and hard cap at `600 px/s` tangential speed to prevent infinite energy pumping.
-- **Why:** Standard cardinal movement feels disconnected when swinging. Tangential mapping ensures input directly influences swing momentum, while the speed cap prevents players from accelerating uncontrollably at the bottom of long arcs.
-- **Expected Result:** Pressing left/right smoothly accelerates or decelerates your swing along the rope's path, giving tight aerial control without breaking physics stability.
+## Step 3: Screen-Space Tangent Mapping & Pole Safety
+- **What:** Recalculate the tangent vector to align with screen-space left/right expectations in Godot's Y-down coordinate system. Add a small epsilon check (`dist > 0.1f`) and clamp tangent calculations when directly above/below the anchor to prevent division-by-zero or NaN freezes at vertical extremes. Maintain velocity-dependent acceleration falloff and `600 px/s` cap.
+- **Why:** Standard mathematical tangents often invert visually in Y-down engines, causing left/right input swaps. Vertical alignment (directly over/under anchor) creates degenerate tangent vectors that can freeze movement or cause erratic snapping. Explicit screen-space mapping and pole safety ensure consistent control across all swing angles.
+- **Expected Result:** Left/right inputs correctly accelerate/decelerate the swing along the arc in all directions. No input inversion, no freezing at vertical extremes, and smooth momentum buildup throughout the full 360° swing range.
 
 ## Step 4: Gravity & Momentum Handling (Strict Integration Order)
 - **What:** Enforce strict per-frame integration order: `Gravity → Spring/Damping Correction → Tangential Input → MoveAndSlide()`. Preserve tangential velocity by projecting out radial components before applying constraints. Anchor semantics are fixed-world points for now.
