@@ -76,7 +76,7 @@ public partial class Rope : Node2D {
 		
 		var spaceState = GetWorld2D().DirectSpaceState;
 		var query = PhysicsRayQueryParameters2D.Create(origin, end);
-		query.Exclude = new Object[] { player }; // Completely ignores the player collider
+		query.Exclude = new Godot.Collections.Array<Rid> { player.GetRid() }; // Completely ignores the player collider
 		query.HitFromInside = true; // Fixes snapping to center/missing edges when ray starts near colliders
 		var result = spaceState.IntersectRay(query);
 		
