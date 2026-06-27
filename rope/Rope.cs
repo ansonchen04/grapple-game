@@ -69,7 +69,6 @@ public partial class Rope : Node2D {
 		var query = PhysicsRayQueryParameters2D.Create(origin, end);
 		query.CollisionMask = uint.MaxValue & ~4u;
 		query.HitFromInside = true; // Fixes snapping to center/missing edges when ray starts near colliders
-		query.MaxResults = 1;
 		var result = spaceState.IntersectRay(query);
 		
 		if (result.Count > 0) {
@@ -95,7 +94,6 @@ public partial class Rope : Node2D {
 					var query = PhysicsRayQueryParameters2D.Create(origin, end);
 					query.CollisionMask = uint.MaxValue & ~4u;
 					query.HitFromInside = true; // Fixes snapping to center/missing edges when ray starts near colliders
-					query.MaxResults = 1;
 					var result = spaceState.IntersectRay(query);
 					
 					if (result.Count > 0) {
