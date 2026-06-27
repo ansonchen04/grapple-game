@@ -195,44 +195,52 @@ public partial class player : CharacterBody2D
 		Vector2 toPlayer = GlobalPosition - anchor;
 		float dist = toPlayer.Length();
 		
-		// 1. Gravity
+		// 1. Gravity (applied first per integration order)
 		vel.Y += gravity * (float)delta;
 		
-		// 2. Spring/Damping Constraint
+		// 2. Strictly Unidirectional Spring/Damping Constraint
 		if (dist > maxLen && dist > 0.001f) {
 			Vector2 radialDir = toPlayer / dist;
-			Vector2 radialVel = vel.Dot(radialDir) * radialDir;
+			float radialSpeed = vel.Dot(radialDir);
 			
-			// Blend window: 0 to full strength over 10% of maxLen to prevent velocity "pops"
-			float blendStart = maxLen;
-			float blendEnd = maxLen * 1.1f;
-			float blendFactor = Mathf.Clamp((dist - blendStart) / (blendEnd - blendStart), 0.0f, 1.0f);
-			
-			// Hard clamp at 1.3x to prevent infinite stretch/overshoot
-			if (dist > maxLen * 1.3f) {
-				GlobalPosition = anchor + radialDir * (maxLen * 1.3f);
-				toPlayer = GlobalPosition - anchor;
-				dist = maxLen * 1.3f;
+			// Only apply constraint when stretched AND moving outward. 
+			// Moving inward or within limit disables forces completely, allowing natural free-fall/slack.
+			if (radialSpeed > 0) {
+				Vector2 radialVel = radialSpeed * radialDir;
+				
+				// Blend window: 0 to full strength over 10% of maxLen to prevent velocity "pops"
+				float blendStart = maxLen;
+				float blendEnd = maxLen * 1.1f;
+				float blendFactor = Mathf.Clamp((dist - blendStart) / (blendEnd - blendStart), 0.0f, 1.0f);
+				
+				// Hard clamp at 1.3x to prevent infinite stretch/overshoot
+				if (dist > maxLen * 1.3f) {
+					GlobalPosition = anchor + radialDir * (maxLen * 1.3f);
+					toPlayer = GlobalPosition - anchor;
+					dist = maxLen * 1.3f;
+				}
+				
+				// Critically damped spring force
+				float k = 800.0f; 
+				float c = 2.0f * Mathf.Sqrt(k); 
+				
+				float stretch = dist - maxLen;
+				Vector2 springForce = (-k * stretch) * radialDir;
+				Vector2 dampingForce = -c * radialVel;
+				
+				vel += (springForce + dampingForce) * blendFactor * (float)delta;
+				
+				// Remove remaining radial velocity to prevent bouncing
+				vel -= radialVel;
 			}
-			
-			// Critically damped spring force (mass assumed ~1 for simplicity)
-			float k = 800.0f; 
-			float c = 2.0f * Mathf.Sqrt(k); 
-			
-			float stretch = dist - maxLen;
-			Vector2 springForce = (-k * stretch) * radialDir;
-			Vector2 dampingForce = -c * radialVel;
-			
-			vel += (springForce + dampingForce) * blendFactor * (float)delta;
-			
-			// Remove remaining radial velocity to prevent bouncing
-			vel -= radialVel;
 		}
 		
 		// 3. Tangential Input with speed cap & falloff
-		if (dist > 0.001f) {
+		if (dist > 0.1f) { // Pole safety: skip if too close to anchor to avoid NaN/tangent flips
 			Vector2 radialDir = toPlayer / dist;
-			Vector2 tangentDir = new Vector2(-radialDir.Y, radialDir.X);
+			// Fixed tangent direction for consistent screen-space left/right mapping in Y-down coords
+			Vector2 tangentDir = new Vector2(radialDir.Y, -radialDir.X);
+			
 			float inputX = Input.GetActionStrength("Right") - Input.GetActionStrength("Left");
 			
 			float currentTangentialSpeed = Mathf.Abs(vel.Dot(tangentDir));
