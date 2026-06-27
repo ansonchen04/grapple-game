@@ -27,8 +27,8 @@ public partial class Rope : Node2D {
 	Vector2 lastValidHit = Vector2.Zero;
 	bool hasLastHit = false;
 
-    public Vector2 GetAnchor() => currentAnchor;
-    public float GetMaxRopeLength() => MaxLength;
+	public Vector2 GetAnchor() => currentAnchor;
+	public float GetMaxRopeLength() => MaxLength;
 
 	public override void _Ready() {
 		player = GetNode<CharacterBody2D>("../Player");
