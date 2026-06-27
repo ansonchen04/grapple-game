@@ -53,6 +53,7 @@ public partial class Rope : Node2D {
                     ropeState = RopeState.Hidden;
                     break;
             }
+            GD.Print($"Rope State changed to: {ropeState}");
         }
     }
 }
