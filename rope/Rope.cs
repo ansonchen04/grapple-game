@@ -15,6 +15,7 @@ public partial class Rope : Node2D {
 	Line2D ropeLine;
 	float SegmentLength; // Dynamic segment length, set on initialization to prevent snapping/stretching
 	const float RopeGravity = 400.0f;
+	bool _isRopeInitialized = false;
 
 	public override void _Ready() {
 		player = GetNode<CharacterBody2D>("../Player");
@@ -27,9 +28,9 @@ public partial class Rope : Node2D {
 
 	public override void _PhysicsProcess(double delta) {
 		if (ropeState == RopeState.Shot || ropeState == RopeState.Hooked) {
-			// Initialize test rope if not already set up
-			if (positions[0] == Vector2.Zero) {
+			if (!_isRopeInitialized) {
 				InitializeTestRope();
+				_isRopeInitialized = true;
 			}
 			UpdateVerlet(delta);
 		} else {
@@ -56,11 +57,11 @@ public partial class Rope : Node2D {
 	}
 
 	void UpdateVerlet(double delta) {
-		float dt = (float)delta;
+		float dt = Mathf.Clamp((float)delta, 0.0f, 0.033f); // Clamp dt to prevent physics explosions on lag spikes
 		
 		// 1. Integration step: newPos = 2*current - previous + acc*dt^2
 		for (int i = 0; i <= MaxSegments; i++) {
-			Vector2 vel = (positions[i] - previousPositions[i]) * 0.98f; // Damping prevents energy buildup & stretching
+			Vector2 vel = (positions[i] - previousPositions[i]) * 0.96f; // Increased damping for stability
 			previousPositions[i] = positions[i];
 			
 			if (i > 0) {
@@ -76,7 +77,7 @@ public partial class Rope : Node2D {
 		previousPositions[0] = anchor;
 
 		// 2. Constraint relaxation: enforce fixed distance between points
-		int iterations = 10; // Increased for better stability
+		int iterations = 15; // More iterations for tighter constraints
 		for (int iter = 0; iter < iterations; iter++) {
 			for (int i = 0; i < MaxSegments; i++) {
 				Vector2 p1 = positions[i];
@@ -101,8 +102,12 @@ public partial class Rope : Node2D {
 			}
 		}
 
-		// Update visuals
-		ropeLine.Points = positions;
+		// Update visuals (convert global positions to local space for Line2D)
+		var localPoints = new Vector2[MaxSegments + 1];
+		for(int i=0; i<=MaxSegments; i++) {
+			localPoints[i] = ToLocal(positions[i]);
+		}
+		ropeLine.Points = localPoints;
 	}
 
 	public override void _Input(InputEvent @event) {
