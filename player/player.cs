@@ -121,7 +121,12 @@ public partial class player : CharacterBody2D
 			velocity.X = direction.X * speed;
 		}
 		else {
-			velocity.X = Mathf.MoveToward(Velocity.X, 0, speed);
+			// Preserve aerial momentum when no input is pressed (Step 8: Aerial Momentum Preservation)
+			if (!IsOnFloor()) {
+				// Keep existing horizontal velocity while airborne
+			} else {
+				velocity.X = Mathf.MoveToward(Velocity.X, 0, speed);
+			}
 		}
 		// Handle Jump.
 		if (Input.IsActionJustPressed("Up") && IsOnFloor())

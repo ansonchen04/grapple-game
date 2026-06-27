@@ -53,13 +53,6 @@ public partial class Rope : Node2D {
 			if (!_isRopeInitialized) {
 				InitializeRope(currentAnchor);
 				_isRopeInitialized = true;
-				currentEffectiveLength = MaxLength; // Reset effective length on hook
-			}
-			
-			if (ropeState == RopeState.Retracting) {
-				float retractSpeed = 250.0f;
-				currentEffectiveLength = Mathf.Max(currentEffectiveLength - retractSpeed * (float)delta, 60.0f);
-				SegmentLength = currentEffectiveLength / MaxSegments; // Sync visuals with physics
 			}
 			
 			UpdateVerlet(delta);
