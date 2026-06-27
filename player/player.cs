@@ -201,7 +201,7 @@ public partial class player : CharacterBody2D
         // 2. Spring/Damping Constraint
         if (dist > maxLen && dist > 0.001f) {
             Vector2 radialDir = toPlayer / dist;
-            Vector2 radialVel = Vector2.Dot(vel, radialDir) * radialDir;
+            Vector2 radialVel = vel.Dot(radialDir) * radialDir;
             
             // Blend window: 0 to full strength over 10% of maxLen to prevent velocity "pops"
             float blendStart = maxLen;
@@ -235,7 +235,7 @@ public partial class player : CharacterBody2D
             Vector2 tangentDir = new Vector2(-radialDir.Y, radialDir.X);
             float inputX = Input.GetActionStrength("Right") - Input.GetActionStrength("Left");
             
-            float currentTangentialSpeed = Mathf.Abs(Vector2.Dot(vel, tangentDir));
+            float currentTangentialSpeed = Mathf.Abs(vel.Dot(tangentDir));
             float maxTangentialSpeed = 600.0f;
             // Velocity-dependent acceleration falloff prevents infinite energy pumping
             float accelFalloff = Mathf.Clamp((maxTangentialSpeed - currentTangentialSpeed) / (maxTangentialSpeed * 0.5f), 0.0f, 1.0f);
