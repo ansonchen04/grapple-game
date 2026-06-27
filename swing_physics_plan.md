@@ -8,19 +8,19 @@ This plan outlines how we will implement smooth, responsive swinging mechanics u
 - **Why:** `player.cs` needs deterministic access to the hook position and rope limits every physics frame.
 - **Expected Result:** No visual change yet, but player script can query exact swing boundaries.
 
-## Step 2: Spring-Based Attachment (Stretchy Grapple)
-- **What:** Implement a Hooke's Law spring system (`F = -k * stretch`) combined with radial velocity damping. When the player exceeds `MaxLength`, a restoring force pulls them back toward the anchor. We will heavily dampen any velocity pointing directly away from or toward the anchor to prevent infinite bouncing.
-- **Why:** Hard constraints fight Godot's `CharacterBody2D` movement, causing micro-collisions and jitter. Springs absorb momentum naturally and feel organic.
-- **Expected Result:** The rope will stretch slightly under fast swings or gravity, then smoothly pull the player back. No snapping or position teleportation. Tunable stiffness allows for that "Spider-Man web" elasticity without breaking collision resolution.
+## Step 2: Critically Damped Spring Attachment (Stretchy Grapple)
+- **What:** Implement a "rope" constraint (zero force inside radius, restoring force only past `MaxLength`). Use a critically damped oscillator (`c = 2 * sqrt(k)`) instead of independent stiffness/damping knobs to guarantee numerical stability. Blend the spring force over a 10% window past `MaxLength` to eliminate velocity "pops". Add a hard position clamp at `1.3x MaxLength` as a safety backstop against high-speed overshoot.
+- **Why:** Bare Hooke springs integrated with Euler steps can oscillate or blow up if tuned poorly. Critical damping collapses tuning into one predictable pair, while the blend window and hard clamp prevent edge-case tunneling or infinite stretch.
+- **Expected Result:** The rope stretches organically under momentum but settles instantly without bouncing. Fast swings feel elastic but never break physics bounds.
 
-## Step 3: Tangential Input Mapping
-- **What:** While hooked, remap horizontal input (`Left`/`Right`) to apply acceleration along the tangent vector of the swing arc.
-- **Why:** Standard cardinal movement feels disconnected when swinging. Tangential mapping ensures input directly influences swing momentum.
-- **Expected Result:** Pressing left/right smoothly accelerates or decelerates your swing along the rope's path, giving tight aerial control.
+## Step 3: Tangential Input Mapping with Speed Cap
+- **What:** While hooked, remap horizontal input to apply acceleration along the tangent vector of the swing arc. Apply a velocity-dependent acceleration falloff and hard cap at `600 px/s` tangential speed to prevent infinite energy pumping.
+- **Why:** Standard cardinal movement feels disconnected when swinging. Tangential mapping ensures input directly influences swing momentum, while the speed cap prevents players from accelerating uncontrollably at the bottom of long arcs.
+- **Expected Result:** Pressing left/right smoothly accelerates or decelerates your swing along the rope's path, giving tight aerial control without breaking physics stability.
 
-## Step 4: Gravity & Momentum Handling
-- **What:** Allow Godot's default gravity to act on the player normally. The spring force only activates when stretching occurs. We will preserve all tangential velocity during swings by projecting out radial components before applying the spring correction, ensuring `MoveAndSlide()` handles floor/wall collisions naturally.
-- **Why:** Pendulum physics rely on gravity for natural arc motion. Letting the engine handle gravity avoids complex manual calculations and keeps movement consistent with platforming.
+## Step 4: Gravity & Momentum Handling (Strict Integration Order)
+- **What:** Enforce strict per-frame integration order: `Gravity → Spring/Damping Correction → Tangential Input → MoveAndSlide()`. Preserve tangential velocity by projecting out radial components before applying constraints. Anchor semantics are fixed-world points for now.
+- **Why:** Pendulum physics rely on gravity for natural arc motion. Strict ordering prevents input from leaking into the spring correction next frame, and fixed anchors simplify constraint math while keeping `MoveAndSlide()` collision resolution intact.
 - **Expected Result:** Smooth pendulum arcs, natural speed buildup at the bottom of swings, and seamless transitions between swinging and falling. The stretchy feel won't interfere with normal jumping or landing.
 
 ## Step 5: Clean Release & State Sync
