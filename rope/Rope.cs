@@ -13,7 +13,6 @@ public partial class Rope : Node2D {
 
 	Line2D ropeLine;
 	Sprite2D hookSprite;
-	RayCast2D aimRaycast;
 	float SegmentLength; 
 	const float RopeGravity = 400.0f;
 	bool _isRopeInitialized = false;
@@ -23,7 +22,6 @@ public partial class Rope : Node2D {
 		player = GetNode<CharacterBody2D>("../Player");
 		ropeLine = GetNode<Line2D>("RopeLine");
 		hookSprite = GetNode<Sprite2D>("HookSprite");
-		aimRaycast = GetNode<RayCast2D>("AimRaycast");
 		ropeState = RopeState.Hidden;
 		
 		positions = new Vector2[MaxSegments + 1];
@@ -58,20 +56,22 @@ public partial class Rope : Node2D {
 
 	void UpdateAim() {
 		hookSprite.Visible = true;
-		aimRaycast.Enabled = true;
 		
 		Vector2 mousePos = GetGlobalMousePosition();
 		Vector2 direction = (mousePos - player.GlobalPosition).Normalized();
 		float dist = Mathf.Min(player.GlobalPosition.DistanceTo(mousePos), MaxLength);
 		
-		aimRaycast.GlobalPosition = player.GlobalPosition;
-		aimRaycast.TargetPosition = direction * dist;
-		aimRaycast.ForceRaycastUpdate();
+		// Offset origin slightly to prevent self-collision with player hitbox
+		Vector2 origin = player.GlobalPosition + direction * 10.0f;
+		Vector2 end = origin + direction * (dist - 10.0f);
 		
-		if (aimRaycast.IsColliding()) {
-			hookSprite.GlobalPosition = aimRaycast.GetCollisionPoint();
+		var spaceState = GetWorld2D().DirectSpaceState;
+		var result = spaceState.IntersectRay(origin, end, collision_mask: uint.MaxValue ^ 4u);
+		
+		if (result.Count > 0) {
+			hookSprite.GlobalPosition = (Vector2)result["position"];
 		} else {
-			hookSprite.GlobalPosition = player.GlobalPosition + direction * dist;
+			hookSprite.GlobalPosition = end;
 		}
 	}
 
@@ -79,16 +79,18 @@ public partial class Rope : Node2D {
 		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left) {
 			switch (ropeState) {
 				case RopeState.Hidden:
-					// Aim directly at the exact click position to avoid frame-delay mismatches
 					Vector2 direction = (mouseEvent.GlobalPosition - player.GlobalPosition).Normalized();
 					float dist = Mathf.Min(player.GlobalPosition.DistanceTo(mouseEvent.GlobalPosition), MaxLength);
 					
-					aimRaycast.GlobalPosition = player.GlobalPosition;
-					aimRaycast.TargetPosition = direction * dist;
-					aimRaycast.ForceRaycastUpdate();
+					// Offset origin slightly to prevent self-collision with player hitbox
+					Vector2 origin = player.GlobalPosition + direction * 10.0f;
+					Vector2 end = origin + direction * (dist - 10.0f);
 					
-					if (aimRaycast.IsColliding()) {
-						currentAnchor = aimRaycast.GetCollisionPoint();
+					var spaceState = GetWorld2D().DirectSpaceState;
+					var result = spaceState.IntersectRay(origin, end, collision_mask: uint.MaxValue ^ 4u);
+					
+					if (result.Count > 0) {
+						currentAnchor = (Vector2)result["position"];
 						ropeState = RopeState.Hooked;
 					} else {
 						ropeState = RopeState.Hidden;

@@ -14,5 +14,3 @@ width = 4
 texture = ExtResource("2_4v30u")
 scale = Vector2(0.25, 0.25)
 
-[node name="AimRaycast" type="RayCast2D" parent="."]
-collision_mask = 255
