@@ -45,7 +45,7 @@ public partial class Rope : Node2D {
 		// Hardcoded anchor 200px above player for testing Chunk 2
 		Vector2 anchor = player.GlobalPosition + new Vector2(0, -200);
 		Vector2 end = player.GlobalPosition;
-        SegmentLength = anchor.DistanceTo(end) / MaxSegments;
+		SegmentLength = anchor.DistanceTo(end) / MaxSegments;
 		
 		for (int i = 0; i <= MaxSegments; i++) {
 			float t = i / (float)MaxSegments;
