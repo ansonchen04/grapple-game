@@ -9,9 +9,9 @@ This plan outlines how we will implement smooth, responsive swinging mechanics u
 - **Expected Result:** No visual change yet, but player script can query exact swing boundaries.
 
 ## Step 2: Spring-Based Attachment (Stretchy Grapple)
-- **What:** Replace hard distance clamping with a spring-damper system. When player distance > max length, apply a restoring force proportional to the stretch amount. Heavily dampen radial velocity to control oscillation.
+- **What:** Implement a Hooke's Law spring system (`F = -k * stretch`) combined with radial velocity damping. When the player exceeds `MaxLength`, a restoring force pulls them back toward the anchor. We will heavily dampen any velocity pointing directly away from or toward the anchor to prevent infinite bouncing.
 - **Why:** Hard constraints fight Godot's `CharacterBody2D` movement, causing micro-collisions and jitter. Springs absorb momentum naturally and feel organic.
-- **Expected Result:** The rope will stretch slightly under fast swings or gravity, then smoothly pull the player back. No snapping or position teleportation.
+- **Expected Result:** The rope will stretch slightly under fast swings or gravity, then smoothly pull the player back. No snapping or position teleportation. Tunable stiffness allows for that "Spider-Man web" elasticity without breaking collision resolution.
 
 ## Step 3: Tangential Input Mapping
 - **What:** While hooked, remap horizontal input (`Left`/`Right`) to apply acceleration along the tangent vector of the swing arc.
@@ -19,9 +19,9 @@ This plan outlines how we will implement smooth, responsive swinging mechanics u
 - **Expected Result:** Pressing left/right smoothly accelerates or decelerates your swing along the rope's path, giving tight aerial control.
 
 ## Step 4: Gravity & Momentum Handling
-- **What:** Allow Godot's default gravity to act on the player normally. The spring force only activates when stretching occurs. Preserve all tangential velocity during swings.
+- **What:** Allow Godot's default gravity to act on the player normally. The spring force only activates when stretching occurs. We will preserve all tangential velocity during swings by projecting out radial components before applying the spring correction, ensuring `MoveAndSlide()` handles floor/wall collisions naturally.
 - **Why:** Pendulum physics rely on gravity for natural arc motion. Letting the engine handle gravity avoids complex manual calculations and keeps movement consistent with platforming.
-- **Expected Result:** Smooth pendulum arcs, natural speed buildup at the bottom of swings, and seamless transitions between swinging and falling.
+- **Expected Result:** Smooth pendulum arcs, natural speed buildup at the bottom of swings, and seamless transitions between swinging and falling. The stretchy feel won't interfere with normal jumping or landing.
 
 ## Step 5: Clean Release & State Sync
 - **What:** On release (Left Click), switch state to `Hidden`, clear Verlet arrays, but retain player velocity. Spring forces immediately deactivate.
