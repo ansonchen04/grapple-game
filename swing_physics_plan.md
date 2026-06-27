@@ -28,5 +28,15 @@ This plan outlines how we will implement smooth, responsive swinging mechanics u
 - **Why:** Releasing mid-swing should launch the player forward with accumulated momentum, not drop them vertically.
 - **Expected Result:** Click to release and watch the player arc gracefully into the air, ready to jump or land normally.
 
+## Step 6: Platform Interaction & Jumping While Hooked
+- **What:** Allow the player to trigger a normal jump while `RopeState.Hooked` if `IsOnFloor()` returns true. The jump impulse will override vertical velocity temporarily, and the spring constraint will yield to the upward force without detaching.
+- **Why:** Players expect to land on platforms mid-swing and immediately jump again. Forcing a manual release before jumping breaks flow and feels clunky in fast-paced platforming.
+- **Expected Result:** Land on a platform while swinging, press Up, and launch upward naturally. The rope remains attached until manually released or slack conditions are met, enabling seamless swing-to-platform transitions.
+
+## Step 7: Momentum-Preserving Retraction
+- **What:** Implement a `Retracting` state that gradually reduces the effective `MaxLength` (or applies a controlled inward pull) while strictly preserving the player's tangential velocity vector. Instead of zeroing out momentum or teleporting, retraction will complement existing swing speed, allowing players to "pump" closer to the anchor before releasing for a high-speed launch.
+- **Why:** Standard retraction often acts as a brake, killing swing momentum and making aerial movement feel sluggish. Preserving tangential velocity during retraction lets players chain swings or launch at higher speeds, matching professional platformer grapple mechanics.
+- **Expected Result:** Holding the retract input smoothly pulls the player toward the anchor while maintaining swing speed. Releasing mid-retraction launches the player with full accumulated momentum, enabling advanced aerial maneuvers.
+
 ## Why This Works
 Spring-damper systems are mathematically stable in game loops because they convert kinetic energy into potential energy smoothly. By damping radial velocity, we prevent infinite bouncing while preserving the "stretchy" web feel. Tangential input mapping aligns player control with the physics of swinging, resulting in a responsive, professional-grade grapple mechanic.
