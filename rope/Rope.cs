@@ -33,7 +33,7 @@ public partial class Rope : Node2D {
             }
             UpdateVerlet(delta);
         } else {
-            ropeLine.Points = new Godot.Collections.Array<Vector2>();
+            ropeLine.Points = new Vector2[0];
             for(int i=0; i<=MaxSegments; i++) {
                 positions[i] = Vector2.Zero;
                 previousPositions[i] = Vector2.Zero;
@@ -101,9 +101,7 @@ public partial class Rope : Node2D {
         }
 
         // Update visuals
-        var linePoints = new Godot.Collections.Array<Vector2>();
-        for(int i=0; i<=MaxSegments; i++) linePoints.Add(positions[i]);
-        ropeLine.Points = linePoints;
+        ropeLine.Points = positions;
     }
 
 	public override void _Input(InputEvent @event) {
