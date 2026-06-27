@@ -69,8 +69,8 @@ public partial class Rope : Node2D {
 		Vector2 direction = (mousePos - player.GlobalPosition).Normalized();
 		float dist = Mathf.Min(player.GlobalPosition.DistanceTo(mousePos), MaxLength);
 		
-		// Reduced offset prevents ray from starting inside nearby walls/platforms when aiming sideways/upwards
-		float offset = 30.0f;
+		// Offset must be > 64 (half of 128x128 hitbox) to start safely outside the player collider
+		float offset = 80.0f;
 		Vector2 origin = player.GlobalPosition + direction * offset;
 		Vector2 end = origin + direction * Mathf.Max(dist - offset, 1.0f);
 		
