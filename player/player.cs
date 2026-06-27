@@ -61,6 +61,10 @@ public partial class player : CharacterBody2D
 		
 		if (rope.ropeState == RopeState.Hooked) {
 			ApplySwingPhysics(ref newVelocity, delta);
+            // Allow jumping while hooked if standing on a platform
+            if (Input.IsActionJustPressed("Up") && IsOnFloor()) {
+                newVelocity.Y = jumpVelocity;
+            }
 		} else {
 			//Checking which movement option, if any, is being used. Will convert this into a switch case in a future commit
 			if (onOneWaySurface) {
