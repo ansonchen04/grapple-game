@@ -86,12 +86,12 @@ public partial class Rope : Node2D {
 		if (result.Count > 0) {
 			debugHit = (Vector2)result["position"];
 			hasHit = true;
-            lastValidHit = debugHit;
-            hasLastHit = true;
+			lastValidHit = debugHit;
+			hasLastHit = true;
 			hookSprite.GlobalPosition = debugHit;
 		} else {
 			hasHit = false;
-            hasLastHit = false;
+			hasLastHit = false;
 			hookSprite.GlobalPosition = end;
 		}
 		
