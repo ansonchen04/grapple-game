@@ -69,14 +69,14 @@ public partial class Rope : Node2D {
 		Vector2 direction = (mousePos - player.GlobalPosition).Normalized();
 		float dist = Mathf.Min(player.GlobalPosition.DistanceTo(mousePos), MaxLength);
 		
-		// Offset must be > 64 (half of 128x128 hitbox) to start safely outside the player collider
-		float offset = 80.0f;
+		// Small offset prevents tunneling into nearby walls; Exclude handles self-collision
+		float offset = 10.0f;
 		Vector2 origin = player.GlobalPosition + direction * offset;
 		Vector2 end = origin + direction * Mathf.Max(dist - offset, 1.0f);
 		
 		var spaceState = GetWorld2D().DirectSpaceState;
 		var query = PhysicsRayQueryParameters2D.Create(origin, end);
-		query.CollisionMask = uint.MaxValue & ~8u; // Correctly excludes Layer 4 (Player)
+		query.Exclude = new Object[] { player }; // Completely ignores the player collider
 		query.HitFromInside = true; // Fixes snapping to center/missing edges when ray starts near colliders
 		var result = spaceState.IntersectRay(query);
 		
