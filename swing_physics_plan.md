@@ -33,10 +33,10 @@ This plan outlines how we will implement smooth, responsive swinging mechanics u
 - **Why:** Players expect to land on platforms mid-swing and immediately jump again. Forcing a manual release before jumping breaks flow and feels clunky in fast-paced platforming.
 - **Expected Result:** Land on a platform while swinging, press Up, and launch upward naturally. The rope remains attached until manually released or slack conditions are met, enabling seamless swing-to-platform transitions.
 
-## Step 7: Momentum-Preserving Retraction
-- **What:** Implement a `Retracting` state that gradually reduces the effective `MaxLength` (or applies a controlled inward pull) while strictly preserving the player's tangential velocity vector. Instead of zeroing out momentum or teleporting, retraction will complement existing swing speed, allowing players to "pump" closer to the anchor before releasing for a high-speed launch.
-- **Why:** Standard retraction often acts as a brake, killing swing momentum and making aerial movement feel sluggish. Preserving tangential velocity during retraction lets players chain swings or launch at higher speeds, matching professional platformer grapple mechanics.
-- **Expected Result:** Holding the retract input smoothly pulls the player toward the anchor while maintaining swing speed. Releasing mid-retraction launches the player with full accumulated momentum, enabling advanced aerial maneuvers.
+## Step 7: Momentum-Preserving Retraction (Refined)
+- **What:** Replace dynamic `MaxLength` shrinking with a direct inward radial force applied during `Retracting`. Completely disable radial damping while retracting to prevent braking. Explicitly project and preserve the tangential velocity vector each frame before applying the retraction force, ensuring horizontal/swing momentum is mathematically isolated from the inward pull.
+- **Why:** Shrinking `MaxLength` forces the spring constraint to constantly trigger, and critical damping aggressively removes radial velocity. This acts as a brake on overall speed and inadvertently drains tangential/horizontal momentum due to constraint fighting. Direct force application bypasses solver overhead, while disabling damping guarantees momentum conservation.
+- **Expected Result:** Holding retract smoothly pulls you toward the anchor without slowing down your swing. Horizontal/tangential speed is fully preserved (or even boosted by gravity), allowing high-speed launches upon release with zero braking or oscillation.
 
 ## Why This Works
 Spring-damper systems are mathematically stable in game loops because they convert kinetic energy into potential energy smoothly. By damping radial velocity, we prevent infinite bouncing while preserving the "stretchy" web feel. Tangential input mapping aligns player control with the physics of swinging, resulting in a responsive, professional-grade grapple mechanic.
