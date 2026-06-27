@@ -67,7 +67,7 @@ public partial class Rope : Node2D {
 		var spaceState = GetWorld2D().DirectSpaceState;
 		var query = PhysicsRayQueryParameters2D.Create(origin, end);
 		query.CollisionMask = uint.MaxValue & ~4u;
-		var result = spaceState.Intersect(query);
+		var result = spaceState.IntersectRay(query);
 		
 		if (result.Count > 0) {
 			hookSprite.GlobalPosition = (Vector2)result["position"];
@@ -90,7 +90,7 @@ public partial class Rope : Node2D {
 					var spaceState = GetWorld2D().DirectSpaceState;
 					var query = PhysicsRayQueryParameters2D.Create(origin, end);
 					query.CollisionMask = uint.MaxValue & ~4u;
-					var result = spaceState.Intersect(query);
+					var result = spaceState.IntersectRay(query);
 					
 					if (result.Count > 0) {
 						currentAnchor = (Vector2)result["position"];
