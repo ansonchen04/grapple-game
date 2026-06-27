@@ -61,7 +61,7 @@ public partial class Rope : Node2D {
 			if (ropeState == RopeState.Retracting) {
 				float retractSpeed = 250.0f;
 				currentEffectiveLength = Mathf.Max(currentEffectiveLength - retractSpeed * (float)delta, 60.0f);
-                SegmentLength = currentEffectiveLength / MaxSegments; // Sync visuals with physics
+				SegmentLength = currentEffectiveLength / MaxSegments; // Sync visuals with physics
 			}
 			
 			UpdateVerlet(delta);
