@@ -174,11 +174,6 @@ public partial class player : CharacterBody2D
 	public void setOneWay(bool onOneWaySurface) {
 		this.onOneWaySurface = onOneWaySurface;
 	}
-  // sets the force the rope should be applying to the player
-	public void SetRopePull(Vector2 newRopePull) {
-		ropePull = newRopePull;
-	}
-
 	public Vector2 GetRaycastPos() {
 		return rayCast.GlobalPosition;
 	}
