@@ -18,11 +18,14 @@ public partial class Rope : Node2D {
 	bool _isRopeInitialized = false;
 	Vector2 currentAnchor = Vector2.Zero;
 	
-	// Debug visualization
+	// Debug visualization & aim caching
 	Vector2 debugOrigin = Vector2.Zero;
 	Vector2 debugEnd = Vector2.Zero;
 	Vector2 debugHit = Vector2.Zero;
 	bool hasHit = false;
+	
+	Vector2 lastValidHit = Vector2.Zero;
+	bool hasLastHit = false;
 
 	public override void _Ready() {
 		player = GetNode<CharacterBody2D>("../Player");
@@ -73,7 +76,7 @@ public partial class Rope : Node2D {
 		
 		var spaceState = GetWorld2D().DirectSpaceState;
 		var query = PhysicsRayQueryParameters2D.Create(origin, end);
-		query.CollisionMask = uint.MaxValue & ~4u;
+		query.CollisionMask = uint.MaxValue & ~8u; // Correctly excludes Layer 4 (Player)
 		query.HitFromInside = true; // Fixes snapping to center/missing edges when ray starts near colliders
 		var result = spaceState.IntersectRay(query);
 		
@@ -83,9 +86,12 @@ public partial class Rope : Node2D {
 		if (result.Count > 0) {
 			debugHit = (Vector2)result["position"];
 			hasHit = true;
+            lastValidHit = debugHit;
+            hasLastHit = true;
 			hookSprite.GlobalPosition = debugHit;
 		} else {
 			hasHit = false;
+            hasLastHit = false;
 			hookSprite.GlobalPosition = end;
 		}
 		
@@ -107,22 +113,9 @@ public partial class Rope : Node2D {
 		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left) {
 			switch (ropeState) {
 				case RopeState.Hidden:
-					Vector2 direction = (mouseEvent.GlobalPosition - player.GlobalPosition).Normalized();
-					float dist = Mathf.Min(player.GlobalPosition.DistanceTo(mouseEvent.GlobalPosition), MaxLength);
-					
-					// Reduced offset prevents ray from starting inside nearby walls/platforms when aiming sideways/upwards
-					float offset = 30.0f;
-					Vector2 origin = player.GlobalPosition + direction * offset;
-					Vector2 end = origin + direction * Mathf.Max(dist - offset, 1.0f);
-					
-					var spaceState = GetWorld2D().DirectSpaceState;
-					var query = PhysicsRayQueryParameters2D.Create(origin, end);
-					query.CollisionMask = uint.MaxValue & ~4u;
-					query.HitFromInside = true; // Fixes snapping to center/missing edges when ray starts near colliders
-					var result = spaceState.IntersectRay(query);
-					
-					if (result.Count > 0) {
-						currentAnchor = (Vector2)result["position"];
+					// Use cached aim result to guarantee attachment matches debug visualization exactly
+					if (hasLastHit) {
+						currentAnchor = lastValidHit;
 						ropeState = RopeState.Hooked;
 					} else {
 						ropeState = RopeState.Hidden;
