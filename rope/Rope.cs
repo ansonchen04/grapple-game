@@ -13,7 +13,7 @@ public partial class Rope : Node2D {
 	const int MaxSegments = 30;
 
 	Line2D ropeLine;
-	const float SegmentLength = MaxLength / MaxSegments;
+	float SegmentLength; // Dynamic segment length, set on initialization to prevent snapping/stretching
 	const float RopeGravity = 400.0f;
 
 	public override void _Ready() {
@@ -45,6 +45,7 @@ public partial class Rope : Node2D {
 		// Hardcoded anchor 200px above player for testing Chunk 2
 		Vector2 anchor = player.GlobalPosition + new Vector2(0, -200);
 		Vector2 end = player.GlobalPosition;
+        SegmentLength = anchor.DistanceTo(end) / MaxSegments;
 		
 		for (int i = 0; i <= MaxSegments; i++) {
 			float t = i / (float)MaxSegments;
@@ -59,7 +60,7 @@ public partial class Rope : Node2D {
 		
 		// 1. Integration step: newPos = 2*current - previous + acc*dt^2
 		for (int i = 0; i <= MaxSegments; i++) {
-			Vector2 vel = positions[i] - previousPositions[i];
+			Vector2 vel = (positions[i] - previousPositions[i]) * 0.98f; // Damping prevents energy buildup & stretching
 			previousPositions[i] = positions[i];
 			
 			if (i > 0) {
@@ -75,7 +76,7 @@ public partial class Rope : Node2D {
 		previousPositions[0] = anchor;
 
 		// 2. Constraint relaxation: enforce fixed distance between points
-		int iterations = 5;
+		int iterations = 10; // Increased for better stability
 		for (int iter = 0; iter < iterations; iter++) {
 			for (int i = 0; i < MaxSegments; i++) {
 				Vector2 p1 = positions[i];
