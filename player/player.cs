@@ -195,7 +195,7 @@ public partial class player : CharacterBody2D
 
 	void ApplySwingPhysics(ref Vector2 vel, double delta) {
 		Vector2 anchor = rope.GetAnchor();
-		float maxLen = rope.GetMaxRopeLength();
+		float maxLen = rope.GetEffectiveLength();
 		Vector2 toPlayer = GlobalPosition - anchor;
 		float dist = toPlayer.Length();
 		

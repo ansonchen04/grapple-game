@@ -29,6 +29,8 @@ public partial class Rope : Node2D {
 
 	public Vector2 GetAnchor() => currentAnchor;
 	public float GetMaxRopeLength() => MaxLength;
+	public float GetEffectiveLength() => currentEffectiveLength;
+	float currentEffectiveLength = MaxLength;
 
 	public override void _Ready() {
 		player = GetNode<CharacterBody2D>("../Player");
@@ -49,11 +51,19 @@ public partial class Rope : Node2D {
 	}
 
 	public override void _PhysicsProcess(double delta) {
-		if (ropeState == RopeState.Hooked) {
+		if (ropeState == RopeState.Hooked || ropeState == RopeState.Retracting) {
 			if (!_isRopeInitialized) {
 				InitializeRope(currentAnchor);
 				_isRopeInitialized = true;
+				currentEffectiveLength = MaxLength; // Reset effective length on hook
 			}
+			
+			if (ropeState == RopeState.Retracting) {
+				float retractSpeed = 250.0f;
+				currentEffectiveLength = Mathf.Max(currentEffectiveLength - retractSpeed * (float)delta, 60.0f);
+                SegmentLength = currentEffectiveLength / MaxSegments; // Sync visuals with physics
+			}
+			
 			UpdateVerlet(delta);
 		} else {
 			ropeLine.Points = new Vector2[0];
@@ -113,24 +123,33 @@ public partial class Rope : Node2D {
 	}
 
 	public override void _Input(InputEvent @event) {
-		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left) {
-			switch (ropeState) {
-				case RopeState.Hidden:
-					// Use cached aim result to guarantee attachment matches debug visualization exactly
-					if (hasLastHit) {
-						currentAnchor = lastValidHit;
-						ropeState = RopeState.Hooked;
-					} else {
+		if (@event is InputEventMouseButton mouseEvent && mouseEvent.ButtonIndex == MouseButton.Left) {
+			if (mouseEvent.Pressed) {
+				switch (ropeState) {
+					case RopeState.Hidden:
+						if (hasLastHit) {
+							currentAnchor = lastValidHit;
+							ropeState = RopeState.Hooked;
+						} else {
+							ropeState = RopeState.Hidden;
+						}
+						break;
+					case RopeState.Hooked:
+					case RopeState.Slack:
+					case RopeState.Retracting:
 						ropeState = RopeState.Hidden;
-					}
-					break;
-				case RopeState.Hooked:
-				case RopeState.Slack:
-					ropeState = RopeState.Hidden;
-					break;
+						break;
+				}
 			}
-			GD.Print($"Rope State changed to: {ropeState}");
+		} else if (@event is InputEventMouseButton mouseEvent && mouseEvent.ButtonIndex == MouseButton.Right) {
+			if (mouseEvent.Pressed && ropeState == RopeState.Hooked) {
+				ropeState = RopeState.Retracting;
+			} else if (!mouseEvent.Pressed && ropeState == RopeState.Retracting) {
+				ropeState = RopeState.Hooked;
+			}
 		}
+		
+		GD.Print($"Rope State changed to: {ropeState}");
 	}
 
 	void InitializeRope(Vector2 anchor) {
