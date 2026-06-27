@@ -76,6 +76,10 @@ public partial class Rope : Node2D {
 		positions[0] = anchor;
 		previousPositions[0] = anchor;
 
+		// Temporarily pin the end of the rope to the player for Chunk 2 testing
+		positions[MaxSegments] = player.GlobalPosition;
+		previousPositions[MaxSegments] = player.GlobalPosition;
+
 		// 2. Constraint relaxation: enforce fixed distance between points
 		int iterations = 15; // More iterations for tighter constraints
 		for (int iter = 0; iter < iterations; iter++) {
