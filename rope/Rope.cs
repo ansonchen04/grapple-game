@@ -141,10 +141,10 @@ public partial class Rope : Node2D {
 						break;
 				}
 			}
-		} else if (@event is InputEventMouseButton mouseEvent && mouseEvent.ButtonIndex == MouseButton.Right) {
-			if (mouseEvent.Pressed && ropeState == RopeState.Hooked) {
+		} else if (@event is InputEventMouseButton rightMouse && rightMouse.ButtonIndex == MouseButton.Right) {
+			if (rightMouse.Pressed && ropeState == RopeState.Hooked) {
 				ropeState = RopeState.Retracting;
-			} else if (!mouseEvent.Pressed && ropeState == RopeState.Retracting) {
+			} else if (!rightMouse.Pressed && ropeState == RopeState.Retracting) {
 				ropeState = RopeState.Hooked;
 			}
 		}
