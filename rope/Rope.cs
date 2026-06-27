@@ -7,29 +7,42 @@ public partial class Rope : Node2D {
 
 	const float MaxLength = 500.0f;
 	
-	// Placeholders for Verlet integration (Chunk 2)
 	Vector2[] positions;
 	Vector2[] previousPositions;
 	const int MaxSegments = 30;
 
 	Line2D ropeLine;
-	float SegmentLength; // Dynamic segment length, set on initialization to prevent snapping/stretching
+	Sprite2D hookSprite;
+	RayCast2D aimRaycast;
+	float SegmentLength; 
 	const float RopeGravity = 400.0f;
 	bool _isRopeInitialized = false;
+	Vector2 currentAnchor = Vector2.Zero;
 
 	public override void _Ready() {
 		player = GetNode<CharacterBody2D>("../Player");
 		ropeLine = GetNode<Line2D>("RopeLine");
+		hookSprite = GetNode<Sprite2D>("HookSprite");
+		aimRaycast = GetNode<RayCast2D>("AimRaycast");
 		ropeState = RopeState.Hidden;
 		
 		positions = new Vector2[MaxSegments + 1];
 		previousPositions = new Vector2[MaxSegments + 1];
 	}
 
+	public override void _Process(double delta) {
+		if (ropeState == RopeState.Hidden || ropeState == RopeState.Shot) {
+			UpdateAim();
+		} else {
+			hookSprite.Visible = false;
+			aimRaycast.Enabled = false;
+		}
+	}
+
 	public override void _PhysicsProcess(double delta) {
-		if (ropeState == RopeState.Shot || ropeState == RopeState.Hooked) {
+		if (ropeState == RopeState.Hooked) {
 			if (!_isRopeInitialized) {
-				InitializeTestRope();
+				InitializeRope(currentAnchor);
 				_isRopeInitialized = true;
 			}
 			UpdateVerlet(delta);
@@ -39,14 +52,56 @@ public partial class Rope : Node2D {
 				positions[i] = Vector2.Zero;
 				previousPositions[i] = Vector2.Zero;
 			}
+			_isRopeInitialized = false;
 		}
 	}
 
-	void InitializeTestRope() {
-		// Hardcoded anchor 200px above player for testing Chunk 2
-		Vector2 anchor = player.GlobalPosition + new Vector2(0, -200);
+	void UpdateAim() {
+		hookSprite.Visible = true;
+		aimRaycast.Enabled = true;
+		
+		Vector2 mousePos = GetGlobalMousePosition();
+		Vector2 direction = (mousePos - player.GlobalPosition).Normalized();
+		float dist = Mathf.Min(player.GlobalPosition.DistanceTo(mousePos), MaxLength);
+		
+		aimRaycast.GlobalPosition = player.GlobalPosition;
+		aimRaycast.TargetPosition = direction * dist;
+		aimRaycast.ForceRaycastUpdate();
+		
+		if (aimRaycast.IsColliding()) {
+			hookSprite.GlobalPosition = aimRaycast.GetCollisionPoint();
+		} else {
+			hookSprite.GlobalPosition = player.GlobalPosition + direction * dist;
+		}
+	}
+
+	public override void _Input(InputEvent @event) {
+		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left) {
+			switch (ropeState) {
+				case RopeState.Hidden:
+					ropeState = RopeState.Shot;
+					break;
+				case RopeState.Shot:
+					if (aimRaycast.IsColliding()) {
+						currentAnchor = aimRaycast.GetCollisionPoint();
+						ropeState = RopeState.Hooked;
+					} else {
+						ropeState = RopeState.Hidden;
+					}
+					break;
+				case RopeState.Hooked:
+				case RopeState.Slack:
+					ropeState = RopeState.Hidden;
+					break;
+			}
+			GD.Print($"Rope State changed to: {ropeState}");
+		}
+	}
+
+	void InitializeRope(Vector2 anchor) {
 		Vector2 end = player.GlobalPosition;
-		SegmentLength = anchor.DistanceTo(end) / MaxSegments;
+		float dist = anchor.DistanceTo(end);
+		SegmentLength = dist / MaxSegments;
 		
 		for (int i = 0; i <= MaxSegments; i++) {
 			float t = i / (float)MaxSegments;
@@ -54,14 +109,14 @@ public partial class Rope : Node2D {
 			positions[i] = pos;
 			previousPositions[i] = pos;
 		}
+		currentAnchor = anchor;
 	}
 
 	void UpdateVerlet(double delta) {
-		float dt = Mathf.Clamp((float)delta, 0.0f, 0.033f); // Clamp dt to prevent physics explosions on lag spikes
+		float dt = Mathf.Clamp((float)delta, 0.0f, 0.033f);
 		
-		// 1. Integration step: newPos = 2*current - previous + acc*dt^2
 		for (int i = 0; i <= MaxSegments; i++) {
-			Vector2 vel = (positions[i] - previousPositions[i]) * 0.96f; // Increased damping for stability
+			Vector2 vel = (positions[i] - previousPositions[i]) * 0.96f;
 			previousPositions[i] = positions[i];
 			
 			if (i > 0) {
@@ -71,17 +126,13 @@ public partial class Rope : Node2D {
 			}
 		}
 
-		// Fix anchor point (index 0) to stay above player
-		Vector2 anchor = player.GlobalPosition + new Vector2(0, -200);
-		positions[0] = anchor;
-		previousPositions[0] = anchor;
+		positions[0] = currentAnchor;
+		previousPositions[0] = currentAnchor;
 
-		// Temporarily pin the end of the rope to the player for Chunk 2 testing
 		positions[MaxSegments] = player.GlobalPosition;
 		previousPositions[MaxSegments] = player.GlobalPosition;
 
-		// 2. Constraint relaxation: enforce fixed distance between points
-		int iterations = 15; // More iterations for tighter constraints
+		int iterations = 15;
 		for (int iter = 0; iter < iterations; iter++) {
 			for (int i = 0; i < MaxSegments; i++) {
 				Vector2 p1 = positions[i];
@@ -94,7 +145,6 @@ public partial class Rope : Node2D {
 				float error = (dist - SegmentLength) / dist;
 				Vector2 correction = diff * error * 0.5f;
 				
-				// Don't move anchor or player attachment yet (handled later)
 				if (i == 0) {
 					positions[i+1] -= correction;
 				} else if (i + 1 == MaxSegments) {
@@ -106,27 +156,10 @@ public partial class Rope : Node2D {
 			}
 		}
 
-		// Update visuals (convert global positions to local space for Line2D)
 		var localPoints = new Vector2[MaxSegments + 1];
 		for(int i=0; i<=MaxSegments; i++) {
 			localPoints[i] = ToLocal(positions[i]);
 		}
 		ropeLine.Points = localPoints;
-	}
-
-	public override void _Input(InputEvent @event) {
-		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left) {
-			switch (ropeState) {
-				case RopeState.Hidden:
-					ropeState = RopeState.Shot;
-					break;
-				case RopeState.Shot:
-				case RopeState.Hooked:
-				case RopeState.Slack:
-					ropeState = RopeState.Hidden;
-					break;
-			}
-			GD.Print($"Rope State changed to: {ropeState}");
-		}
 	}
 }

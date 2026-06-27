@@ -13,3 +13,5 @@ width = 4
 [node name="HookSprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_4v30u")
 scale = Vector2(0.25, 0.25)
+
+[node name="AimRaycast" type="RayCast2D" parent="."]
