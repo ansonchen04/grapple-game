@@ -17,6 +17,12 @@ public partial class Rope : Node2D {
 	const float RopeGravity = 400.0f;
 	bool _isRopeInitialized = false;
 	Vector2 currentAnchor = Vector2.Zero;
+	
+	// Debug visualization
+	Vector2 debugOrigin = Vector2.Zero;
+	Vector2 debugEnd = Vector2.Zero;
+	Vector2 debugHit = Vector2.Zero;
+	bool hasHit = false;
 
 	public override void _Ready() {
 		player = GetNode<CharacterBody2D>("../Player");
@@ -71,10 +77,29 @@ public partial class Rope : Node2D {
 		query.HitFromInside = true; // Fixes snapping to center/missing edges when ray starts near colliders
 		var result = spaceState.IntersectRay(query);
 		
+		debugOrigin = origin;
+		debugEnd = end;
+		
 		if (result.Count > 0) {
-			hookSprite.GlobalPosition = (Vector2)result["position"];
+			debugHit = (Vector2)result["position"];
+			hasHit = true;
+			hookSprite.GlobalPosition = debugHit;
 		} else {
+			hasHit = false;
 			hookSprite.GlobalPosition = end;
+		}
+		
+		QueueRedraw();
+	}
+
+	public override void _Draw() {
+		if (ropeState == RopeState.Hidden || ropeState == RopeState.Shot) {
+			DrawLine(ToLocal(debugOrigin), ToLocal(debugEnd), Colors.Cyan, 2.0f);
+			if (hasHit) {
+				DrawCircle(ToLocal(debugHit), 6.0f, Colors.Red);
+			} else {
+				DrawCircle(ToLocal(debugEnd), 6.0f, Colors.Yellow);
+			}
 		}
 	}
 
