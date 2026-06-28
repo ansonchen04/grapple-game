@@ -43,5 +43,15 @@ This plan outlines how we will implement smooth, responsive swinging mechanics u
 - **Fix:** Modify `baseMovement()` (or the transition fallback) to preserve existing horizontal velocity while airborne (`!IsOnFloor()`) if no directional input is active. Only apply deceleration/friction when grounded or when explicitly counter-steering in the air.
 - **Expected Result:** Releasing mid-swing will allow the player to coast through the air with full accumulated horizontal speed, matching Spider-Man's aerial glide feel. Momentum transitions seamlessly from swinging to free-fall without artificial braking.
 
+## Step 9: Dynamic Deployed Length & Elastic Tuning
+- **What:** Capture the exact distance between player and anchor at the moment of hook (`deployedLength`). Replace the hardcoded `MaxLength` constraint with this dynamic value. Lower spring stiffness (`k`) from `800` to `~350` and recalculate critical damping (`c = 2√k`) to allow noticeable, controlled stretch. Widen the force blend window and hard clamp threshold slightly to safely accommodate the softer elasticity.
+- **Why:** The current system targets a fixed 500px radius regardless of actual grapple distance, causing short grapples to feel artificially long or completely slack until extreme momentum is reached. Capturing the deployed length ensures the rope behaves like a true tether. Softening the spring parameters introduces that desired "web-like" elasticity without sacrificing numerical stability.
+- **Expected Result:** Grappling at any distance locks the rope to that exact length. Fast swings will visibly stretch the rope, storing kinetic energy, then smoothly snap back to the deployed length as momentum decreases. No more artificial extension or dead zones.
+
+## Step 10: Increased Tangential Speed Cap for High-Velocity Swings
+- **What:** Increase the `maxTangentialSpeed` cap from `600 px/s` to `900 px/s`. Adjust the acceleration falloff curve proportionally to maintain control at higher speeds while allowing players to reach greater velocities during long drops or rapid retraction chains.
+- **Why:** The previous cap felt restrictive for high-momentum swings, artificially braking the player before they could fully utilize gravity or retraction boosts. Raising the limit enables faster, more dynamic aerial maneuvers without compromising stability, as the critically damped spring system will still safely manage extreme radial forces.
+- **Expected Result:** Swings feel significantly faster and more exhilarating. Players can build up substantial speed during long arcs or rapid retracts, enabling high-velocity launches and advanced platforming techniques.
+
 ## Why This Works
 Spring-damper systems are mathematically stable in game loops because they convert kinetic energy into potential energy smoothly. By damping radial velocity, we prevent infinite bouncing while preserving the "stretchy" web feel. Tangential input mapping aligns player control with the physics of swinging, and preserving aerial inertia on release ensures momentum conservation across state transitions, resulting in a responsive, professional-grade grapple mechanic.
