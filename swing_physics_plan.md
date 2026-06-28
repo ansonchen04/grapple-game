@@ -58,5 +58,10 @@ This plan outlines how we will implement smooth, responsive swinging mechanics u
 - **Fix:** Remove the `maxTangentialSpeed` cap and `accelFalloff` multiplier from `ApplySwingPhysics()`. Allow raw tangential input to continuously apply acceleration regardless of current velocity. Rely on natural physics constraints and player control rather than artificial speed limits to govern swing dynamics.
 - **Expected Result:** Holding Left/Right during a swing will consistently add momentum without sudden braking or zeroed-out acceleration at high speeds. Players can freely pump swings, maintain high velocities throughout the arc, and chain maneuvers without artificial interference.
 
+## Step 12: Dynamic Anchor Tracking for Moving Platforms
+- **What:** Replace the static `Vector2 currentAnchor` with a reference to the hit node (`anchorNode`) and a local attachment offset. Each physics frame, recalculate the global anchor position as `anchorNode.GlobalPosition + localOffset`. Add safety checks to handle destroyed nodes or out-of-bounds platforms by falling back to a fixed position or releasing the grapple.
+- **Why:** Currently, grappling onto moving platforms (like elevators or conveyor belts) locks the rope to the initial world coordinates, causing the rope to stretch infinitely or detach visually as the platform moves away. Tracking the node ensures the anchor moves naturally with the environment.
+- **Expected Result:** Grappling onto a moving platform will keep the hook attached to the exact spot on that platform as it travels. Swings will feel consistent and physically accurate regardless of platform movement.
+
 ## Why This Works
 Spring-damper systems are mathematically stable in game loops because they convert kinetic energy into potential energy smoothly. By damping radial velocity, we prevent infinite bouncing while preserving the "stretchy" web feel. Tangential input mapping aligns player control with the physics of swinging, and preserving aerial inertia on release ensures momentum conservation across state transitions, resulting in a responsive, professional-grade grapple mechanic.
