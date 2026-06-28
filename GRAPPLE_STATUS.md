@@ -17,14 +17,14 @@
 7. **Momentum-Preserving Retraction**: Direct inward force (1500), zero damping, explicit tangential velocity preservation.
 8. **Aerial Momentum Preservation**: `baseMovement()` skips air friction when airborne to maintain swing glide.
 9. **Dynamic Deployed Length**: Rope locks to exact grapple distance (`deployedLength`), not hardcoded 500px.
-10. **Increased Speed Cap**: Raised to 900 px/s (later removed cap entirely in Step 11).
+10. **Increased Speed Cap**: Raised to 900 px/s (superseded by Step 11).
 11. **Removed Tangential Speed Cap**: Unlimited swing acceleration for natural momentum buildup.
 
 ## 🔑 Key Implementation Details
 ### Rope.cs
 - **Aiming**: Uses `PhysicsRayQueryParameters2D` with `Exclude = { player.GetRid() }` to prevent self-collision. `HitFromInside = true` for edge precision.
 - **Verlet**: 30 segments, 15 constraint iterations, 0.96 damping, gravity 400. Updates in `_PhysicsProcess`.
-- **Moving Anchors**: `GetAnchor()` returns `anchorNode.GlobalPosition + anchorLocalOffset` if valid, else fallback to `currentAnchor`. Cleared on release.
+- **Moving Anchors**: *WIP* - Currently uses static `currentAnchor`. Node tracking (`anchorNode` + `anchorLocalOffset`) is planned for Step 12.
 - **Debug Viz**: `_Draw()` renders cyan ray path, red hit marker, yellow miss marker.
 
 ### player.cs
@@ -32,17 +32,16 @@
 - **Spring Tuning**: `k = 350`, `c = 2√k` (critical damping). Blend window: `1.0x → 1.2x maxLen`. Hard clamp: `1.4x maxLen`.
 - **Input Projection**: `Vector2 tangentialInput = inputDir - (inputDir.Dot(radialDir) * radialDir);`
 - **Retraction**: `ropeState == Retracting` applies `-radialDir * 1500 * dt`, strips radial velocity, restores tangential velocity.
-- **Momentum Preservation**: `baseMovement()` checks `Mathf.Abs(velocity.X) <= speed`. If moving fast in same direction as input, velocity is untouched.
+- **Momentum Preservation**: `baseMovement()` checks `Mathf.Abs(velocity.X) <= speed`. If moving fast in same direction as input, velocity is untouched. Opposing input gradually steers/brakes.
 
 ## ⚙️ Current Tuning & Behavior Notes
 - Rope feels "stretchy/web-like" due to softened spring (`k=350`) and unidirectional constraint.
 - No artificial speed caps during swings; momentum carries naturally into free-fall.
 - Retraction pulls smoothly without braking tangential speed.
-- Moving platforms are tracked correctly via node reference + local offset.
 - Debug visualization remains active in `Hidden`/`Shot` states for aiming feedback.
 
 ## 📌 Next Steps / Open Questions
-- Implement **Dynamic Anchor Tracking**: `anchorNode` + `anchorLocalOffset` tracks moving platforms/elevators.
+- **Step 12 (WIP)**: Implement Dynamic Anchor Tracking (`anchorNode` + `anchorLocalOffset`) to support moving platforms/elevators.
 - Consider cleaning up debug visualization (`_Draw()` calls) once aiming is fully validated.
 - Tune spring stiffness/damping if "stretchy" feel needs adjustment (currently balanced for web-like elasticity).
 - Add sound effects/particles for hook impact, retraction, and release.
