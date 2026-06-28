@@ -30,9 +30,9 @@ public partial class Rope : Node2D {
 	public Vector2 GetAnchor() => currentAnchor;
 	public float GetMaxRopeLength() => deployedLength;
 	float deployedLength = MaxLength;
-	Node anchorNode = null;
+	Node2D anchorNode = null;
 	Vector2 anchorLocalOffset = Vector2.Zero;
-	Node lastHitCollider = null;
+	Node2D lastHitCollider = null;
 
 	public override void _Ready() {
 		player = GetNode<CharacterBody2D>("../Player");
@@ -103,7 +103,7 @@ public partial class Rope : Node2D {
 			debugHit = (Vector2)result["position"];
 			hasHit = true;
 			lastValidHit = debugHit;
-			lastHitCollider = result.ContainsKey("collider") ? result["collider"] as Node : null;
+			lastHitCollider = result.Has("collider") ? result["collider"].As<Node2D>() : null;
 			hasLastHit = true;
 			hookSprite.GlobalPosition = debugHit;
 		} else {
