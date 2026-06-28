@@ -117,8 +117,14 @@ public partial class player : CharacterBody2D
 	private Vector2 baseMovement(Vector2 velocity) {
 		// Get the input direction and handle the movement/deceleration.
 		Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
-		if (direction != Vector2.Zero) {
-			velocity.X = direction.X * speed;
+		if (direction.X != 0) {
+			// Preserve high momentum from swings/retracts; only cap if below max walk speed
+			if (Mathf.Abs(velocity.X) <= speed) {
+				velocity.X = direction.X * speed;
+			} else {
+				// Gradually steer towards input direction without instantly killing momentum
+				velocity.X = Mathf.MoveToward(velocity.X, direction.X * speed, speed);
+			}
 		}
 		else {
 			// Preserve aerial momentum when no input is pressed (Step 8: Aerial Momentum Preservation)
