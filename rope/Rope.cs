@@ -103,7 +103,7 @@ public partial class Rope : Node2D {
 			debugHit = (Vector2)result["position"];
 			hasHit = true;
 			lastValidHit = debugHit;
-			lastHitCollider = result.Has("collider") ? result["collider"].As<Node2D>() : null;
+			lastHitCollider = result.ContainsKey("collider") ? result["collider"].As<Node2D>() : null;
 			hasLastHit = true;
 			hookSprite.GlobalPosition = debugHit;
 		} else {
