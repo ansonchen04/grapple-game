@@ -58,10 +58,16 @@ This plan outlines how we will implement smooth, responsive swinging mechanics u
 - **Fix:** Remove the `maxTangentialSpeed` cap and `accelFalloff` multiplier from `ApplySwingPhysics()`. Allow raw tangential input to continuously apply acceleration regardless of current velocity. Rely on natural physics constraints and player control rather than artificial speed limits to govern swing dynamics.
 - **Expected Result:** Holding Left/Right during a swing will consistently add momentum without sudden braking or zeroed-out acceleration at high speeds. Players can freely pump swings, maintain high velocities throughout the arc, and chain maneuvers without artificial interference.
 
-## Step 12: Dynamic Anchor Tracking for Moving Platforms
-- **What:** Replace the static `Vector2 currentAnchor` with a reference to the hit node (`anchorNode`) and a local attachment offset. Each physics frame, recalculate the global anchor position as `anchorNode.GlobalPosition + localOffset`. Add safety checks to handle destroyed nodes or out-of-bounds platforms by falling back to a fixed position or releasing the grapple.
-- **Why:** Currently, grappling onto moving platforms (like elevators or conveyor belts) locks the rope to the initial world coordinates, causing the rope to stretch infinitely or detach visually as the platform moves away. Tracking the node ensures the anchor moves naturally with the environment.
-- **Expected Result:** Grappling onto a moving platform will keep the hook attached to the exact spot on that platform as it travels. Swings will feel consistent and physically accurate regardless of platform movement.
+## Step 12: Dynamic Anchor Tracking for Moving Platforms (Implementation Plan)
+- **What:** Transition from a static `Vector2 currentAnchor` to a node-based tracking system. When the grapple hooks, we will capture the hit collider as `anchorNode`, calculate the attachment point in local space (`anchorLocalOffset`), and update `currentAnchor` every physics frame using `anchorNode.ToGlobal(anchorLocalOffset)`.
+- **Why:** Static coordinates detach visually and physically when platforms move. Node tracking ensures the rope anchor moves seamlessly with elevators, conveyors, or animated platforms without stretching or snapping.
+- **Implementation Steps:**
+  1. **Capture Hit Node**: Extract the `"collider"` from the raycast result dictionary during hook initialization. Cast it to `Node` (or `CollisionObject2D`).
+  2. **Store Local Offset**: Compute `anchorLocalOffset = anchorNode.ToLocal(hitPosition)` to safely handle platform rotation or scaling.
+  3. **Frame-by-Frame Update**: In `_PhysicsProcess`, if `ropeState` is `Hooked` or `Retracting`, check `IsInstanceValid(anchorNode)`. If valid, update `currentAnchor = anchorNode.ToGlobal(anchorLocalOffset)`.
+  4. **Safety & Fallbacks**: If the platform is destroyed or leaves the scene tree (`!IsInstanceValid`), gracefully transition to `Slack` state or lock to the last known position until manual release. This prevents null reference exceptions and physics jitter.
+  5. **Zero Player Script Changes**: `player.cs` already calls `rope.GetAnchor()`. The rope will handle all tracking internally, keeping the decoupled architecture intact.
+- **Expected Result:** Grappling onto moving platforms keeps the hook locked to the exact attachment point as it travels. Swings remain physically accurate, and momentum transfers smoothly without artificial stretching or detachment.
 
 ## Why This Works
 Spring-damper systems are mathematically stable in game loops because they convert kinetic energy into potential energy smoothly. By damping radial velocity, we prevent infinite bouncing while preserving the "stretchy" web feel. Tangential input mapping aligns player control with the physics of swinging, and preserving aerial inertia on release ensures momentum conservation across state transitions, resulting in a responsive, professional-grade grapple mechanic.
