@@ -30,6 +30,9 @@ public partial class Rope : Node2D {
 	public Vector2 GetAnchor() => currentAnchor;
 	public float GetMaxRopeLength() => deployedLength;
 	float deployedLength = MaxLength;
+	Node anchorNode = null;
+	Vector2 anchorLocalOffset = Vector2.Zero;
+	Node lastHitCollider = null;
 
 	public override void _Ready() {
 		player = GetNode<CharacterBody2D>("../Player");
@@ -51,6 +54,13 @@ public partial class Rope : Node2D {
 
 	public override void _PhysicsProcess(double delta) {
 		if (ropeState == RopeState.Hooked || ropeState == RopeState.Retracting) {
+			// Dynamic anchor tracking: update global position based on moving platform
+			if (anchorNode != null && GodotObject.IsInstanceValid(anchorNode)) {
+				currentAnchor = anchorNode.ToGlobal(anchorLocalOffset);
+			} else {
+				anchorNode = null; // Platform destroyed or left scene, lock to last known position
+			}
+
 			if (!_isRopeInitialized) {
 				InitializeRope(currentAnchor);
 				_isRopeInitialized = true;
@@ -58,6 +68,7 @@ public partial class Rope : Node2D {
 			
 			UpdateVerlet(delta);
 		} else {
+			anchorNode = null; // Reset tracking when rope is released/hidden
 			ropeLine.Points = new Vector2[0];
 			for(int i=0; i<=MaxSegments; i++) {
 				positions[i] = Vector2.Zero;
@@ -92,11 +103,13 @@ public partial class Rope : Node2D {
 			debugHit = (Vector2)result["position"];
 			hasHit = true;
 			lastValidHit = debugHit;
+			lastHitCollider = result.ContainsKey("collider") ? result["collider"] as Node : null;
 			hasLastHit = true;
 			hookSprite.GlobalPosition = debugHit;
 		} else {
 			hasHit = false;
 			hasLastHit = false;
+			lastHitCollider = null;
 			hookSprite.GlobalPosition = end;
 		}
 		
@@ -121,6 +134,10 @@ public partial class Rope : Node2D {
 					case RopeState.Hidden:
 						if (hasLastHit) {
 							currentAnchor = lastValidHit;
+							anchorNode = lastHitCollider;
+							if (anchorNode != null) {
+								anchorLocalOffset = anchorNode.ToLocal(currentAnchor);
+							}
 							deployedLength = player.GlobalPosition.DistanceTo(currentAnchor);
 							ropeState = RopeState.Hooked;
 						} else {
