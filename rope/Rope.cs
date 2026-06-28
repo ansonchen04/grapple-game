@@ -28,7 +28,8 @@ public partial class Rope : Node2D {
 	bool hasLastHit = false;
 
 	public Vector2 GetAnchor() => currentAnchor;
-	public float GetMaxRopeLength() => MaxLength;
+	public float GetMaxRopeLength() => deployedLength;
+	float deployedLength = MaxLength;
 
 	public override void _Ready() {
 		player = GetNode<CharacterBody2D>("../Player");
@@ -120,6 +121,7 @@ public partial class Rope : Node2D {
 					case RopeState.Hidden:
 						if (hasLastHit) {
 							currentAnchor = lastValidHit;
+							deployedLength = player.GlobalPosition.DistanceTo(currentAnchor);
 							ropeState = RopeState.Hooked;
 						} else {
 							ropeState = RopeState.Hidden;

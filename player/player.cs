@@ -234,17 +234,17 @@ public partial class player : CharacterBody2D
 					Vector2 radialVelCurrent = radialSpeed * radialDir;
 					
 					float blendStart = maxLen;
-					float blendEnd = maxLen * 1.1f;
+					float blendEnd = maxLen * 1.2f; // Widened for softer elasticity
 					float blendFactor = Mathf.Clamp((dist - blendStart) / (blendEnd - blendStart), 0.0f, 1.0f);
 					
-					if (dist > maxLen * 1.3f) {
-						GlobalPosition = anchor + radialDir * (maxLen * 1.3f);
+					if (dist > maxLen * 1.4f) { // Widened hard clamp threshold
+						GlobalPosition = anchor + radialDir * (maxLen * 1.4f);
 						toPlayer = GlobalPosition - anchor;
-						dist = maxLen * 1.3f;
+						dist = maxLen * 1.4f;
 						radialDir = toPlayer / dist;
 					}
 					
-					float k = 800.0f; 
+					float k = 350.0f; // Lowered for noticeable web-like stretch
 					float c = 2.0f * Mathf.Sqrt(k); 
 					float stretch = dist - maxLen;
 					
@@ -261,8 +261,8 @@ public partial class player : CharacterBody2D
 				float inputX = Input.GetActionStrength("Right") - Input.GetActionStrength("Left");
 				
 				float currentTangentialSpeed = Mathf.Abs(vel.Dot(tangentDir));
-				float maxTangentialSpeed = 600.0f;
-				float accelFalloff = Mathf.Clamp((maxTangentialSpeed - currentTangentialSpeed) / (maxTangentialSpeed * 0.5f), 0.0f, 1.0f);
+				float maxTangentialSpeed = 900.0f; // Increased for high-velocity swings
+				float accelFalloff = Mathf.Clamp((maxTangentialSpeed - currentTangentialSpeed) / (maxTangentialSpeed * 0.6f), 0.0f, 1.0f);
 				
 				vel += tangentDir * inputX * speed * accelFalloff * (float)delta * 3.0f;
 			}
