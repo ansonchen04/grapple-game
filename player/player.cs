@@ -256,15 +256,19 @@ public partial class player : CharacterBody2D
 				}
 			}
 			
-			// 3. Tangential Input with speed cap & falloff
+			// 3. Tangential Input with speed cap & falloff (Screen-Space Projection)
 			if (dist > 0.1f) { 
 				float inputX = Input.GetActionStrength("Right") - Input.GetActionStrength("Left");
+				Vector2 inputDir = new Vector2(inputX, 0);
+				
+				// Project raw horizontal input onto the tangent plane to prevent control reversal below anchor
+				Vector2 tangentialInput = inputDir - (inputDir.Dot(radialDir) * radialDir);
 				
 				float currentTangentialSpeed = Mathf.Abs(vel.Dot(tangentDir));
 				float maxTangentialSpeed = 900.0f; // Increased for high-velocity swings
 				float accelFalloff = Mathf.Clamp((maxTangentialSpeed - currentTangentialSpeed) / (maxTangentialSpeed * 0.6f), 0.0f, 1.0f);
 				
-				vel += tangentDir * inputX * speed * accelFalloff * (float)delta * 3.0f;
+				vel += tangentialInput * speed * accelFalloff * (float)delta * 3.0f;
 			}
 		}
 	}
