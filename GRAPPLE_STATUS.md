@@ -7,7 +7,7 @@
 - **`swing_physics_plan.md`**: Documents all implemented steps (1-12) and design rationale.
 - **Decoupled Design**: Visual rope (Verlet) is separate from player constraint physics (spring-damper). This prevents Godot's `CharacterBody2D` from fighting rigid-body joints, eliminating jitter.
 
-## ✅ Implemented Features (Steps 1-12 Complete)
+## ✅ Implemented Features (Steps 1-11 Complete)
 1. **Expose Anchor & Rope Data**: `GetAnchor()`, `GetMaxRopeLength()` in `Rope.cs`.
 2. **Strictly Unidirectional Constraint**: Spring/damping only activates when `dist > maxLen` AND moving outward. Prevents "stick" suspension.
 3. **Screen-Space Input Projection**: Raw horizontal input projected onto tangent plane. Fixes control reversal below anchor.
@@ -19,7 +19,6 @@
 9. **Dynamic Deployed Length**: Rope locks to exact grapple distance (`deployedLength`), not hardcoded 500px.
 10. **Increased Speed Cap**: Raised to 900 px/s (later removed cap entirely in Step 11).
 11. **Removed Tangential Speed Cap**: Unlimited swing acceleration for natural momentum buildup.
-12. **Dynamic Anchor Tracking**: `anchorNode` + `anchorLocalOffset` tracks moving platforms/elevators.
 
 ## 🔑 Key Implementation Details
 ### Rope.cs
@@ -43,6 +42,7 @@
 - Debug visualization remains active in `Hidden`/`Shot` states for aiming feedback.
 
 ## 📌 Next Steps / Open Questions
+- Implement **Dynamic Anchor Tracking**: `anchorNode` + `anchorLocalOffset` tracks moving platforms/elevators.
 - Consider cleaning up debug visualization (`_Draw()` calls) once aiming is fully validated.
 - Tune spring stiffness/damping if "stretchy" feel needs adjustment (currently balanced for web-like elasticity).
 - Add sound effects/particles for hook impact, retraction, and release.
