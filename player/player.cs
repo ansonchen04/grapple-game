@@ -122,9 +122,14 @@ public partial class player : CharacterBody2D
 			if (Mathf.Abs(velocity.X) <= speed) {
 				velocity.X = direction.X * speed;
 			} else {
-				// Gradually steer towards input direction without instantly killing momentum
-				velocity.X = Mathf.MoveToward(velocity.X, direction.X * speed, speed);
-			}
+                // If moving fast in the same direction as input, preserve momentum
+                if (velocity.X * direction.X > 0) {
+                    // Do nothing, keep high speed
+                } else {
+                    // Opposing input: gradually steer/brake towards target speed
+                    velocity.X = Mathf.MoveToward(velocity.X, direction.X * speed, speed);
+                }
+            }
 		}
 		else {
 			// Preserve aerial momentum when no input is pressed (Step 8: Aerial Momentum Preservation)
