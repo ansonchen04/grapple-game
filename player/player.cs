@@ -25,6 +25,7 @@ public partial class player : CharacterBody2D
   	private RayCast2D rayCast;
   	private bool isGrappled = false;
 	private Rope rope;
+	private Vector2 previousAnchor = Vector2.Zero; // For anchor velocity compensation
 	//Booleans to check if we are on a special surface, if we have different movement options
 	private bool onClimbableSurface = false;
 	private bool onOneWaySurface = false;
@@ -66,6 +67,7 @@ public partial class player : CharacterBody2D
 				newVelocity.Y = jumpVelocity;
 			}
 		} else {
+			previousAnchor = Vector2.Zero; // Reset for next grapple to avoid velocity spikes
 			//Checking which movement option, if any, is being used. Will convert this into a switch case in a future commit
 			if (onOneWaySurface) {
 				onewaydropMovement(newVelocity);
@@ -212,6 +214,12 @@ public partial class player : CharacterBody2D
 	void ApplySwingPhysics(ref Vector2 vel, double delta) {
 		Vector2 anchor = rope.GetAnchor();
 		float maxLen = rope.GetMaxRopeLength();
+		
+		// Fix 2: Anchor velocity compensation
+		if (previousAnchor == Vector2.Zero) previousAnchor = anchor;
+		Vector2 anchorVel = (anchor - previousAnchor) / (float)delta;
+		previousAnchor = anchor;
+
 		Vector2 toPlayer = GlobalPosition - anchor;
 		float dist = toPlayer.Length();
 		
@@ -224,9 +232,11 @@ public partial class player : CharacterBody2D
 			Vector2 radialDir = toPlayer / dist;
 			Vector2 tangentDir = new Vector2(radialDir.Y, -radialDir.X);
 			
-			// Project velocity into radial and tangential components
-			float radialSpeed = vel.Dot(radialDir);
-			float tangentialSpeed = vel.Dot(tangentDir);
+			// Work in relative velocity space to account for moving anchor
+			Vector2 relVel = vel - anchorVel;
+			
+			float radialSpeed = relVel.Dot(radialDir);
+			float tangentialSpeed = relVel.Dot(tangentDir);
 			Vector2 radialVel = radialSpeed * radialDir;
 			Vector2 tangentialVel = tangentialSpeed * tangentDir;
 
@@ -234,11 +244,11 @@ public partial class player : CharacterBody2D
 				// Retracting: Direct inward pull, NO damping, preserve tangential velocity
 				float retractForce = 1500.0f; 
 				
-				vel -= radialVel; // Remove radial velocity to prevent fighting the pull
-				vel += tangentialVel; // Explicitly restore tangential velocity
+				relVel -= radialVel; // Remove radial relative velocity
+				relVel += tangentialVel; // Explicitly restore tangential relative velocity
 				
 				// Apply inward force
-				vel -= radialDir * retractForce * (float)delta;
+				relVel -= radialDir * retractForce * (float)delta;
 			} else {
 				// Hooked: Strictly Unidirectional Spring/Damping Constraint
 				if (dist > maxLen && radialSpeed > 0) {
@@ -248,22 +258,23 @@ public partial class player : CharacterBody2D
 					float blendEnd = maxLen * 1.2f; // Widened for softer elasticity
 					float blendFactor = Mathf.Clamp((dist - blendStart) / (blendEnd - blendStart), 0.0f, 1.0f);
 					
-					if (dist > maxLen * 1.4f) { // Widened hard clamp threshold
-						GlobalPosition = anchor + radialDir * (maxLen * 1.4f);
-						toPlayer = GlobalPosition - anchor;
-						dist = maxLen * 1.4f;
-						radialDir = toPlayer / dist;
-					}
-					
+					// Fix 1: Soft Position Correction - removed hard clamp, rely on dynamic spring stiffness
 					float k = 350.0f; // Lowered for noticeable web-like stretch
+					if (dist > maxLen * 1.3f) {
+						k *= Mathf.Clamp((dist - maxLen * 1.3f) / (maxLen * 0.2f), 1.0f, 5.0f);
+					}
 					float c = 2.0f * Mathf.Sqrt(k); 
 					float stretch = dist - maxLen;
 					
 					Vector2 springForce = (-k * stretch) * radialDir;
 					Vector2 dampingForce = -c * radialVelCurrent;
 					
-					vel += (springForce + dampingForce) * blendFactor * (float)delta;
-					vel -= radialVelCurrent; // Remove remaining radial velocity
+					relVel += (springForce + dampingForce) * blendFactor * (float)delta;
+					
+					// Fix 3: Conditional Radial Damping - only strip if moving outward relative to anchor
+					if (radialSpeed > 0) {
+						relVel -= radialVelCurrent;
+					}
 				}
 			}
 			
@@ -275,8 +286,11 @@ public partial class player : CharacterBody2D
 				// Project raw horizontal input onto the tangent plane to prevent control reversal below anchor
 				Vector2 tangentialInput = inputDir - (inputDir.Dot(radialDir) * radialDir);
 				
-				vel += tangentialInput * speed * (float)delta * 3.0f;
+				relVel += tangentialInput * speed * (float)delta * 3.0f;
 			}
+			
+			// Convert back to absolute velocity
+			vel = relVel + anchorVel;
 		}
 	}
 }
