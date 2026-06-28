@@ -244,7 +244,7 @@ public partial class player : CharacterBody2D
 						radialDir = toPlayer / dist;
 					}
 					
-					float k = 200.0f; // Lowered further for a much stretchier, elastic feel
+					float k = 350.0f; // Lowered for noticeable web-like stretch
 					float c = 2.0f * Mathf.Sqrt(k); 
 					float stretch = dist - maxLen;
 					
@@ -261,7 +261,7 @@ public partial class player : CharacterBody2D
 				float inputX = Input.GetActionStrength("Right") - Input.GetActionStrength("Left");
 				
 				float currentTangentialSpeed = Mathf.Abs(vel.Dot(tangentDir));
-				float maxTangentialSpeed = 700.0f; // Slowed down for better control and feel
+				float maxTangentialSpeed = 900.0f; // Increased for high-velocity swings
 				float accelFalloff = Mathf.Clamp((maxTangentialSpeed - currentTangentialSpeed) / (maxTangentialSpeed * 0.6f), 0.0f, 1.0f);
 				
 				vel += tangentDir * inputX * speed * accelFalloff * (float)delta * 3.0f;
