@@ -77,5 +77,16 @@ This plan outlines how we will implement smooth, responsive swinging mechanics u
 - **Fix 4: Stabilized Force Integration:** Accumulate all forces (gravity, spring, damping, tangential input) into velocity deltas and apply them once per frame before `MoveAndSlide()`, ensuring deterministic physics integration.
 - **Expected Result:** Zero teleportation when stretching past limits. Smooth, fluid motion on elevators/moving platforms with natural momentum transfer. The "stretchy web" feel remains intact without instant snaps or frame-rate dependent jitter.
 
+## Step 14: Native Surface Friction Integration During Swings
+- **What:** Integrate Godot's built-in `PhysicsMaterial` friction into the custom swing loop. Use a collision query to detect surface contact while hooked, extract the collided shape's friction coefficient, and apply it to the player's velocity component parallel to the surface.
+- **Why:** Manual velocity overrides in `ApplySwingPhysics()` bypass Godot's automatic friction resolution, causing players to slide endlessly on walls/floors mid-swing. Tapping into native materials allows per-surface tuning (ice vs. concrete) directly in the editor without writing custom platform scripts or adding new variables to existing nodes.
+- **Implementation Steps:**
+  1. **Surface Detection**: Add a `ShapeCast2D` or leverage `GetSlideCollision()` to reliably identify surfaces the player is brushing against during `RopeState.Hooked`.
+  2. **Material Extraction**: Query the collided `CollisionShape2D` for its assigned `PhysicsMaterial` (or override). Read the `.friction` property, falling back to a sensible default (e.g., `0.5`) if none exists.
+  3. **Velocity Decomposition**: Split current velocity into perpendicular (`v_perp = (v · n) * n`) and parallel (`v_parallel = v - v_perp`) components relative to the surface normal `n`.
+  4. **Friction Application**: Dampen `v_parallel` each frame using an exponential decay model `(1.0 - frictionCoeff * dt)` or impulse subtraction, then reconstruct velocity before applying tangential input.
+  5. **Deadzone & Integration Order**: Add a minimal speed threshold to prevent micro-collisions from killing momentum prematurely. Insert the friction calculation after gravity/spring forces but before screen-space input projection.
+- **Expected Result:** Swinging near walls/floors naturally slows horizontal drift based on the surface's native friction value. Airborne arcs remain completely unaffected until contact is made. Zero interference with existing spring constraints, retraction mechanics, or release momentum.
+
 ## Why This Works
 Spring-damper systems are mathematically stable in game loops because they convert kinetic energy into potential energy smoothly. By damping radial velocity, we prevent infinite bouncing while preserving the "stretchy" web feel. Tangential input mapping aligns player control with the physics of swinging, and preserving aerial inertia on release ensures momentum conservation across state transitions, resulting in a responsive, professional-grade grapple mechanic.
