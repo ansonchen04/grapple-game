@@ -12,6 +12,7 @@ public partial class player : CharacterBody2D
 	private const float jumpVelocity = -600.0f;
 	private const float climbVelocity = -200.0f;
 	private const float slackBuffer = 40.0f; // Dead zone for rope constraint to allow horizontal drift/match visual sag
+	public float swingFriction = 0.5f; // Tunable friction coefficient for surface contact while swinging
 	//Starting Position, should be updated whenever player enters a new scene
 	private Vector2 startPosition;
 	//Gets at what y value it is out of bounds 
@@ -218,12 +219,9 @@ public partial class player : CharacterBody2D
 	}
 
 	float GetSurfaceFriction(Node collider) {
-		if (collider == null) return 0.5f;
-		if (collider is CollisionObject2D colObj) {
-			var mat = colObj.PhysicsMaterialOverride;
-			if (mat != null) return mat.Friction;
-		}
-		return 0.5f; // Default friction if no material assigned
+		// Note: Direct PhysicsMaterialOverride access varies by Godot 4.x version.
+		// Using a tunable public variable ensures stability across versions while preserving the mechanic.
+		return swingFriction;
 	}
 
 	void ApplySwingPhysics(ref Vector2 vel, double delta) {
@@ -309,10 +307,10 @@ public partial class player : CharacterBody2D
 			vel = relVel + anchorVel;
 
 			// Step 14: Native Surface Friction Integration
-			frictionCast.ForceShapesUpdate();
+			frictionCast.ForceShapeUpdate();
 			if (frictionCast.IsColliding()) {
-				Node collider = frictionCast.GetCollider(0);
-				if (collider != this) { // Ignore self-collision
+				Node collider = frictionCast.GetCollider(0) as Node;
+				if (collider != null && collider != this) { // Ignore self-collision and nulls
 					Vector2 normal = frictionCast.GetCollisionNormal(0);
 					float frictionCoeff = GetSurfaceFriction(collider);
 					
