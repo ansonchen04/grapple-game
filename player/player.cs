@@ -11,6 +11,7 @@ public partial class player : CharacterBody2D
 	private const float speed = 300.0f;
 	private const float jumpVelocity = -600.0f;
 	private const float climbVelocity = -200.0f;
+	private const float slackBuffer = 40.0f; // Dead zone for rope constraint to allow horizontal drift/match visual sag
 	//Starting Position, should be updated whenever player enters a new scene
 	private Vector2 startPosition;
 	//Gets at what y value it is out of bounds 
@@ -250,17 +251,18 @@ public partial class player : CharacterBody2D
 				relVel -= radialDir * retractForce * (float)delta;
 			} else {
 				// Hooked: Strictly Unidirectional Spring/Damping Constraint
-				if (dist > maxLen && radialSpeed > 0) {
+				float effectiveMaxLen = maxLen + slackBuffer;
+				if (dist > effectiveMaxLen && radialSpeed > 0) {
 					Vector2 radialVelCurrent = radialSpeed * radialDir;
 					
-					float blendStart = maxLen;
-					float blendEnd = maxLen * 1.2f; // Widened for softer elasticity
+					float blendStart = effectiveMaxLen;
+					float blendEnd = effectiveMaxLen * 1.2f; // Widened for softer elasticity
 					float blendFactor = Mathf.Clamp((dist - blendStart) / (blendEnd - blendStart), 0.0f, 1.0f);
 					
 					// Fix 1: Soft Position Correction - removed hard clamp, rely on dynamic spring stiffness
 					float k = 350.0f; // Lowered for noticeable web-like stretch
-					if (dist > maxLen * 1.3f) {
-						k *= Mathf.Clamp((dist - maxLen * 1.3f) / (maxLen * 0.2f), 1.0f, 5.0f);
+					if (dist > effectiveMaxLen * 1.3f) {
+						k *= Mathf.Clamp((dist - effectiveMaxLen * 1.3f) / (effectiveMaxLen * 0.2f), 1.0f, 5.0f);
 					}
 					float c = 2.0f * Mathf.Sqrt(k); 
 					float stretch = dist - maxLen;

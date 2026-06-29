@@ -14,7 +14,7 @@ public partial class Rope : Node2D {
 	Line2D ropeLine;
 	Sprite2D hookSprite;
 	float SegmentLength; 
-	const float RopeGravity = 400.0f;
+	const float RopeGravity = 200.0f; // Reduced to prevent excessive sagging that exceeds the physics slack buffer
 	bool _isRopeInitialized = false;
 	Vector2 currentAnchor = Vector2.Zero;
 	
