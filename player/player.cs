@@ -42,7 +42,6 @@ public partial class player : CharacterBody2D
 		rope = GetNode<Rope>("../Rope");
 	}
 	public override void _PhysicsProcess(double delta) {
-		GD.Print(Position.Y);
 		//Check out of bounds from the resource
 		if (Position.Y > outOfBounds || Input.IsActionJustPressed("Restart")) {
 		this.restart();
