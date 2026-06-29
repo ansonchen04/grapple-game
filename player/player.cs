@@ -307,7 +307,6 @@ public partial class player : CharacterBody2D
 			vel = relVel + anchorVel;
 
 			// Step 14: Native Surface Friction Integration
-			frictionCast.ForceShapeUpdate();
 			if (frictionCast.IsColliding()) {
 				Node collider = frictionCast.GetCollider(0) as Node;
 				if (collider != null && collider != this) { // Ignore self-collision and nulls
