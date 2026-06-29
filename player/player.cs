@@ -12,7 +12,7 @@ public partial class player : CharacterBody2D
 	private const float jumpVelocity = -600.0f;
 	private const float climbVelocity = -200.0f;
 	private const float slackBuffer = 40.0f; // Dead zone for rope constraint to allow horizontal drift/match visual sag
-	public float swingFriction = 0.5f; // Tunable friction coefficient for surface contact while swinging
+	public float swingFriction = 0.1f; // Tunable friction (0.0-0.3 recommended). Higher values act like glue due to per-frame damping.
 	//Starting Position, should be updated whenever player enters a new scene
 	private Vector2 startPosition;
 	//Gets at what y value it is out of bounds 
@@ -319,7 +319,8 @@ public partial class player : CharacterBody2D
 					
 					// Apply friction damping to parallel component (with deadzone)
 					if (vParallel.Length() > 10.0f) {
-						float dampFactor = Mathf.Pow(1.0f - frictionCoeff, (float)delta * 60.0f);
+						// Linear decay per frame for predictable tuning without exponential overkill
+						float dampFactor = Math.Max(0.0f, 1.0f - frictionCoeff * (float)delta * 60.0f);
 						vParallel *= dampFactor;
 					}
 					vel = vPerp + vParallel;
