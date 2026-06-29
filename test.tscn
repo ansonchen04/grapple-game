@@ -1,10 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://bwkqlcpk8d3b6"]
+[gd_scene format=3 uid="uid://bwkqlcpk8d3b6"]
 
 [ext_resource type="PackedScene" uid="uid://jluoaxxepfrv" path="res://template/platform.tscn" id="1_18mqm"]
 [ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="2_8rov2"]
 [ext_resource type="PackedScene" uid="uid://6yotxco8qhu" path="res://rope/Rope.tscn" id="2_hk15k"]
 [ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="4_75edt"]
-[ext_resource type="Script" path="res://level/level1/PathPlatform.cs" id="4_d6s7j"]
+[ext_resource type="Script" uid="uid://b2wmqxk5ggmlg" path="res://level/level1/PathPlatform.cs" id="4_d6s7j"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l41iw"]
 size = Vector2(127.625, 124.875)
@@ -43,71 +43,81 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fmt24"]
 _data = {
-"PlatformMovement": SubResource("Animation_pa0ob"),
-"RESET": SubResource("Animation_dcl1p")
+&"PlatformMovement": SubResource("Animation_pa0ob"),
+&"RESET": SubResource("Animation_dcl1p")
 }
 
 [sub_resource type="Curve2D" id="Curve2D_y4rks"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 878.878, 528.638, 0, 0, 0, 0, 1110.31, 397.787, 0, 0, 0, 0, 873.368, -108.606, 0, 0, 0, 0, 659.847, 397.787, 0, 0, 0, 0, 878.878, 528.638)
+"points": PackedVector2Array(0, 0, 0, 0, 1625.51, 511.62738, 0, 0, 0, 0, 1625.51, -81.12761, 0, 0, 0, 0, 630.9183, -81.12761, 0, 0, 0, 0, 630.9183, 515.5529, 0, 0, 0, 0, 1629.6426, 515.5529)
 }
 point_count = 5
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kdjij"]
 size = Vector2(122.602, 119.074)
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="Node2D" unique_id=418078570]
 
-[node name="Player" parent="." instance=ExtResource("2_8rov2")]
+[node name="Player" parent="." unique_id=760042422 instance=ExtResource("2_8rov2")]
 position = Vector2(549, 271)
 collision_mask = 1
 
-[node name="Rope" parent="." instance=ExtResource("2_hk15k")]
+[node name="Rope" parent="." unique_id=2087076869 instance=ExtResource("2_hk15k")]
 
-[node name="StaticPlatform" parent="." instance=ExtResource("1_18mqm")]
+[node name="StaticPlatform" parent="." unique_id=1797895714 instance=ExtResource("1_18mqm")]
 position = Vector2(549, 445)
 
-[node name="MovingPlatform" type="AnimatableBody2D" parent="."]
+[node name="MovingPlatform" type="AnimatableBody2D" parent="." unique_id=1634391725]
 position = Vector2(75, 455)
 
-[node name="Sprite2D" type="Sprite2D" parent="MovingPlatform"]
+[node name="Sprite2D" type="Sprite2D" parent="MovingPlatform" unique_id=673961518]
 texture = ExtResource("4_75edt")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MovingPlatform"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovingPlatform" unique_id=1118831309]
 position = Vector2(-3, -1)
 shape = SubResource("RectangleShape2D_l41iw")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="MovingPlatform"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MovingPlatform" unique_id=1045275182]
 deterministic = true
-libraries = {
-"": SubResource("AnimationLibrary_fmt24")
-}
-autoplay = "PlatformMovement"
+libraries/ = SubResource("AnimationLibrary_fmt24")
+autoplay = &"PlatformMovement"
 
-[node name="MovingPlatformPath" type="Node2D" parent="."]
+[node name="MovingPlatformPath" type="Node2D" parent="." unique_id=1401350912]
 script = ExtResource("4_d6s7j")
 
-[node name="PlatformPath" type="Path2D" parent="MovingPlatformPath"]
+[node name="PlatformPath" type="Path2D" parent="MovingPlatformPath" unique_id=576096141]
 position = Vector2(295, 123)
 scale = Vector2(0.725926, 0.764228)
 curve = SubResource("Curve2D_y4rks")
 
-[node name="PathFollow2D" type="PathFollow2D" parent="MovingPlatformPath/PlatformPath"]
-position = Vector2(878.878, 528.638)
+[node name="PathFollow2D" type="PathFollow2D" parent="MovingPlatformPath/PlatformPath" unique_id=1909636284]
+position = Vector2(1625.51, 511.62738)
 rotation = -0.830919
 rotates = false
 
-[node name="RemoteTransform2D" type="RemoteTransform2D" parent="MovingPlatformPath/PlatformPath/PathFollow2D"]
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="MovingPlatformPath/PlatformPath/PathFollow2D" unique_id=1332839571]
 remote_path = NodePath("../../PlatformBody")
 update_rotation = false
 
-[node name="PlatformBody" type="AnimatableBody2D" parent="MovingPlatformPath/PlatformPath"]
-position = Vector2(878.878, 528.638)
-scale = Vector2(1.02912, 0.972982)
+[node name="PlatformBody" type="AnimatableBody2D" parent="MovingPlatformPath/PlatformPath" unique_id=2018452782]
+position = Vector2(1625.51, 511.62738)
+scale = Vector2(1.0291153, 0.9729824)
 
-[node name="Sprite2D" type="Sprite2D" parent="MovingPlatformPath/PlatformPath/PlatformBody"]
+[node name="Sprite2D" type="Sprite2D" parent="MovingPlatformPath/PlatformPath/PlatformBody" unique_id=77294130]
 texture = ExtResource("4_75edt")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MovingPlatformPath/PlatformPath/PlatformBody"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovingPlatformPath/PlatformPath/PlatformBody" unique_id=366640701]
 position = Vector2(7.62939e-06, -1.30849)
 shape = SubResource("RectangleShape2D_kdjij")
+
+[node name="StaticPlatform2" parent="." unique_id=2101468346 instance=ExtResource("1_18mqm")]
+position = Vector2(127, 29)
+
+[node name="StaticPlatform3" parent="." unique_id=1691707199 instance=ExtResource("1_18mqm")]
+position = Vector2(-216, 31)
+
+[node name="StaticPlatform4" parent="." unique_id=1075101754 instance=ExtResource("1_18mqm")]
+position = Vector2(-557, 27)
+
+[node name="StaticPlatform5" parent="." unique_id=835452145 instance=ExtResource("1_18mqm")]
+position = Vector2(-906, 31)

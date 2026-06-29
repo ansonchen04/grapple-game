@@ -159,7 +159,7 @@ public partial class Rope : Node2D {
 			}
 		}
 		
-		GD.Print($"Rope State changed to: {ropeState}");
+		//GD.Print($"Rope State changed to: {ropeState}");
 	}
 
 	void InitializeRope(Vector2 anchor) {
