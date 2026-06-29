@@ -219,11 +219,9 @@ public partial class player : CharacterBody2D
 
 	float GetSurfaceFriction(Node collider) {
 		if (collider == null) return 0.5f;
-		foreach (Node child in collider.GetChildren()) {
-			if (child is CollisionShape2D shape) {
-				var mat = shape.PhysicsMaterialOverride ?? shape.PhysicsMaterial;
-				if (mat != null) return mat.Friction;
-			}
+		if (collider is CollisionObject2D colObj) {
+			var mat = colObj.PhysicsMaterialOverride;
+			if (mat != null) return mat.Friction;
 		}
 		return 0.5f; // Default friction if no material assigned
 	}
@@ -311,11 +309,11 @@ public partial class player : CharacterBody2D
 			vel = relVel + anchorVel;
 
 			// Step 14: Native Surface Friction Integration
-			frictionCast.ForceShapeUpdate();
+			frictionCast.ForceShapesUpdate();
 			if (frictionCast.IsColliding()) {
-				Node collider = frictionCast.GetCollider();
+				Node collider = frictionCast.GetCollider(0);
 				if (collider != this) { // Ignore self-collision
-					Vector2 normal = frictionCast.GetCollisionNormal();
+					Vector2 normal = frictionCast.GetCollisionNormal(0);
 					float frictionCoeff = GetSurfaceFriction(collider);
 					
 					// Decompose velocity into perpendicular and parallel components relative to surface
