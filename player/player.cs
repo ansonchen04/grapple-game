@@ -27,6 +27,7 @@ public partial class player : CharacterBody2D
   	private bool isGrappled = false;
 	private Rope rope;
 	private Vector2 previousAnchor = Vector2.Zero; // For anchor velocity compensation
+	private ShapeCast2D frictionCast; // For native surface friction detection
 	//Booleans to check if we are on a special surface, if we have different movement options
 	private bool onClimbableSurface = false;
 	private bool onOneWaySurface = false;
@@ -41,6 +42,11 @@ public partial class player : CharacterBody2D
 		rayCast = GetNode<RayCast2D>("RayCast2D");
 		rayCast.Enabled = true;  // disabled by default, we'll turn it on when we click
 		rope = GetNode<Rope>("../Rope");
+		
+		frictionCast = new ShapeCast2D();
+		frictionCast.Shape = GetNode<CollisionShape2D>("CollisionShape2D").Shape;
+		frictionCast.CollisionMask = CollisionMask; // Match player's collision mask
+		AddChild(frictionCast);
 	}
 	public override void _PhysicsProcess(double delta) {
 		//Check out of bounds from the resource
@@ -211,6 +217,17 @@ public partial class player : CharacterBody2D
 		return hookStartPos + GlobalPosition;
 	}
 
+	float GetSurfaceFriction(Node collider) {
+		if (collider == null) return 0.5f;
+		foreach (Node child in collider.GetChildren()) {
+			if (child is CollisionShape2D shape) {
+				var mat = shape.PhysicsMaterialOverride ?? shape.PhysicsMaterial;
+				if (mat != null) return mat.Friction;
+			}
+		}
+		return 0.5f; // Default friction if no material assigned
+	}
+
 	void ApplySwingPhysics(ref Vector2 vel, double delta) {
 		Vector2 anchor = rope.GetAnchor();
 		float maxLen = rope.GetMaxRopeLength();
@@ -292,6 +309,27 @@ public partial class player : CharacterBody2D
 			
 			// Convert back to absolute velocity
 			vel = relVel + anchorVel;
+
+			// Step 14: Native Surface Friction Integration
+			frictionCast.ForceShapeUpdate();
+			if (frictionCast.IsColliding()) {
+				Node collider = frictionCast.GetCollider();
+				if (collider != this) { // Ignore self-collision
+					Vector2 normal = frictionCast.GetCollisionNormal();
+					float frictionCoeff = GetSurfaceFriction(collider);
+					
+					// Decompose velocity into perpendicular and parallel components relative to surface
+					Vector2 vPerp = normal * vel.Dot(normal);
+					Vector2 vParallel = vel - vPerp;
+					
+					// Apply friction damping to parallel component (with deadzone)
+					if (vParallel.Length() > 10.0f) {
+						float dampFactor = Mathf.Pow(1.0f - frictionCoeff, (float)delta * 60.0f);
+						vParallel *= dampFactor;
+					}
+					vel = vPerp + vParallel;
+				}
+			}
 		}
 	}
 }
