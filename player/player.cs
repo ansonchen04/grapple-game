@@ -50,52 +50,53 @@ public partial class player : CharacterBody2D
 		AddChild(frictionCast);
 	}
 	public override void _PhysicsProcess(double delta) {
-		//Check out of bounds from the resource
 		if (Position.Y > outOfBounds || Input.IsActionJustPressed("Restart")) {
-		this.restart();
+			this.restart();
+			return;
 		}
-		// Check if the player is on the floor or a specific platform using the raycast
+
+		// Check platform state
 		if (_downwardRaycast.IsColliding()) {
 			var collider = _downwardRaycast.GetCollider();
-			//Likely will have to constrain this more
-			if (collider is Node2D platform) {	
-				//Will likely have to safeguard this if we collide with platforms without a collision box. 
-				//Not sure when that would happen though
+			if (collider is Node2D platform) {
 				this.setOneWay(this.checkOneway(platform));
 			}
 		}
-		//Gets the current velocity
+
 		Vector2 newVelocity = Velocity;
-		
-		if (rope.ropeState == RopeState.Hooked) {
-			ApplySwingPhysics(ref newVelocity, delta);
-			// Allow jumping while hooked if standing on a platform
-			if (Input.IsActionJustPressed("Up") && IsOnFloor()) {
-				newVelocity.Y = jumpVelocity;
-			}
-		} else {
-			previousAnchor = Vector2.Zero; // Reset for next grapple to avoid velocity spikes
-			//Checking which movement option, if any, is being used. Will convert this into a switch case in a future commit
-			if (onOneWaySurface) {
-				onewaydropMovement(newVelocity);
-				newVelocity = baseMovement(newVelocity);
-			}
-			else if (onClimbableSurface) {
-				newVelocity = climbMovement(newVelocity);
-			}
-			else {
-				//If nothing fancy, just use base movement vectors
-				newVelocity = baseMovement(newVelocity);
-			}
-			// Add the gravity.
-			if (!IsOnFloor() && !onClimbableSurface)
-				newVelocity.Y += gravity * (float)delta;
+		float dt = (float)delta;
+
+		// 1. Gravity (applied first for deterministic integration)
+		if (!IsOnFloor() && !onClimbableSurface) {
+			newVelocity.Y += gravity * dt;
 		}
-		//Updates to the new velocity
+
+		// 2. Base Input Handling
+		if (onClimbableSurface) {
+			newVelocity = climbMovement(newVelocity);
+		} else if (onOneWaySurface && IsOnFloor() && Input.IsActionJustPressed("Down")) {
+			Position += new Vector2(0, 1); // Drop through one-way platform
+		} else {
+			newVelocity = baseMovement(newVelocity);
+		}
+
+		// 3. Rope Constraints & Tangential Input (modifies velocity if hooked/retracting)
+		if (rope.ropeState == RopeState.Hooked || rope.ropeState == RopeState.Retracting) {
+			ApplyRopeConstraints(ref newVelocity, delta);
+		} else {
+			previousAnchor = Vector2.Zero; // Reset anchor tracking when not grappled
+		}
+
+		// 4. Surface Friction (applies in both states if colliding)
+		ApplySurfaceFriction(ref newVelocity, dt);
+
+		// 5. Jump Override (works seamlessly in both states)
+		if (Input.IsActionJustPressed("Up") && IsOnFloor()) {
+			newVelocity.Y = jumpVelocity;
+		}
+
 		Velocity = newVelocity;
-		//Moves the sprite at the end
 		MoveAndSlide();
-		//GD.Print(onClimbableSurface);
 	}
   	public override void _Input(InputEvent @event) {
 		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left) {
@@ -171,14 +172,6 @@ public partial class player : CharacterBody2D
 			velocity.Y = 0;
 		return velocity;
 	}
-	private Vector2 onewaydropMovement(Vector2 velocity) {
-		// Drop the player down 1 pixel if standing on a one-way collision platform and "ui_drop_down" is pressed
-		//TODO verify this actually does ^
-		if (IsOnFloor() && Input.IsActionJustPressed("Down")) {
-			Position += new Vector2(0, 1);
-		}
-		return velocity;
-	}
 	private Boolean checkOneway(Node2D platform) {
 		//Gets the collision polygon or collision shape of the platform
 		Node[] children = platform.FindChildren("*","CollisionPolygon2D",false,false).ToArray();
@@ -219,16 +212,13 @@ public partial class player : CharacterBody2D
 	}
 
 	float GetSurfaceFriction(Node collider) {
-		// Note: Direct PhysicsMaterialOverride access varies by Godot 4.x version.
-		// Using a tunable public variable ensures stability across versions while preserving the mechanic.
 		return swingFriction;
 	}
 
-	void ApplySwingPhysics(ref Vector2 vel, double delta) {
+	void ApplyRopeConstraints(ref Vector2 vel, double delta) {
 		Vector2 anchor = rope.GetAnchor();
 		float maxLen = rope.GetMaxRopeLength();
 		
-		// Fix 2: Anchor velocity compensation
 		if (previousAnchor == Vector2.Zero) previousAnchor = anchor;
 		Vector2 anchorVel = (anchor - previousAnchor) / (float)delta;
 		previousAnchor = anchor;
@@ -236,44 +226,31 @@ public partial class player : CharacterBody2D
 		Vector2 toPlayer = GlobalPosition - anchor;
 		float dist = toPlayer.Length();
 		
-		// 1. Gravity (applied first per integration order)
-		vel.Y += gravity * (float)delta;
-		
 		bool isRetracting = rope.ropeState == RopeState.Retracting;
 
 		if (dist > 0.001f) {
 			Vector2 radialDir = toPlayer / dist;
-			Vector2 tangentDir = new Vector2(radialDir.Y, -radialDir.X);
 			
 			// Work in relative velocity space to account for moving anchor
 			Vector2 relVel = vel - anchorVel;
 			
 			float radialSpeed = relVel.Dot(radialDir);
-			float tangentialSpeed = relVel.Dot(tangentDir);
 			Vector2 radialVel = radialSpeed * radialDir;
-			Vector2 tangentialVel = tangentialSpeed * tangentDir;
 
 			if (isRetracting) {
-				// Retracting: Direct inward pull, NO damping, preserve tangential velocity
 				float retractForce = 1500.0f; 
-				
 				relVel -= radialVel; // Remove radial relative velocity
-				relVel += tangentialVel; // Explicitly restore tangential relative velocity
-				
-				// Apply inward force
-				relVel -= radialDir * retractForce * (float)delta;
+				relVel -= radialDir * retractForce * (float)delta; // Apply inward force
 			} else {
-				// Hooked: Strictly Unidirectional Spring/Damping Constraint
 				float effectiveMaxLen = maxLen + slackBuffer;
 				if (dist > effectiveMaxLen && radialSpeed > 0) {
 					Vector2 radialVelCurrent = radialSpeed * radialDir;
 					
 					float blendStart = effectiveMaxLen;
-					float blendEnd = effectiveMaxLen * 1.2f; // Widened for softer elasticity
+					float blendEnd = effectiveMaxLen * 1.2f;
 					float blendFactor = Mathf.Clamp((dist - blendStart) / (blendEnd - blendStart), 0.0f, 1.0f);
 					
-					// Fix 1: Soft Position Correction - removed hard clamp, rely on dynamic spring stiffness
-					float k = 350.0f; // Lowered for noticeable web-like stretch
+					float k = 350.0f;
 					if (dist > effectiveMaxLen * 1.3f) {
 						k *= Mathf.Clamp((dist - effectiveMaxLen * 1.3f) / (effectiveMaxLen * 0.2f), 1.0f, 5.0f);
 					}
@@ -285,46 +262,39 @@ public partial class player : CharacterBody2D
 					
 					relVel += (springForce + dampingForce) * blendFactor * (float)delta;
 					
-					// Fix 3: Conditional Radial Damping - only strip if moving outward relative to anchor
 					if (radialSpeed > 0) {
 						relVel -= radialVelCurrent;
 					}
 				}
 			}
 			
-			// 3. Tangential Input (Screen-Space Projection) - No speed cap to preserve momentum
+			// Tangential Input Projection
 			if (dist > 0.1f) { 
 				float inputX = Input.GetActionStrength("Right") - Input.GetActionStrength("Left");
 				Vector2 inputDir = new Vector2(inputX, 0);
-				
-				// Project raw horizontal input onto the tangent plane to prevent control reversal below anchor
 				Vector2 tangentialInput = inputDir - (inputDir.Dot(radialDir) * radialDir);
-				
 				relVel += tangentialInput * speed * (float)delta * 3.0f;
 			}
 			
-			// Convert back to absolute velocity
 			vel = relVel + anchorVel;
+		}
+	}
 
-			// Step 14: Native Surface Friction Integration
-			if (frictionCast.IsColliding()) {
-				Node collider = frictionCast.GetCollider(0) as Node;
-				if (collider != null && collider != this) { // Ignore self-collision and nulls
-					Vector2 normal = frictionCast.GetCollisionNormal(0);
-					float frictionCoeff = GetSurfaceFriction(collider);
-					
-					// Decompose velocity into perpendicular and parallel components relative to surface
-					Vector2 vPerp = normal * vel.Dot(normal);
-					Vector2 vParallel = vel - vPerp;
-					
-					// Apply friction damping to parallel component (with deadzone)
-					if (vParallel.Length() > 10.0f) {
-						// Linear decay per frame for predictable tuning without exponential overkill
-						float dampFactor = Math.Max(0.0f, 1.0f - frictionCoeff * (float)delta * 60.0f);
-						vParallel *= dampFactor;
-					}
-					vel = vPerp + vParallel;
+	void ApplySurfaceFriction(ref Vector2 vel, float dt) {
+		if (frictionCast.IsColliding()) {
+			Node collider = frictionCast.GetCollider(0) as Node;
+			if (collider != null && collider != this) {
+				Vector2 normal = frictionCast.GetCollisionNormal(0);
+				float frictionCoeff = GetSurfaceFriction(collider);
+				
+				Vector2 vPerp = normal * vel.Dot(normal);
+				Vector2 vParallel = vel - vPerp;
+				
+				if (vParallel.Length() > 10.0f) {
+					float dampFactor = Math.Max(0.0f, 1.0f - frictionCoeff * dt * 60.0f);
+					vParallel *= dampFactor;
 				}
+				vel = vPerp + vParallel;
 			}
 		}
 	}
