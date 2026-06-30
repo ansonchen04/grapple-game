@@ -78,7 +78,7 @@ public partial class player : CharacterBody2D
 		} else if (!isSwinging && onOneWaySurface && IsOnFloor() && Input.IsActionJustPressed("Down")) {
 			Position += new Vector2(0, 1); // Drop through one-way platform
 		} else if (!isSwinging || IsOnFloor()) {
-			newVelocity = baseMovement(newVelocity);
+			newVelocity = baseMovement(newVelocity, dt);
 		}
 
 		// 3. Rope Constraints & Tangential Input (modifies velocity if hooked/retracting)
@@ -122,29 +122,27 @@ public partial class player : CharacterBody2D
 			*/
 		}
 	}
-	private Vector2 baseMovement(Vector2 velocity) {
-		// Get the input direction and handle the movement/deceleration.
+	private Vector2 baseMovement(Vector2 velocity, float dt) {
 		Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
+		
 		if (direction.X != 0) {
-			// Preserve high momentum from swings/retracts; only cap if below max walk speed
-			if (Mathf.Abs(velocity.X) <= speed) {
-				velocity.X = direction.X * speed;
+			if (IsOnFloor()) {
+				// Grounded: snappy direct control with deceleration/acceleration curve
+				velocity.X = Mathf.MoveToward(velocity.X, direction.X * speed, speed);
 			} else {
-				// If moving fast in the same direction as input, preserve momentum
-				if (velocity.X * direction.X > 0) {
-					// Do nothing, keep high speed
-				} else {
-					// Opposing input: gradually steer/brake towards target speed
-					velocity.X = Mathf.MoveToward(velocity.X, direction.X * speed, speed);
-				}
+				// Airborne: acceleration-based to match swing tangential input feel
+				float airAccel = speed * 2.0f; 
+				velocity.X += direction.X * airAccel * dt;
+				
+				// Soft cap to prevent runaway speeds, but high enough for momentum preservation
+				float maxAirSpeed = speed * 4.0f;
+				velocity.X = Mathf.Clamp(velocity.X, -maxAirSpeed, maxAirSpeed);
 			}
-		}
-		else {
-			// Preserve aerial momentum when no input is pressed (Step 8: Aerial Momentum Preservation)
+		} else {
 			if (!IsOnFloor()) {
-				// Keep existing horizontal velocity while airborne
+				// Preserve aerial momentum when no input is pressed (Step 8: Aerial Momentum Preservation)
 			} else {
-				velocity.X = Mathf.MoveToward(Velocity.X, 0, speed);
+				velocity.X = Mathf.MoveToward(velocity.X, 0, speed);
 			}
 		}
 		return velocity;
