@@ -131,11 +131,11 @@ public partial class player : CharacterBody2D
 				velocity.X = Mathf.MoveToward(velocity.X, direction.X * speed, speed);
 			} else {
 				// Airborne: acceleration-based to match swing tangential input feel
-				float airAccel = speed * 2.0f; 
+				float airAccel = speed * 1.0f; // Lowered for smoother, more controlled buildup
 				velocity.X += direction.X * airAccel * dt;
 				
 				// Soft cap to prevent runaway speeds, but high enough for momentum preservation
-				float maxAirSpeed = speed * 4.0f;
+				float maxAirSpeed = speed * 3.0f;
 				velocity.X = Mathf.Clamp(velocity.X, -maxAirSpeed, maxAirSpeed);
 			}
 		} else {
