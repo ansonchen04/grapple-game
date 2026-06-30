@@ -290,7 +290,7 @@ public partial class player : CharacterBody2D
 					tangentialInput.Y *= 0.4f;
 				}
 				
-				relVel += tangentialInput * speed * (float)delta * 3.0f;
+				relVel += tangentialInput * speed * (float)delta * 2.0f;
 			}
 			
 			// Convert back to absolute velocity
