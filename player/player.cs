@@ -72,12 +72,12 @@ public partial class player : CharacterBody2D
 			newVelocity.Y += gravity * dt;
 		}
 
-		// 2. Base Input Handling (gated during swings to prevent momentum override/double-input)
+		// 2. Base Input Handling (gated during airborne swings to prevent momentum override)
 		if (onClimbableSurface) {
 			newVelocity = climbMovement(newVelocity);
 		} else if (!isSwinging && onOneWaySurface && IsOnFloor() && Input.IsActionJustPressed("Down")) {
 			Position += new Vector2(0, 1); // Drop through one-way platform
-		} else if (!isSwinging) {
+		} else if (!isSwinging || IsOnFloor()) {
 			newVelocity = baseMovement(newVelocity);
 		}
 
@@ -278,7 +278,7 @@ public partial class player : CharacterBody2D
 			}
 			
 			// 3. Tangential Input (Screen-Space Projection) - No speed cap to preserve momentum
-			if (dist > 0.1f) { 
+			if (dist > 0.1f && !IsOnFloor()) { 
 				float inputX = Input.GetActionStrength("Right") - Input.GetActionStrength("Left");
 				Vector2 inputDir = new Vector2(inputX, 0);
 				
