@@ -29,6 +29,12 @@ The recent unification of the movement system introduced subtle but impactful ch
 - **Action**: Keep surface friction scoped inside the restored swing solver rather than applying it globally in `_PhysicsProcess`.
 - **Why**: Matches previous tuning and prevents unintended damping during free-fall or grounded movement.
 
+### Step 6: Unify Airborne Input Acceleration
+- **Diagnosis**: `baseMovement()` instantly assigns horizontal velocity to walk speed (`velocity.X = direction.X * speed`) when airborne, creating snappy, direct control. Meanwhile, `ApplySwingPhysics()` applies continuous tangential acceleration (`relVel += ... * delta`), causing gradual momentum buildup. This mismatch makes hooking/releasing feel jarring as control responsiveness suddenly shifts.
+- **Action**: Refactor the airborne branch of `baseMovement()` to use an acceleration-based model instead of direct velocity assignment. Apply horizontal input as a force delta scaled by `delta`, matching the magnitude and curve of the swing's tangential input. Optionally introduce consistent air drag or a soft max-speed cap to prevent infinite acceleration, ensuring both states build momentum at identical rates.
+- **Why**: Aligns the control curve across all airborne states. Players won't experience sudden "snappy" vs "floaty" shifts when transitioning between swinging and free-fall.
+- **Expected Result**: Consistent air acceleration and momentum buildup whether grappled or unhooked. Smooth, predictable transitions with identical input feel across all aerial maneuvers.
+
 ## 🎮 Expected Results Post-Fix
 - **Restored Swing Feel**: Spring stiffness, damping, retraction force, and tangential input projection will behave exactly as before.
 - **Clean Unified Loop**: The architecture remains a single `_PhysicsProcess` loop, but state-specific logic is properly gated to prevent interference.
