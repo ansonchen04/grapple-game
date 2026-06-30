@@ -285,6 +285,11 @@ public partial class player : CharacterBody2D
 				// Project raw horizontal input onto the tangent plane to prevent control reversal below anchor
 				Vector2 tangentialInput = inputDir - (inputDir.Dot(radialDir) * radialDir);
 				
+				// Dampen vertical input influence when falling to let gravity dominate
+				if (relVel.Y > 0) {
+					tangentialInput.Y *= 0.4f;
+				}
+				
 				relVel += tangentialInput * speed * (float)delta * 3.0f;
 			}
 			
