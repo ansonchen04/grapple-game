@@ -93,12 +93,12 @@ public partial class Rope : Node2D {
 		
 		Vector2 mousePos = GetGlobalMousePosition();
 		Vector2 direction = (mousePos - player.GlobalPosition).Normalized();
-		float dist = Mathf.Min(player.GlobalPosition.DistanceTo(mousePos), MaxLength);
+		float dist = MaxLength; // Always aim/shoot to max distance
 		
 		// Small offset prevents tunneling into nearby walls; Exclude handles self-collision
 		float offset = 10.0f;
 		Vector2 origin = player.GlobalPosition + direction * offset;
-		Vector2 end = origin + direction * Mathf.Max(dist - offset, 1.0f);
+		Vector2 end = origin + direction * (dist - offset);
 		
 		var spaceState = GetWorld2D().DirectSpaceState;
 		var query = PhysicsRayQueryParameters2D.Create(origin, end);
@@ -171,7 +171,7 @@ public partial class Rope : Node2D {
 		
 		shotOrigin = player.GlobalPosition;
 		shotDirection = (debugEnd - shotOrigin).Normalized();
-		shotDistance = player.GlobalPosition.DistanceTo(debugEnd);
+		shotDistance = MaxLength; // Always shoot to max distance
 		shotTraveled = 0f;
 		isShooting = true;
 		ropeState = RopeState.Shot;
