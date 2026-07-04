@@ -34,6 +34,14 @@ public partial class Rope : Node2D {
 	Vector2 anchorLocalOffset = Vector2.Zero;
 	Node2D lastHitCollider = null;
 
+	// Shooting hook state
+	Vector2 shotOrigin = Vector2.Zero;
+	Vector2 shotDirection = Vector2.Zero;
+	float shotDistance = 0f;
+	float shotTraveled = 0f;
+	const float ShotSpeed = 1500.0f;
+	bool isShooting = false;
+
 	public override void _Ready() {
 		player = GetNode<CharacterBody2D>("../Player");
 		ropeLine = GetNode<Line2D>("RopeLine");
@@ -45,8 +53,10 @@ public partial class Rope : Node2D {
 	}
 
 	public override void _Process(double delta) {
-		if (ropeState == RopeState.Hidden || ropeState == RopeState.Shot) {
+		if (ropeState == RopeState.Hidden) {
 			UpdateAim();
+		} else if (ropeState == RopeState.Shot) {
+			UpdateShot(delta);
 		} else {
 			hookSprite.Visible = false;
 		}
@@ -117,13 +127,16 @@ public partial class Rope : Node2D {
 	}
 
 	public override void _Draw() {
-		if (ropeState == RopeState.Hidden || ropeState == RopeState.Shot) {
+		if (ropeState == RopeState.Hidden) {
 			DrawLine(ToLocal(debugOrigin), ToLocal(debugEnd), Colors.Cyan, 2.0f);
 			if (hasHit) {
 				DrawCircle(ToLocal(debugHit), 6.0f, Colors.Red);
 			} else {
 				DrawCircle(ToLocal(debugEnd), 6.0f, Colors.Yellow);
 			}
+		} else if (ropeState == RopeState.Shot) {
+			// Draw line from player to moving hook
+			DrawLine(ToLocal(player.GlobalPosition), ToLocal(hookSprite.GlobalPosition), Colors.White, 2.0f);
 		}
 	}
 
@@ -132,22 +145,13 @@ public partial class Rope : Node2D {
 			if (mouseEvent.Pressed) {
 				switch (ropeState) {
 					case RopeState.Hidden:
-						if (hasLastHit) {
-							currentAnchor = lastValidHit;
-							anchorNode = lastHitCollider;
-							if (anchorNode != null) {
-								anchorLocalOffset = anchorNode.ToLocal(currentAnchor);
-							}
-							deployedLength = player.GlobalPosition.DistanceTo(currentAnchor);
-							ropeState = RopeState.Hooked;
-						} else {
-							ropeState = RopeState.Hidden;
-						}
+						StartShot();
 						break;
+					case RopeState.Shot:
 					case RopeState.Hooked:
 					case RopeState.Slack:
 					case RopeState.Retracting:
-						ropeState = RopeState.Hidden;
+						CancelRope();
 						break;
 				}
 			}
@@ -160,6 +164,59 @@ public partial class Rope : Node2D {
 		}
 		
 		//GD.Print($"Rope State changed to: {ropeState}");
+	}
+
+	void StartShot() {
+		if (ropeState != RopeState.Hidden) return;
+		
+		shotOrigin = player.GlobalPosition;
+		shotDirection = (debugEnd - shotOrigin).Normalized();
+		shotDistance = player.GlobalPosition.DistanceTo(debugEnd);
+		shotTraveled = 0f;
+		isShooting = true;
+		ropeState = RopeState.Shot;
+		
+		hookSprite.Visible = true;
+		hookSprite.GlobalPosition = shotOrigin;
+	}
+
+	void CancelRope() {
+		ropeState = RopeState.Hidden;
+		isShooting = false;
+		hookSprite.Visible = false;
+		ropeLine.Points = new Vector2[0];
+		for(int i=0; i<=MaxSegments; i++) {
+			positions[i] = Vector2.Zero;
+			previousPositions[i] = Vector2.Zero;
+		}
+		_isRopeInitialized = false;
+		anchorNode = null;
+	}
+
+	void UpdateShot(double delta) {
+		float dt = (float)delta;
+		float moveStep = ShotSpeed * dt;
+		
+		hookSprite.GlobalPosition += shotDirection * moveStep;
+		shotTraveled += moveStep;
+		
+		if (shotTraveled >= shotDistance) {
+			if (hasLastHit) {
+				// Successfully hit something, hook!
+				currentAnchor = lastValidHit;
+				anchorNode = lastHitCollider;
+				if (anchorNode != null) {
+					anchorLocalOffset = anchorNode.ToLocal(currentAnchor);
+				}
+				deployedLength = player.GlobalPosition.DistanceTo(currentAnchor);
+				ropeState = RopeState.Hooked;
+			} else {
+				// Reached max distance without hitting anything, retract
+				CancelRope();
+			}
+		}
+		
+		QueueRedraw();
 	}
 
 	void InitializeRope(Vector2 anchor) {
