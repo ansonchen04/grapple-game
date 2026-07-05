@@ -1,2 +1,7 @@
 # Godot 4+ specific ignores
 .godot/
+
+# Aider
+.aider.chat.history.md
+.aider*.aider.tags.cache*
+.aider.input.history
