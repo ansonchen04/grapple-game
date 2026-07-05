@@ -25,6 +25,7 @@ public partial class Rope : Node2D {
 	bool hasHit = false;
 	
 	Vector2 lastValidHit = Vector2.Zero;
+	Vector2 lastValidLocalHit = Vector2.Zero;
 	bool hasLastHit = false;
 
 	public Vector2 GetAnchor() => currentAnchor;
@@ -114,6 +115,9 @@ public partial class Rope : Node2D {
 			hasHit = true;
 			lastValidHit = debugHit;
 			lastHitCollider = result.ContainsKey("collider") ? result["collider"].As<Node2D>() : null;
+			if (lastHitCollider != null) {
+				lastValidLocalHit = lastHitCollider.ToLocal(debugHit);
+			}
 			hasLastHit = true;
 			hookSprite.GlobalPosition = debugHit;
 		} else {
@@ -203,10 +207,12 @@ public partial class Rope : Node2D {
 		if (shotTraveled >= shotDistance) {
 			if (hasLastHit) {
 				// Successfully hit something, hook!
-				currentAnchor = lastValidHit;
 				anchorNode = lastHitCollider;
 				if (anchorNode != null) {
-					anchorLocalOffset = anchorNode.ToLocal(currentAnchor);
+					anchorLocalOffset = lastValidLocalHit;
+					currentAnchor = anchorNode.ToGlobal(anchorLocalOffset);
+				} else {
+					currentAnchor = lastValidHit;
 				}
 				deployedLength = player.GlobalPosition.DistanceTo(currentAnchor);
 				ropeState = RopeState.Hooked;
