@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://6vx1riphdci0"]
+
+[ext_resource type="Script" uid="uid://bm5ugx2wpquec" path="res://template/scripts/PolyPlatTemplate.cs" id="1_ca4cx"]
+
+[node name="StartingPlatform" type="StaticBody2D" unique_id=1313610053]
+position = Vector2(0, 380)
+collision_layer = 1
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+position = Vector2(-1.4944197, 0)
+scale = Vector2(6.297978, 1)
+polygon = PackedVector2Array(-20.721823, 5, 272.7057, 1, 218.56134, 645, 124.245346, 806, 18.655897, 643)
+
+[node name="PolyPlatSprite" type="Polygon2D" parent="." unique_id=118132866]
+position = Vector2(-1.4944197, 0)
+scale = Vector2(6.297978, 1)
+color = Color(1, 0.423529, 0, 1)
+polygon = PackedVector2Array(-20.721823, 5, 272.7057, 1, 218.56134, 645, 124.245346, 806, 18.655897, 643)
+script = ExtResource("1_ca4cx")
