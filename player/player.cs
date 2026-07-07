@@ -34,7 +34,7 @@ public partial class player : CharacterBody2D
 	private bool onOneWaySurface = false;
 	public override void _Ready() {
 		//Hardcoded, TODO make this varible for the level
-		WorldBoundaryShape2D worldBoundary = GD.Load<WorldBoundaryShape2D>("res://level/level1/outotbounds.tres");
+		WorldBoundaryShape2D worldBoundary = GD.Load<WorldBoundaryShape2D>("res://template/outofbounds.tres");
 		outOfBounds = worldBoundary.Distance;
 		// Initialize the RayCast2D node
 		_downwardRaycast = GetNode<RayCast2D>("DownwardRaycast");

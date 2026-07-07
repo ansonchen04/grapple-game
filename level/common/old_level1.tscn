@@ -1,0 +1,198 @@
+[gd_scene format=3 uid="uid://jp83d74t8m5a"]
+
+[ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="1_1p103"]
+[ext_resource type="PackedScene" uid="uid://6yotxco8qhu" path="res://rope/Rope.tscn" id="2_jxaye"]
+[ext_resource type="Script" uid="uid://dj72cnhiu8cat" path="res://level/common/PolyPlatSprite.cs" id="3_dnhxt"]
+[ext_resource type="Script" uid="uid://cxj1fd5y3sj1t" path="res://level/common/DropDownSprite.cs" id="4_6wrah"]
+[ext_resource type="Script" uid="uid://bsvu6kj54nn31" path="res://level/common/CurvedPlatform.cs" id="5_f3lin"]
+[ext_resource type="Script" uid="uid://dbrppqm2sgesr" path="res://level/common/PathPlatform.cs" id="6_2x2kq"]
+[ext_resource type="Texture2D" uid="uid://c7n33ghgp4olt" path="res://icon.svg" id="7_lm0pw"]
+
+[sub_resource type="Curve2D" id="Curve2D_i6v66"]
+bake_interval = 35.0
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -57, 65, -152.218, 34.487, 152.218, -34.487, 216, -175, 0, 0, 0, 0, 420, -200, 0, 0, 0, 0, 420, -425, 0, 0, 0, 0, 675, -425, 0, 0, 0, 0, 675, 225, 0, 0, 0, 0, -57, 225, 0, 0, 0, 0, -57, 65)
+}
+point_count = 8
+
+[sub_resource type="Curve2D" id="Curve2D_y4rks"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 600, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 3
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kdjij"]
+size = Vector2(122.602, 119.074)
+
+[sub_resource type="Curve2D" id="Curve2D_efjtf"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -450, 0, 0, 0, 0, 0, 0)
+}
+point_count = 3
+
+[node name="World" type="Node2D" unique_id=1196130423]
+
+[node name="Player" parent="." unique_id=1894976511 instance=ExtResource("1_1p103")]
+position = Vector2(135, 250)
+scale = Vector2(0.6, 0.6)
+collision_mask = 5
+
+[node name="Rope" parent="." unique_id=1543012374 instance=ExtResource("2_jxaye")]
+
+[node name="StartingPlatform" type="StaticBody2D" parent="." unique_id=1325055291]
+position = Vector2(0, 380)
+collision_mask = 5
+
+[node name="PolyPlatSprite" type="Polygon2D" parent="StartingPlatform" unique_id=479116880]
+color = Color(1, 0.423529, 0, 1)
+polygon = PackedVector2Array(0, 0, 602, 0, 841, -170, 1180, -170, 1180, -115, 903, -115, 668, 76, 632, 270, 0, 270)
+script = ExtResource("3_dnhxt")
+
+[node name="DropDown" type="StaticBody2D" parent="." unique_id=993694239]
+position = Vector2(1180, 210)
+collision_mask = 5
+
+[node name="DropDownSprite" type="Polygon2D" parent="DropDown" unique_id=1332663516]
+color = Color(0.972549, 0.815686, 0.847059, 1)
+polygon = PackedVector2Array(0, 0, 225, 0, 225, 55, 0, 55)
+script = ExtResource("4_6wrah")
+
+[node name="Platform" type="StaticBody2D" parent="." unique_id=1399711963]
+position = Vector2(1223, 478)
+collision_mask = 5
+
+[node name="PolyPlatSprite" type="Polygon2D" parent="Platform" unique_id=471794213]
+color = Color(1, 0.423529, 0, 1)
+polygon = PackedVector2Array(0, 0, 300, 0, 250, 50, 0, 50)
+script = ExtResource("3_dnhxt")
+
+[node name="CurvedPlatform" type="StaticBody2D" parent="." unique_id=1116718950]
+position = Vector2(1664, 515)
+collision_mask = 5
+script = ExtResource("5_f3lin")
+
+[node name="Path2D" type="Path2D" parent="CurvedPlatform" unique_id=2133939221]
+curve = SubResource("Curve2D_i6v66")
+
+[node name="Line2D" type="Line2D" parent="CurvedPlatform" unique_id=2022134140]
+
+[node name="Polygon2D" type="Polygon2D" parent="CurvedPlatform" unique_id=864336747]
+
+[node name="ClimbArea" type="Area2D" parent="CurvedPlatform" unique_id=1451603817]
+collision_mask = 5
+
+[node name="ClimbPolygon" type="CollisionPolygon2D" parent="CurvedPlatform/ClimbArea" unique_id=206530996]
+polygon = PackedVector2Array(400, -200, 400, -435, 430, -435, 430, -200)
+
+[node name="MovingPlatform1" type="Node2D" parent="." unique_id=1661898324]
+position = Vector2(2890, 276)
+script = ExtResource("6_2x2kq")
+Speed = 250
+
+[node name="PlatformPath" type="Path2D" parent="MovingPlatform1" unique_id=2011337153]
+curve = SubResource("Curve2D_y4rks")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="MovingPlatform1/PlatformPath" unique_id=469641606]
+rotation = -0.830919
+rotates = false
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="MovingPlatform1/PlatformPath/PathFollow2D" unique_id=552960097]
+remote_path = NodePath("../../PlatformBody")
+update_rotation = false
+
+[node name="_Timer_17557" type="Timer" parent="MovingPlatform1/PlatformPath/PathFollow2D" unique_id=560844743]
+wait_time = 0.2
+one_shot = true
+
+[node name="PlatformBody" type="AnimatableBody2D" parent="MovingPlatform1/PlatformPath" unique_id=1329150946]
+collision_mask = 5
+
+[node name="Sprite2D" type="Sprite2D" parent="MovingPlatform1/PlatformPath/PlatformBody" unique_id=1501032530]
+texture = ExtResource("7_lm0pw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovingPlatform1/PlatformPath/PlatformBody" unique_id=141285967]
+position = Vector2(7.62939e-06, -1.30849)
+shape = SubResource("RectangleShape2D_kdjij")
+
+[node name="MovingPlatform2" type="Node2D" parent="." unique_id=1082640226]
+position = Vector2(3994, 401)
+script = ExtResource("6_2x2kq")
+
+[node name="PlatformPath" type="Path2D" parent="MovingPlatform2" unique_id=867864943]
+curve = SubResource("Curve2D_efjtf")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="MovingPlatform2/PlatformPath" unique_id=924661601]
+rotation = -0.830919
+rotates = false
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="MovingPlatform2/PlatformPath/PathFollow2D" unique_id=233203576]
+remote_path = NodePath("../../PlatformBody")
+update_rotation = false
+
+[node name="_Timer_17557" type="Timer" parent="MovingPlatform2/PlatformPath/PathFollow2D" unique_id=1781429564]
+wait_time = 0.2
+one_shot = true
+
+[node name="PlatformBody" type="AnimatableBody2D" parent="MovingPlatform2/PlatformPath" unique_id=1825299364]
+collision_mask = 5
+
+[node name="Sprite2D" type="Sprite2D" parent="MovingPlatform2/PlatformPath/PlatformBody" unique_id=368847517]
+texture = ExtResource("7_lm0pw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MovingPlatform2/PlatformPath/PlatformBody" unique_id=1301708502]
+position = Vector2(7.62939e-06, -1.30849)
+shape = SubResource("RectangleShape2D_kdjij")
+
+[node name="Platform3" type="StaticBody2D" parent="." unique_id=1392641080]
+position = Vector2(2484, 274)
+collision_mask = 5
+
+[node name="PolyPlatSprite" type="Polygon2D" parent="Platform3" unique_id=45862217]
+color = Color(1, 0.423529, 0, 1)
+polygon = PackedVector2Array(0, 0, 250, 0, 250, 250, 0, 250)
+script = ExtResource("3_dnhxt")
+
+[node name="Platform4" type="StaticBody2D" parent="." unique_id=785774279]
+position = Vector2(3618, 284)
+collision_mask = 5
+
+[node name="PolyPlatSprite" type="Polygon2D" parent="Platform4" unique_id=1774191935]
+color = Color(1, 0.423529, 0, 1)
+polygon = PackedVector2Array(0, 0, 250, 0, 250, 250, 0, 250)
+script = ExtResource("3_dnhxt")
+
+[node name="Platform5" type="StaticBody2D" parent="." unique_id=997573827]
+position = Vector2(3636, -132)
+collision_mask = 5
+
+[node name="PolyPlatSprite" type="Polygon2D" parent="Platform5" unique_id=488013679]
+color = Color(1, 0.423529, 0, 1)
+polygon = PackedVector2Array(0, 0, 250, 0, 250, 150, 0, 150)
+script = ExtResource("3_dnhxt")
+
+[node name="Platform6" type="StaticBody2D" parent="." unique_id=1247917123]
+position = Vector2(3286, -307)
+collision_mask = 5
+
+[node name="PolyPlatSprite" type="Polygon2D" parent="Platform6" unique_id=1575441400]
+color = Color(1, 0.423529, 0, 1)
+polygon = PackedVector2Array(0, 0, 250, 0, 250, 150, 0, 150)
+script = ExtResource("3_dnhxt")
+
+[node name="Platform7" type="StaticBody2D" parent="." unique_id=1437931018]
+position = Vector2(3718, -452)
+collision_mask = 5
+
+[node name="PolyPlatSprite" type="Polygon2D" parent="Platform7" unique_id=1655181415]
+color = Color(1, 0.423529, 0, 1)
+polygon = PackedVector2Array(0, 0, 250, 0, 250, 150, 0, 150)
+script = ExtResource("3_dnhxt")
+
+[node name="Platform8" type="StaticBody2D" parent="." unique_id=1688543588]
+position = Vector2(4080, -612)
+collision_mask = 5
+
+[node name="PolyPlatSprite" type="Polygon2D" parent="Platform8" unique_id=1598247226]
+color = Color(1, 0, 0, 1)
+polygon = PackedVector2Array(0, 0, 250, 0, 250, 150, 0, 150)
+script = ExtResource("3_dnhxt")

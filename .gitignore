@@ -5,3 +5,4 @@
 .aider.chat.history.md
 .aider*.aider.tags.cache*
 .aider.input.history
+.aider*
