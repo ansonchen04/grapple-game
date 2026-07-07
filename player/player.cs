@@ -42,6 +42,8 @@ public partial class player : CharacterBody2D
 		GD.Print(startPosition);
 		rayCast = GetNode<RayCast2D>("RayCast2D");
 		rayCast.Enabled = true;  // disabled by default, we'll turn it on when we click
+		rayCast.CollisionMask = 1; // Explicitly target platform layer (Layer 1)
+		_downwardRaycast.CollisionMask = 1;
 		rope = GetNode<Rope>("../Rope");
 		
 		frictionCast = new ShapeCast2D();
