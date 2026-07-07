@@ -1,16 +1,21 @@
 [gd_scene format=3 uid="uid://bwkhhnsjxt441"]
 
 [ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="1_q2th1"]
-[ext_resource type="PackedScene" uid="uid://6vx1riphdci0" path="res://level/level_1/PolygonPlatformTemplate.tscn" id="2_fp37s"]
+[ext_resource type="PackedScene" uid="uid://6vx1riphdci0" path="res://level/level_1/Lvl1StartingPlatform.tscn" id="2_fp37s"]
 [ext_resource type="PackedScene" uid="uid://6yotxco8qhu" path="res://rope/Rope.tscn" id="3_mubsx"]
+[ext_resource type="PackedScene" uid="uid://cagn6rblc6286" path="res://level/level_1/Lvl1SmallPlatform.tscn" id="4_qugjk"]
 
 [node name="Level1" type="Node2D" unique_id=1091476641]
 
 [node name="StartingPlatform" parent="." unique_id=1249440026 instance=ExtResource("2_fp37s")]
 position = Vector2(-48, 539)
+collision_mask = 5
 
 [node name="Player" parent="." unique_id=876559661 instance=ExtResource("1_q2th1")]
 position = Vector2(698, 225)
 
 [node name="Rope" parent="." unique_id=682919283 instance=ExtResource("3_mubsx")]
 position = Vector2(4, 8)
+
+[node name="StartingPlatform2" parent="." unique_id=1313610053 instance=ExtResource("4_qugjk")]
+position = Vector2(1442, 840)
