@@ -20,7 +20,7 @@ shape = SubResource("RectangleShape2D_1ybm1")
 [node name="RayCast2D" type="RayCast2D" parent="."]
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(0.75, 0.75)
+zoom = Vector2(0.6, 0.6)
 position_smoothing_speed = 10.0
 
 [node name="DownwardRaycast" type="RayCast2D" parent="."]
