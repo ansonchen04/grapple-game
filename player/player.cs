@@ -23,7 +23,7 @@ public partial class player : CharacterBody2D
 	//Ray is in the center of the player model, checking what platform the player is on
 	private RayCast2D _downwardRaycast;
   //TODO Rename raycast length to a clearer name
-  	private const float raycastLength = 105.0f;
+  	private const float raycastLength = 500.0f;
   	private RayCast2D rayCast;
   	private bool isGrappled = false;
 	private Rope rope;
