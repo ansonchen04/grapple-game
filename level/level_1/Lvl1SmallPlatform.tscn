@@ -7,13 +7,13 @@ position = Vector2(0, 380)
 collision_layer = 1
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-position = Vector2(-8, -14)
+position = Vector2(0, 0)
 scale = Vector2(6.297978, 1)
-polygon = PackedVector2Array(16.98958, 11, 52.397774, 11, 44.299934, 56, 33.262085, 84.85916, 23.81717, 56)
+polygon = PackedVector2Array(-17.704097, 11, 17.704097, 11, 9.606257, 56, -1.431592, 84.85916, -10.876507, 56)
 
 [node name="PolyPlatSprite" type="Polygon2D" parent="." unique_id=118132866]
-position = Vector2(-8, -14)
+position = Vector2(0, 0)
 scale = Vector2(6.297978, 1)
 color = Color(1, 0.423529, 0, 1)
-polygon = PackedVector2Array(16.98958, 11, 52.397774, 11, 44.299934, 56, 33.262085, 84.85916, 23.81717, 56)
+polygon = PackedVector2Array(-17.704097, 11, 17.704097, 11, 9.606257, 56, -1.431592, 84.85916, -10.876507, 56)
 script = ExtResource("1_yddp8")
