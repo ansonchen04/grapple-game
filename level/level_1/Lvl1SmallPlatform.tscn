@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cagn6rblc6286"]
+
+[ext_resource type="Script" uid="uid://bm5ugx2wpquec" path="res://template/scripts/PolyPlatTemplate.cs" id="1_yddp8"]
+
+[node name="StartingPlatform" type="StaticBody2D" unique_id=1313610053]
+position = Vector2(0, 380)
+
+[node name="PolyPlatSprite" type="Polygon2D" parent="." unique_id=118132866]
+position = Vector2(-8, -14)
+scale = Vector2(6.297978, 1)
+color = Color(1, 0.423529, 0, 1)
+polygon = PackedVector2Array(16.98958, 11, 52.397774, 11, 44.299934, 56, 33.262085, 84.85916, 23.81717, 56)
+script = ExtResource("1_yddp8")
