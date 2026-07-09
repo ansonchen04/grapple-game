@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="1_icon"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_anchor"]
-radius = 32.0
+radius = 96.0
 
 [node name="SwingAnchor" type="StaticBody2D"]
 collision_layer = 1
@@ -13,4 +13,4 @@ shape = SubResource("CircleShape2D_anchor")
 
 [node name="Visual" type="Sprite2D" parent="."]
 texture = ExtResource("1_icon")
-scale = Vector2(0.5, 0.5)
+scale = Vector2(1.5, 1.5)
