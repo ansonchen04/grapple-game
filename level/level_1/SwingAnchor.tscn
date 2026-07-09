@@ -1,17 +1,16 @@
 [gd_scene format=3 uid="uid://b282xwf1pp77f"]
 
-[ext_resource type="Script" uid="uid://bm5ugx2wpquec" path="res://template/scripts/PolyPlatTemplate.cs" id="1_owjo5"]
+[ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="1_icon"]
 
-[node name="StartingPlatform" type="StaticBody2D" unique_id=1313610053]
-position = Vector2(0, 380)
+[sub_resource type="CircleShape2D" id="CircleShape2D_anchor"]
+radius = 16.0
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=520003014]
-scale = Vector2(6.297978, 1)
-polygon = PackedVector2Array(-6.9863696, -8, 4.1283092, -8, 9.209306, 43, -1.431592, 84.85916, -10.876507, 56)
+[node name="SwingAnchor" type="StaticBody2D"]
+collision_layer = 1
 
-[node name="PolyPlatSprite" type="Polygon2D" parent="." unique_id=118132866]
-position = Vector2(5, -3)
-scale = Vector2(6.297978, 1)
-color = Color(1, 0.423529, 0, 1)
-polygon = PackedVector2Array(-17.704098, 11, 17.704098, 11, 9.606257, 56, -1.431592, 84.85916, -10.876507, 56)
-script = ExtResource("1_owjo5")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_anchor")
+
+[node name="Visual" type="Sprite2D" parent="."]
+texture = ExtResource("1_icon")
+scale = Vector2(0.5, 0.5)
