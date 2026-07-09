@@ -16,31 +16,31 @@ position = Vector2(0, 0)
 scale = Vector2(0.5, 0.5)
 
 [node name="Player" parent="." unique_id=876559661 instance=ExtResource("1_q2th1")]
-position = Vector2(0, 120)
+position = Vector2(0, 100)
 
 [node name="Rope" parent="." unique_id=682919283 instance=ExtResource("3_mubsx")]
 position = Vector2(0, 0)
 
 [node name="JumpPlatform1" parent="." unique_id=2000000001 instance=ExtResource("4_qugjk")]
-position = Vector2(220, 30)
+position = Vector2(300, 120)
 
 [node name="JumpPlatform2" parent="." unique_id=2000000002 instance=ExtResource("4_qugjk")]
-position = Vector2(460, 60)
+position = Vector2(600, 180)
 
 [node name="GrappleAnchor" parent="." unique_id=2000000003 instance=ExtResource("4_qugjk")]
-position = Vector2(720, -130)
+position = Vector2(900, -80)
 
 [node name="SwingPlatform1" parent="." unique_id=2000000004 instance=ExtResource("4_qugjk")]
-position = Vector2(1120, -70)
+position = Vector2(1300, -20)
 
 [node name="SwingPlatform2" parent="." unique_id=2000000005 instance=ExtResource("4_qugjk")]
-position = Vector2(1480, 40)
+position = Vector2(1650, 60)
 
 [node name="GoalPlatform" parent="." unique_id=2000000006 instance=ExtResource("5_goal")]
-position = Vector2(1800, 90)
+position = Vector2(2000, 120)
 
 [node name="LeftWall" type="StaticBody2D" parent="."]
-position = Vector2(-100, 200)
+position = Vector2(-200, 200)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
 shape = SubResource("RectangleShape2D_wall")
@@ -51,7 +51,7 @@ size = Vector2(100, 900)
 color = Color(0.25, 0.25, 0.25, 1)
 
 [node name="RightWall" type="StaticBody2D" parent="."]
-position = Vector2(2000, 200)
+position = Vector2(2200, 200)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
 shape = SubResource("RectangleShape2D_wall")
