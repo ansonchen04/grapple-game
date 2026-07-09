@@ -6,9 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://cagn6rblc6286" path="res://level/level_1/Lvl1SmallPlatform.tscn" id="4_qugjk"]
 [ext_resource type="PackedScene" uid="uid://d7f8a9b0c1d2e" path="res://level/level_1/Lvl1GoalPlatform.tscn" id="5_goal"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(100, 900)
+
 [node name="Level1" type="Node2D" unique_id=1091476641]
 
-# Scaled down to prevent clipping and provide a compact starting area
 [node name="StartingPlatform" parent="." unique_id=1249440026 instance=ExtResource("2_fp37s")]
 position = Vector2(0, 0)
 scale = Vector2(0.5, 0.5)
@@ -19,29 +21,24 @@ position = Vector2(0, 120)
 [node name="Rope" parent="." unique_id=682919283 instance=ExtResource("3_mubsx")]
 position = Vector2(0, 0)
 
-# Gentle downward slope to teach basic jumping without being too steep
 [node name="JumpPlatform1" parent="." unique_id=2000000001 instance=ExtResource("4_qugjk")]
 position = Vector2(220, 30)
 
 [node name="JumpPlatform2" parent="." unique_id=2000000002 instance=ExtResource("4_qugjk")]
 position = Vector2(460, 60)
 
-# Placed significantly higher and further to force grappling. Normal jump cannot reach it.
 [node name="GrappleAnchor" parent="." unique_id=2000000003 instance=ExtResource("4_qugjk")]
 position = Vector2(720, -130)
 
-# Wide gap requiring a swing to cross safely
 [node name="SwingPlatform1" parent="." unique_id=2000000004 instance=ExtResource("4_qugjk")]
 position = Vector2(1120, -70)
 
-# Lower platform to practice releasing momentum and landing
 [node name="SwingPlatform2" parent="." unique_id=2000000005 instance=ExtResource("4_qugjk")]
 position = Vector2(1480, 40)
 
 [node name="GoalPlatform" parent="." unique_id=2000000006 instance=ExtResource("5_goal")]
 position = Vector2(1800, 90)
 
-# Boundary walls to prevent falling off the level edges
 [node name="LeftWall" type="StaticBody2D" parent="."]
 position = Vector2(-100, 200)
 
@@ -63,6 +60,3 @@ shape = SubResource("RectangleShape2D_wall")
 position = Vector2(-50, -300)
 size = Vector2(100, 900)
 color = Color(0.25, 0.25, 0.25, 1)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
-size = Vector2(100, 900)
