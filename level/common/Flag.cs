@@ -11,7 +11,7 @@ public partial class Flag : Area2D
     {
         if (body is CharacterBody2D player)
         {
-            GetTree().ChangeSceneToFile("res://menu/LevelComplete.tscn");
+            GetTree().CallDeferred("ChangeSceneToFile", "res://menu/LevelComplete.tscn");
         }
     }
 }
