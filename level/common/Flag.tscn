@@ -6,6 +6,8 @@
 size = Vector2(32, 64)
 
 [node name="Flag" type="Area2D"]
+collision_mask = 4
+monitoring = true
 script = ExtResource("1_script")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
