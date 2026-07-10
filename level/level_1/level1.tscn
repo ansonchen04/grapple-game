@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cagn6rblc6286" path="res://level/level_1/Lvl1SmallPlatform.tscn" id="4_qugjk"]
 [ext_resource type="PackedScene" uid="uid://c1do7eqrtibm" path="res://level/level_1/Lvl1GoalPlatform.tscn" id="5_goal"]
 [ext_resource type="PackedScene" uid="uid://b282xwf1pp77f" path="res://level/level_1/SwingAnchor.tscn" id="6_3f3yr"]
+[ext_resource type="PackedScene" uid="uid://f1a2b3c4d5e6" path="res://level/common/Flag.tscn" id="7_flag"]
 
 [node name="Level1" type="Node2D" unique_id=1091476641]
 
@@ -38,3 +39,6 @@ position = Vector2(3471, -106)
 
 [node name="SwingAnchor" parent="." unique_id=129950007 instance=ExtResource("6_3f3yr")]
 position = Vector2(2007, -244)
+
+[node name="Flag" parent="." unique_id=2000000007 instance=ExtResource("7_flag")]
+position = Vector2(3471, -180)

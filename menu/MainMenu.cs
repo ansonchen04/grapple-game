@@ -13,7 +13,7 @@ public partial class MainMenu : Control
 
     private void OnPlayPressed()
     {
-        GetTree().ChangeSceneToFile("res://level/level_1/level1.tscn");
+        GetTree().ChangeSceneToFile("res://menu/LevelSelect.tscn");
     }
 
     private void OnQuitPressed()
