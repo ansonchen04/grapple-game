@@ -10,7 +10,7 @@ _data = {
 point_count = 3
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lvl2"]
-size = Vector2(122.602, 119.074)
+size = Vector2(367.806, 119.074)
 
 [node name="Lvl2MovingPlatform" type="Node2D" unique_id=1149034273]
 script = ExtResource("2_script")
