@@ -4,6 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="2_a2mxc"]
 [ext_resource type="PackedScene" uid="uid://6yotxco8qhu" path="res://rope/Rope.tscn" id="3_2icyi"]
 [ext_resource type="PackedScene" uid="uid://dn6os8ok0h305" path="res://level/level_2/Lvl2MovingPlatform.tscn" id="4_lvl2moving"]
+[ext_resource type="PackedScene" uid="uid://b282xwf1pp77f" path="res://level/common/SwingAnchor.tscn" id="5_jhc7h"]
+[ext_resource type="PackedScene" uid="uid://beg1gitv3x0j1" path="res://level/level_2/Lvl2SmallPlatform.tscn" id="6_2tesa"]
 
 [node name="Level3" type="Node2D" unique_id=1003218659]
 
@@ -20,5 +22,11 @@ position = Vector2(-495, -189)
 position = Vector2(409, 61)
 
 [node name="MovingPlatform2" parent="." unique_id=2000000021 instance=ExtResource("4_lvl2moving")]
-position = Vector2(1000, 61)
+position = Vector2(1877, 64)
 scale = Vector2(-1, 1)
+
+[node name="SwingAnchor" parent="." unique_id=1514559001 instance=ExtResource("5_jhc7h")]
+position = Vector2(2628, -618)
+
+[node name="Lvl2SmallPlatform" parent="." unique_id=1264419818 instance=ExtResource("6_2tesa")]
+position = Vector2(3661, 33)

@@ -4,7 +4,7 @@
 
 [sub_resource type="Curve2D" id="Curve2D_lvl2"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 400, 0, 0, 0, 0, 0, 0, 0, 400, 0, 0, 0, 0, 0)
+"points": PackedVector2Array(0, 0, 0, 0, 400, 0, 0, 0, 0, 0, -167.23717, 0, 400, 0, 0, 0, 400, 0)
 }
 point_count = 3
 
@@ -15,8 +15,8 @@ size = Vector2(367.806, 119.074)
 script = ExtResource("2_script")
 
 [node name="PlatformPath" type="Path2D" parent="." unique_id=218888868]
-position = Vector2(-10, 0)
-scale = Vector2(1.0250001, 1)
+position = Vector2(-9, 0)
+scale = Vector2(1.0225, 1)
 curve = SubResource("Curve2D_lvl2")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="PlatformPath" unique_id=1514996493]
@@ -30,7 +30,7 @@ update_rotation = false
 
 [node name="PlatformBody" type="AnimatableBody2D" parent="PlatformPath" unique_id=614398694]
 position = Vector2(400, 0)
-scale = Vector2(0.9867708, 1.0137129)
+scale = Vector2(0.988058, 1.0123348)
 collision_mask = 5
 
 [node name="Visual" type="ColorRect" parent="PlatformPath/PlatformBody" unique_id=515609101]
