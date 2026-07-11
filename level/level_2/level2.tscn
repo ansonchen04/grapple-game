@@ -18,3 +18,7 @@ position = Vector2(-495, -189)
 
 [node name="MovingPlatform1" parent="." unique_id=2000000020 instance=ExtResource("4_lvl2moving")]
 position = Vector2(409, 61)
+
+[node name="MovingPlatform2" parent="." unique_id=2000000021 instance=ExtResource("4_lvl2moving")]
+position = Vector2(1000, 61)
+scale = Vector2(-1, 1)
