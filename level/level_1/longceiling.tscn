@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://dc23ns3s1u5s1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tacch"]
+size = Vector2(1809.75, 46)
+
+[node name="Longceiling" type="StaticBody2D" unique_id=1902800559]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=807449547]
+position = Vector2(910, 25)
+shape = SubResource("RectangleShape2D_tacch")
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=1269370937]
+position = Vector2(910, 25)
+color = Color(0.9749742, 0.44886506, 0, 1)
+polygon = PackedVector2Array(-904.875, -23, 904.875, -23, 904.875, 23, -904.875, 23)
