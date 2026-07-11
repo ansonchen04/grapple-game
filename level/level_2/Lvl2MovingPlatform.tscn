@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dn6os8ok0h305"]
 
 [ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="1_texture"]
+[ext_resource type="Script" path="res://template/scripts/MovingPlatformTemplate.cs" id="2_script"]
 
 [sub_resource type="Curve2D" id="Curve2D_lvl2"]
 _data = {
@@ -12,6 +13,7 @@ point_count = 3
 size = Vector2(122.602, 119.074)
 
 [node name="Lvl2MovingPlatform" type="Node2D"]
+script = ExtResource("2_script")
 
 [node name="PlatformPath" type="Path2D" parent="."]
 curve = SubResource("Curve2D_lvl2")
