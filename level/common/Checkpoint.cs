@@ -15,7 +15,7 @@ public partial class Checkpoint : Area2D
 
     private void OnBodyEntered(Node body)
     {
-        if (body is CharacterBody2D player && !isActivated)
+        if (body is player p && !isActivated)
         {
             isActivated = true;
             player.LastCheckpointPosition = GlobalPosition;
