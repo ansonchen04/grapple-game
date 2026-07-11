@@ -43,7 +43,7 @@ position = Vector2(2534, 125)
 position = Vector2(3076, -261)
 
 [node name="Checkpoint1" parent="." unique_id=2000000010 instance=ExtResource("9_checkpoint")]
-position = Vector2(3637, 110)
+position = Vector2(319, 52)
 
 [node name="SwingPlatform4" parent="." unique_id=351847565 instance=ExtResource("4_qugjk")]
 position = Vector2(5426, 290)
