@@ -9,7 +9,7 @@ public partial class player : CharacterBody2D
 
 	//How fast the player moves and how high they can jump
 	private const float speed = 300.0f;
-	private const float jumpVelocity = -600.0f;
+	private const float jumpVelocity = -700.0f;
 	private const float climbVelocity = -200.0f;
 	private const float slackBuffer = 40.0f; // Dead zone for rope constraint to allow horizontal drift/match visual sag
 	public float swingFriction = 0.01f; // Tunable friction (0.0-0.3 recommended). Higher values act like glue due to per-frame damping.
