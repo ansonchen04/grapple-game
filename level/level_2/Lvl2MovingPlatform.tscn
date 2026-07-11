@@ -34,8 +34,11 @@ position = Vector2(400, 0)
 scale = Vector2(1.0126201, 0.98779076)
 collision_mask = 5
 
-[node name="Sprite2D" type="Sprite2D" parent="PlatformPath/PlatformBody" unique_id=515609101]
-texture = ExtResource("1_texture")
+[node name="Visual" type="ColorRect" parent="PlatformPath/PlatformBody" unique_id=515609101]
+position = Vector2(-183.903, -59.537)
+size = Vector2(367.806, 119.074)
+color = Color(1, 0.5, 0, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformPath/PlatformBody" unique_id=734852137]
+position = Vector2(0, 0)
 shape = SubResource("RectangleShape2D_lvl2")
