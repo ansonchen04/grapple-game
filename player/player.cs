@@ -73,7 +73,7 @@ public partial class player : CharacterBody2D
 
 		// 1. Gravity (applied first for deterministic integration, skipped when swinging as swing solver handles it)
 		if (!IsOnFloor() && !onClimbableSurface && !isSwinging) {
-			newVelocity.Y += gravity * dt;
+			newVelocity.Y += gravity * dt * 1.5f;
 		}
 
 		// 2. Base Input Handling (gated during airborne swings to prevent momentum override)
