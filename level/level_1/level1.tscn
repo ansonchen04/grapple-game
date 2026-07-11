@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://b282xwf1pp77f" path="res://level/common/SwingAnchor.tscn" id="6_3f3yr"]
 [ext_resource type="PackedScene" uid="uid://f1a2b3c4d5e6" path="res://level/common/Flag.tscn" id="7_flag"]
 [ext_resource type="PackedScene" uid="uid://dc23ns3s1u5s1" path="res://level/level_1/longceiling.tscn" id="8_1vvmk"]
+[ext_resource type="PackedScene" uid="uid://checkpoint123" path="res://level/common/Checkpoint.tscn" id="9_checkpoint"]
 
 [node name="Level1" type="Node2D" unique_id=1091476641]
 
@@ -40,6 +41,9 @@ position = Vector2(2534, 125)
 
 [node name="SwingAnchor2" parent="." unique_id=1377495335 instance=ExtResource("6_3f3yr")]
 position = Vector2(3076, -261)
+
+[node name="Checkpoint1" parent="." unique_id=2000000010 instance=ExtResource("9_checkpoint")]
+position = Vector2(3637, 110)
 
 [node name="SwingPlatform4" parent="." unique_id=351847565 instance=ExtResource("4_qugjk")]
 position = Vector2(5426, 290)

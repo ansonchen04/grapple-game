@@ -15,6 +15,7 @@ public partial class player : CharacterBody2D
 	public float swingFriction = 0.01f; // Tunable friction (0.0-0.3 recommended). Higher values act like glue due to per-frame damping.
 	//Starting Position, should be updated whenever player enters a new scene
 	private Vector2 startPosition;
+	public static Vector2 LastCheckpointPosition { get; private set; }
 	//Gets at what y value it is out of bounds 
 	private float outOfBounds;
 	private Vector2 hookStartPos;
@@ -39,6 +40,7 @@ public partial class player : CharacterBody2D
 		// Initialize the RayCast2D node
 		_downwardRaycast = GetNode<RayCast2D>("DownwardRaycast");
 		startPosition = this.GlobalPosition;
+		LastCheckpointPosition = startPosition; // Initialize checkpoint to start position
 		GD.Print(startPosition);
 		rayCast = GetNode<RayCast2D>("RayCast2D");
 		rayCast.Enabled = true;  // disabled by default, we'll turn it on when we click
@@ -188,8 +190,8 @@ public partial class player : CharacterBody2D
 		return false;
 	}
 	public void restart() {
-		//If restart button pressed, reset the positon to the start and zero out the velocity
-			Position = startPosition;
+		//If restart button pressed, reset the position to the last checkpoint and zero out the velocity
+			Position = LastCheckpointPosition;
 			Velocity = Vector2.Zero;
 	}
 	public void setClimbing(bool onClimbableSurface) {

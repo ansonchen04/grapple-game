@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://checkpoint123"]
+
+[ext_resource type="Script" path="res://level/common/Checkpoint.cs" id="1_script"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_checkpoint"]
+size = Vector2(32, 64)
+
+[node name="Checkpoint" type="Area2D"]
+collision_mask = 4
+monitoring = true
+script = ExtResource("1_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_checkpoint")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -32)
