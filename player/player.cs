@@ -15,7 +15,7 @@ public partial class player : CharacterBody2D
 	public float swingFriction = 0.01f; // Tunable friction (0.0-0.3 recommended). Higher values act like glue due to per-frame damping.
 	//Starting Position, should be updated whenever player enters a new scene
 	private Vector2 startPosition;
-	public static Vector2 LastCheckpointPosition { get; private set; }
+	public static Vector2 LastCheckpointPosition { get; set; }
 	//Gets at what y value it is out of bounds 
 	private float outOfBounds;
 	private Vector2 hookStartPos;
