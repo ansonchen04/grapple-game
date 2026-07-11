@@ -6,7 +6,7 @@ public partial class MovingPlatformTemplate : Node2D
 	private PathFollow2D pathFollow;
 	private Path2D path;
 	[Export]
-	public int Speed = 500;
+	public int Speed = 250;
 	private int direction = 1;
 
 	// Called when the node enters the scene tree for the first time.
