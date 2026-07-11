@@ -60,6 +60,6 @@ position = Vector2(4607, -98)
 shape = SubResource("RectangleShape2D_qri1a")
 
 [node name="Polygon2D" type="Polygon2D" parent="CollisionShape2D" unique_id=1481706760]
-position = Vector2(-52, -19)
+position = Vector2(0, 0)
 color = Color(0.9749742, 0.44886506, 0, 1)
-polygon = PackedVector2Array(-853, 42, 909, 37, 902, -42, -852, -40)
+polygon = PackedVector2Array(-904.875, -23, 904.875, -23, 904.875, 23, -904.875, 23)
