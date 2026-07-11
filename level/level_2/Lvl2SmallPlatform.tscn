@@ -1,14 +1,14 @@
 [gd_scene format=3 uid="uid://beg1gitv3x0j1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lvl2small"]
-size = Vector2(220, 32)
+size = Vector2(367.806, 119.074)
 
 [node name="Lvl2SmallPlatform" type="StaticBody2D"]
 collision_mask = 5
 
 [node name="Visual" type="ColorRect" parent="."]
-position = Vector2(-110, -16)
-size = Vector2(220, 32)
+position = Vector2(-183.903, -59.537)
+size = Vector2(367.806, 119.074)
 color = Color(1, 0.5, 0, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
