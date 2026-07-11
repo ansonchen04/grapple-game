@@ -5,8 +5,11 @@
 [ext_resource type="PackedScene" uid="uid://6yotxco8qhu" path="res://rope/Rope.tscn" id="3_mubsx"]
 [ext_resource type="PackedScene" uid="uid://cagn6rblc6286" path="res://level/level_1/Lvl1SmallPlatform.tscn" id="4_qugjk"]
 [ext_resource type="PackedScene" uid="uid://c1do7eqrtibm" path="res://level/level_1/Lvl1GoalPlatform.tscn" id="5_goal"]
-[ext_resource type="PackedScene" uid="uid://b282xwf1pp77f" path="res://level/level_1/SwingAnchor.tscn" id="6_3f3yr"]
+[ext_resource type="PackedScene" uid="uid://b282xwf1pp77f" path="res://level/common/SwingAnchor.tscn" id="6_3f3yr"]
 [ext_resource type="PackedScene" uid="uid://f1a2b3c4d5e6" path="res://level/common/Flag.tscn" id="7_flag"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qri1a"]
+size = Vector2(1809.75, 46)
 
 [node name="Level1" type="Node2D" unique_id=1091476641]
 
@@ -15,7 +18,7 @@ position = Vector2(-493, -15)
 scale = Vector2(0.5, 0.5)
 
 [node name="Player" parent="." unique_id=876559661 instance=ExtResource("1_q2th1")]
-position = Vector2(-474, -280)
+position = Vector2(1430, -75)
 
 [node name="Rope" parent="." unique_id=682919283 instance=ExtResource("3_mubsx")]
 
@@ -29,16 +32,34 @@ position = Vector2(845, 119)
 position = Vector2(1436, 119)
 
 [node name="SwingPlatform1" parent="." unique_id=2000000004 instance=ExtResource("4_qugjk")]
-position = Vector2(2670, 115)
-
-[node name="SwingPlatform2" parent="." unique_id=2000000005 instance=ExtResource("4_qugjk")]
-position = Vector2(3063, 24)
-
-[node name="GoalPlatform" parent="." unique_id=2000000006 instance=ExtResource("5_goal")]
-position = Vector2(3471, -106)
+position = Vector2(3637, 115)
 
 [node name="SwingAnchor" parent="." unique_id=129950007 instance=ExtResource("6_3f3yr")]
-position = Vector2(2007, -244)
+position = Vector2(1992, -269)
 
-[node name="Flag" parent="." unique_id=2000000007 instance=ExtResource("7_flag")]
-position = Vector2(3471, -180)
+[node name="SwingPlatform3" parent="." unique_id=1313610053 instance=ExtResource("4_qugjk")]
+position = Vector2(2534, 125)
+
+[node name="SwingAnchor2" parent="." unique_id=1377495335 instance=ExtResource("6_3f3yr")]
+position = Vector2(3076, -261)
+
+[node name="SwingPlatform4" parent="." unique_id=351847565 instance=ExtResource("4_qugjk")]
+position = Vector2(5419, 115)
+
+[node name="SwingPlatform5" parent="." unique_id=75534258 instance=ExtResource("4_qugjk")]
+position = Vector2(6144, 24)
+
+[node name="GoalPlatform2" parent="." unique_id=1313610054 instance=ExtResource("5_goal")]
+position = Vector2(6552, -106)
+
+[node name="Flag2" parent="." unique_id=1115610753 instance=ExtResource("7_flag")]
+position = Vector2(6552, -180)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=748947505]
+position = Vector2(4607, -98)
+shape = SubResource("RectangleShape2D_qri1a")
+
+[node name="Polygon2D" type="Polygon2D" parent="CollisionShape2D" unique_id=1481706760]
+position = Vector2(-52, -19)
+color = Color(0.9749742, 0.44886506, 0, 1)
+polygon = PackedVector2Array(-853, 42, 909, 37, 902, -42, -852, -40)
