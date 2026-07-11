@@ -43,7 +43,7 @@ position = Vector2(2534, 125)
 position = Vector2(3076, -261)
 
 [node name="Checkpoint1" parent="." unique_id=2000000010 instance=ExtResource("9_checkpoint")]
-position = Vector2(319, 52)
+position = Vector2(1441, 83)
 
 [node name="SwingPlatform4" parent="." unique_id=351847565 instance=ExtResource("4_qugjk")]
 position = Vector2(5426, 290)
@@ -59,3 +59,6 @@ position = Vector2(6247, 110)
 
 [node name="Longceiling" parent="." unique_id=446949100 instance=ExtResource("8_1vvmk")]
 position = Vector2(3712, -238)
+
+[node name="Checkpoint2" parent="." unique_id=968115637 instance=ExtResource("9_checkpoint")]
+position = Vector2(3639, 65)
