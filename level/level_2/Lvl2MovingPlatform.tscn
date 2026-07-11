@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dn6os8ok0h305"]
 
-[ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="1_texture"]
-[ext_resource type="Script" path="res://template/scripts/MovingPlatformTemplate.cs" id="2_script"]
+[ext_resource type="Texture2D" uid="uid://c7n33ghgp4olt" path="res://icon.svg" id="1_texture"]
+[ext_resource type="Script" uid="uid://x1katupv4ffn" path="res://template/scripts/MovingPlatformTemplate.cs" id="2_script"]
 
 [sub_resource type="Curve2D" id="Curve2D_lvl2"]
 _data = {
@@ -12,25 +12,30 @@ point_count = 3
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lvl2"]
 size = Vector2(122.602, 119.074)
 
-[node name="Lvl2MovingPlatform" type="Node2D"]
+[node name="Lvl2MovingPlatform" type="Node2D" unique_id=1149034273]
 script = ExtResource("2_script")
 
-[node name="PlatformPath" type="Path2D" parent="."]
+[node name="PlatformPath" type="Path2D" parent="." unique_id=218888868]
+position = Vector2(9, 0)
+scale = Vector2(0.9775, 1)
 curve = SubResource("Curve2D_lvl2")
 
-[node name="PathFollow2D" type="PathFollow2D" parent="PlatformPath"]
+[node name="PathFollow2D" type="PathFollow2D" parent="PlatformPath" unique_id=1514996493]
+position = Vector2(400, 0)
 rotation = -0.830919
 rotates = false
 
-[node name="RemoteTransform2D" type="RemoteTransform2D" parent="PlatformPath/PathFollow2D"]
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="PlatformPath/PathFollow2D" unique_id=1984332188]
 remote_path = NodePath("../../PlatformBody")
 update_rotation = false
 
-[node name="PlatformBody" type="AnimatableBody2D" parent="PlatformPath"]
+[node name="PlatformBody" type="AnimatableBody2D" parent="PlatformPath" unique_id=614398694]
+position = Vector2(400, 0)
+scale = Vector2(1.0126201, 0.98779076)
 collision_mask = 5
 
-[node name="Sprite2D" type="Sprite2D" parent="PlatformPath/PlatformBody"]
+[node name="Sprite2D" type="Sprite2D" parent="PlatformPath/PlatformBody" unique_id=515609101]
 texture = ExtResource("1_texture")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformPath/PlatformBody"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformPath/PlatformBody" unique_id=734852137]
 shape = SubResource("RectangleShape2D_lvl2")
