@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://lvl2vertmovingplat1"]
+
+[ext_resource type="Script" uid="uid://x1katupv4ffn" path="res://template/scripts/MovingPlatformTemplate.cs" id="2_script"]
+
+[sub_resource type="Curve2D" id="Curve2D_lvl2vert"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 400, 0, 0, 0, 0, 0, 0, 0, 400, 0, 0, 0, 0)
+}
+point_count = 3
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lvl2vert"]
+size = Vector2(367.806, 119.074)
+
+[node name="Lvl2VerticalMovingPlatform" type="Node2D" unique_id=2000000030]
+script = ExtResource("2_script")
+
+[node name="PlatformPath" type="Path2D" parent="." unique_id=2000000031]
+position = Vector2(-9, 0)
+scale = Vector2(1.0225, 1)
+curve = SubResource("Curve2D_lvl2vert")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="PlatformPath" unique_id=2000000032]
+position = Vector2(0, 400)
+rotation = -0.830919
+rotates = false
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="PlatformPath/PathFollow2D" unique_id=2000000033]
+remote_path = NodePath("../../PlatformBody")
+update_rotation = false
+
+[node name="PlatformBody" type="AnimatableBody2D" parent="PlatformPath" unique_id=2000000034]
+position = Vector2(0, 400)
+rotation = 1.570796
+scale = Vector2(0.988058, 1.0123348)
+collision_mask = 5
+
+[node name="Visual" type="ColorRect" parent="PlatformPath/PlatformBody" unique_id=2000000035]
+offset_left = -183.903
+offset_top = -59.537
+offset_right = 183.903
+offset_bottom = 59.537
+color = Color(1, 0.5, 0, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlatformPath/PlatformBody" unique_id=2000000036]
+shape = SubResource("RectangleShape2D_lvl2vert")
