@@ -1,14 +1,14 @@
 [gd_scene format=3 uid="uid://onewayplat1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oneway"]
-size = Vector2(367.806, 119.074)
+size = Vector2(367.806, 59.537)
 
 [node name="OneWayPlatform" type="StaticBody2D"]
 collision_mask = 5
 
 [node name="Visual" type="ColorRect" parent="."]
-position = Vector2(-183.903, -59.537)
-size = Vector2(367.806, 119.074)
+position = Vector2(-183.903, -29.7685)
+size = Vector2(367.806, 59.537)
 color = Color(0.5, 0.5, 1, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
