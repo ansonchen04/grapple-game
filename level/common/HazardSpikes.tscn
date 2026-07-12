@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://level/common/HazardSpikes.cs" id="1_script"]
 
 [sub_resource type="TriangleShape2D" id="TriangleShape2D_spike"]
-vertices = PackedVector2Array(0, -16, -16, 16, 16, 16)
+vertices = PackedVector2Array(0, -32, -32, 32, 32, 32)
 
 [node name="HazardSpikes" type="Area2D"]
 collision_mask = 4
@@ -15,4 +15,4 @@ shape = SubResource("TriangleShape2D_spike")
 
 [node name="Visual" type="Polygon2D" parent="."]
 color = Color(1, 0, 0, 1)
-polygon = PackedVector2Array(0, -16, -16, 16, 16, 16)
+polygon = PackedVector2Array(0, -32, -32, 32, 32, 32)
