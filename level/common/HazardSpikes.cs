@@ -9,8 +9,10 @@ public partial class HazardSpikes : Area2D
 
     private void OnBodyEntered(Node body)
     {
+        GD.Print($"HazardSpikes: Body entered: {body.Name}");
         if (body is player p)
         {
+            GD.Print("HazardSpikes: Player hit! Restarting.");
             p.restart();
         }
     }
