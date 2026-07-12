@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://level/common/HazardSpikes.cs" id="1_script"]
 
-[sub_resource type="TriangleShape2D" id="TriangleShape2D_spike"]
-vertices = PackedVector2Array(0, -32, -32, 32, 32, 32)
+[sub_resource type="ConcavePolygonShape2D" id="ConcavePolygonShape2D_spike"]
+sections = PackedVector2Array(0, -32, -32, 32, 32, 32)
 
 [node name="HazardSpikes" type="Area2D"]
 collision_mask = 4
@@ -11,7 +11,7 @@ monitoring = true
 script = ExtResource("1_script")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("TriangleShape2D_spike")
+shape = SubResource("ConcavePolygonShape2D_spike")
 
 [node name="Visual" type="Polygon2D" parent="."]
 color = Color(1, 0, 0, 1)
