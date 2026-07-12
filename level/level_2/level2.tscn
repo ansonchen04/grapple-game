@@ -9,7 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://cl7dg85u8fqhc" path="res://level/level_2/Lvl2VerticalMovingPlatform.tscn" id="8_2tesa"]
 [ext_resource type="PackedScene" uid="uid://checkpoint123" path="res://level/common/Checkpoint.tscn" id="9_2tesa"]
 [ext_resource type="PackedScene" uid="uid://onewayplat1" path="res://template/OneWayPlatformTemplate.tscn" id="10_oneway"]
-[ext_resource type="PackedScene" uid="uid://f1a2b3c4d5e6" path="res://level/common/Flag.tscn" id="10_u681c"]
+[ext_resource type="PackedScene" uid="uid://hazardspikes1" path="res://level/common/HazardSpikes.tscn" id="11_hazard"]
+[ext_resource type="PackedScene" uid="uid://f1a2b3c4d5e6" path="res://level/common/Flag.tscn" id="12_u681c"]
 
 [node name="Level3" type="Node2D" unique_id=1003218659]
 
@@ -89,5 +90,8 @@ position = Vector2(3752, -2396)
 [node name="OneWayPlatform14" parent="." unique_id=748787791 instance=ExtResource("10_oneway")]
 position = Vector2(3390, -2396)
 
-[node name="Flag" parent="." unique_id=935277841 instance=ExtResource("10_u681c")]
+[node name="HazardSpikes1" parent="." unique_id=2000000080 instance=ExtResource("11_hazard")]
+position = Vector2(3752, -2100)
+
+[node name="Flag" parent="." unique_id=935277841 instance=ExtResource("12_u681c")]
 position = Vector2(3760, -2510)
