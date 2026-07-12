@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://cl7dg85u8fqhc" path="res://level/level_2/Lvl2VerticalMovingPlatform.tscn" id="8_2tesa"]
 [ext_resource type="PackedScene" uid="uid://checkpoint123" path="res://level/common/Checkpoint.tscn" id="9_2tesa"]
 [ext_resource type="PackedScene" uid="uid://onewayplat1" path="res://template/OneWayPlatformTemplate.tscn" id="10_oneway"]
+[ext_resource type="PackedScene" uid="uid://spinninganchor1" path="res://level/common/SpinningAnchor.tscn" id="11_spin"]
 
 [node name="Level3" type="Node2D" unique_id=1003218659]
 
@@ -66,3 +67,6 @@ position = Vector2(3759, -1776)
 
 [node name="OneWayPlatform10" parent="." unique_id=1513109242 instance=ExtResource("10_oneway")]
 position = Vector2(3397, -1776)
+
+[node name="SpinningAnchor1" parent="." unique_id=2000000060 instance=ExtResource("11_spin")]
+position = Vector2(2628, -400)
