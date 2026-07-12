@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://spikeplatform1"]
+
+[ext_resource type="PackedScene" uid="uid://hazardspikes1" path="res://level/common/HazardSpikes.tscn" id="1_hazard"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_platform"]
+size = Vector2(600, 64)
+
+[node name="SpikePlatform" type="StaticBody2D"]
+collision_mask = 5
+
+[node name="Visual" type="ColorRect" parent="."]
+position = Vector2(-300, -32)
+size = Vector2(600, 64)
+color = Color(1, 0.5, 0, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_platform")
+
+[node name="Spike1" parent="." instance=ExtResource("1_hazard")]
+position = Vector2(-250, -32)
+
+[node name="Spike2" parent="." instance=ExtResource("1_hazard")]
+position = Vector2(-150, -32)
+
+[node name="Spike3" parent="." instance=ExtResource("1_hazard")]
+position = Vector2(-50, -32)
+
+[node name="Spike4" parent="." instance=ExtResource("1_hazard")]
+position = Vector2(50, -32)
+
+[node name="Spike5" parent="." instance=ExtResource("1_hazard")]
+position = Vector2(150, -32)
+
+[node name="Spike6" parent="." instance=ExtResource("1_hazard")]
+position = Vector2(250, -32)
