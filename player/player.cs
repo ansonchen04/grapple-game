@@ -80,7 +80,8 @@ public partial class player : CharacterBody2D
 		if (onClimbableSurface) {
 			newVelocity = climbMovement(newVelocity);
 		} else if (!isSwinging && onOneWaySurface && IsOnFloor() && Input.IsActionJustPressed("Down")) {
-			Position += new Vector2(0, 1); // Drop through one-way platform
+			Position += new Vector2(0, 5); // Drop through one-way platform
+			newVelocity.Y = 100.0f; // Give a small downward push to ensure we fall through
 		} else if (!isSwinging || IsOnFloor()) {
 			newVelocity = baseMovement(newVelocity, dt);
 		}

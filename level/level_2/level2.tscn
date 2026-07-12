@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://cl7dg85u8fqhc" path="res://level/level_2/Lvl2VerticalMovingPlatform.tscn" id="8_2tesa"]
 [ext_resource type="PackedScene" uid="uid://checkpoint123" path="res://level/common/Checkpoint.tscn" id="9_2tesa"]
 [ext_resource type="PackedScene" uid="uid://cagn6rblc6286" path="res://level/level_1/Lvl1SmallPlatform.tscn" id="9_egy2h"]
+[ext_resource type="PackedScene" uid="uid://onewayplat1" path="res://template/OneWayPlatformTemplate.tscn" id="10_oneway"]
 
 [node name="Level3" type="Node2D" unique_id=1003218659]
 
@@ -42,3 +43,6 @@ position = Vector2(3637, -140)
 
 [node name="StartingPlatform2" parent="." unique_id=1610446992 instance=ExtResource("9_egy2h")]
 position = Vector2(3176, -1516)
+
+[node name="OneWayPlatform1" parent="." unique_id=2000000050 instance=ExtResource("10_oneway")]
+position = Vector2(2200, -200)
