@@ -13,6 +13,7 @@ public partial class HazardSpikes : Area2D
         if (body is player p)
         {
             GD.Print("HazardSpikes: Player hit! Restarting.");
+            p.rope.CancelRope();
             p.restart();
         }
     }
