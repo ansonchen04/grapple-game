@@ -38,8 +38,7 @@ text = "Level 1"
 
 [node name="Level2Button" type="Button" parent="MenuContainer"]
 custom_minimum_size = Vector2(0, 50)
-text = "Level 2 (Coming Soon)"
-disabled = true
+text = "Level 2"
 
 [node name="Level3Button" type="Button" parent="MenuContainer"]
 custom_minimum_size = Vector2(0, 50)
