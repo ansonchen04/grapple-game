@@ -16,6 +16,7 @@ public partial class player : CharacterBody2D
 	//Starting Position, should be updated whenever player enters a new scene
 	private Vector2 startPosition;
 	public static Vector2 LastCheckpointPosition { get; set; }
+	public static string CurrentLevelPath { get; set; } = "res://level/level_1/level1.tscn";
 	//Gets at what y value it is out of bounds 
 	private float outOfBounds;
 	private Vector2 hookStartPos;
@@ -41,6 +42,8 @@ public partial class player : CharacterBody2D
 		_downwardRaycast = GetNode<RayCast2D>("DownwardRaycast");
 		startPosition = this.GlobalPosition;
 		LastCheckpointPosition = startPosition; // Initialize checkpoint to start position
+		CurrentLevelPath = GetTree().CurrentScene.SceneFilePath;
+		GD.Print($"Player: Loaded level {CurrentLevelPath}");
 		GD.Print(startPosition);
 		rayCast = GetNode<RayCast2D>("RayCast2D");
 		rayCast.Enabled = true;  // disabled by default, we'll turn it on when we click
