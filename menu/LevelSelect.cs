@@ -10,6 +10,8 @@ public partial class LevelSelect : Control
 
         level1Button.Pressed += OnLevel1Pressed;
         level2Button.Pressed += OnLevel2Pressed;
+        Button level3Button = GetNode<Button>("MenuContainer/Level3Button");
+        level3Button.Pressed += OnLevel3Pressed;
         backButton.Pressed += OnBackPressed;
     }
 
@@ -21,6 +23,11 @@ public partial class LevelSelect : Control
     private void OnLevel2Pressed()
     {
         GetTree().ChangeSceneToFile("res://level/level_2/level2.tscn");
+    }
+
+    private void OnLevel3Pressed()
+    {
+        GetTree().ChangeSceneToFile("res://level/level_3/level3.tscn");
     }
 
     private void OnBackPressed()

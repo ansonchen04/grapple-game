@@ -21,6 +21,11 @@ public partial class LevelComplete : Control
             nextLevelButton.Disabled = false;
             nextLevelButton.Text = "Level 2";
         }
+        else if (currentLevel.Contains("level_2"))
+        {
+            nextLevelButton.Disabled = false;
+            nextLevelButton.Text = "Level 3";
+        }
         else
         {
             // No more levels for now
@@ -55,6 +60,10 @@ public partial class LevelComplete : Control
         if (currentLevel.Contains("level_1"))
         {
             GetTree().ChangeSceneToFile("res://level/level_2/level2.tscn");
+        }
+        else if (currentLevel.Contains("level_2"))
+        {
+            GetTree().ChangeSceneToFile("res://level/level_3/level3.tscn");
         }
         else
         {
