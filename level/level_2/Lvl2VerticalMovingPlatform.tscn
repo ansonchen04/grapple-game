@@ -20,8 +20,8 @@ scale = Vector2(1.0225, 1)
 curve = SubResource("Curve2D_lvl2vert")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="PlatformPath" unique_id=2000000032]
-position = Vector2(0, 400)
-rotation = -0.830919
+position = Vector2(0, 0)
+rotation = 0.0
 rotates = false
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="PlatformPath/PathFollow2D" unique_id=2000000033]
