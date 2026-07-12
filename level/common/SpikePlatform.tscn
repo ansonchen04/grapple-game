@@ -1,35 +1,47 @@
-[gd_scene format=3 uid="uid://spikeplatform1"]
+[gd_scene format=3 uid="uid://behe5gd0wwyu5"]
 
-[ext_resource type="PackedScene" uid="uid://hazardspikes1" path="res://level/common/HazardSpikes.tscn" id="1_hazard"]
+[ext_resource type="PackedScene" uid="uid://dfle6bvgxdi2a" path="res://level/common/HazardSpikes.tscn" id="1_hazard"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_platform"]
-size = Vector2(600, 64)
+size = Vector2(578, 64)
 
-[node name="SpikePlatform" type="StaticBody2D"]
+[node name="SpikePlatform" type="StaticBody2D" unique_id=837018305]
 collision_mask = 5
 
-[node name="Visual" type="ColorRect" parent="."]
-position = Vector2(-300, -32)
-size = Vector2(600, 64)
+[node name="Visual" type="ColorRect" parent="." unique_id=680177600]
+offset_left = -300.0
+offset_top = -32.0
+offset_right = 278.0
+offset_bottom = 32.0
 color = Color(1, 0.5, 0, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=503792837]
+position = Vector2(-11, 0)
 shape = SubResource("RectangleShape2D_platform")
 
-[node name="Spike1" parent="." instance=ExtResource("1_hazard")]
-position = Vector2(-250, -32)
+[node name="Spike1" parent="." unique_id=1622030598 instance=ExtResource("1_hazard")]
+position = Vector2(-267, -64)
 
-[node name="Spike2" parent="." instance=ExtResource("1_hazard")]
-position = Vector2(-150, -32)
+[node name="Spike2" parent="." unique_id=55442573 instance=ExtResource("1_hazard")]
+position = Vector2(-203, -64)
 
-[node name="Spike3" parent="." instance=ExtResource("1_hazard")]
-position = Vector2(-50, -32)
+[node name="Spike3" parent="." unique_id=169320416 instance=ExtResource("1_hazard")]
+position = Vector2(-139, -64)
 
-[node name="Spike4" parent="." instance=ExtResource("1_hazard")]
-position = Vector2(50, -32)
+[node name="Spike4" parent="." unique_id=1496805579 instance=ExtResource("1_hazard")]
+position = Vector2(-75, -64)
 
-[node name="Spike5" parent="." instance=ExtResource("1_hazard")]
-position = Vector2(150, -32)
+[node name="Spike5" parent="." unique_id=2021738087 instance=ExtResource("1_hazard")]
+position = Vector2(-10, -64)
 
-[node name="Spike6" parent="." instance=ExtResource("1_hazard")]
-position = Vector2(250, -32)
+[node name="Spike6" parent="." unique_id=2009814723 instance=ExtResource("1_hazard")]
+position = Vector2(54, -64)
+
+[node name="Spike7" parent="." unique_id=601080687 instance=ExtResource("1_hazard")]
+position = Vector2(118, -64)
+
+[node name="Spike8" parent="." unique_id=37369883 instance=ExtResource("1_hazard")]
+position = Vector2(182, -64)
+
+[node name="Spike9" parent="." unique_id=2006185451 instance=ExtResource("1_hazard")]
+position = Vector2(246, -64)

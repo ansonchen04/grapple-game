@@ -1,0 +1,396 @@
+[gd_scene format=3 uid="uid://cs7aery6d41b5"]
+
+[ext_resource type="PackedScene" uid="uid://6vx1riphdci0" path="res://level/level_1/Lvl1StartingPlatform.tscn" id="1_eduod"]
+[ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="2_070xk"]
+[ext_resource type="PackedScene" uid="uid://6yotxco8qhu" path="res://rope/Rope.tscn" id="3_c38dd"]
+[ext_resource type="PackedScene" uid="uid://behe5gd0wwyu5" path="res://level/common/SpikePlatform.tscn" id="4_c38dd"]
+[ext_resource type="PackedScene" uid="uid://b282xwf1pp77f" path="res://level/common/SwingAnchor.tscn" id="5_8srnw"]
+[ext_resource type="PackedScene" uid="uid://behljti4s2ic1" path="res://level/level_3/Lvl3DPlatform.tscn" id="6_5y1ug"]
+[ext_resource type="PackedScene" uid="uid://onewayplat1" path="res://template/OneWayPlatformTemplate.tscn" id="7_8ttqq"]
+[ext_resource type="PackedScene" uid="uid://checkpoint123" path="res://level/common/Checkpoint.tscn" id="8_6joft"]
+[ext_resource type="PackedScene" uid="uid://dfle6bvgxdi2a" path="res://level/common/HazardSpikes.tscn" id="9_nh2ni"]
+[ext_resource type="PackedScene" uid="uid://spikyball1" path="res://level/common/SpikyBall.tscn" id="10_cebud"]
+[ext_resource type="PackedScene" uid="uid://f1a2b3c4d5e6" path="res://level/common/Flag.tscn" id="11_8krhd"]
+
+[node name="Level3" type="Node2D" unique_id=212584331]
+
+[node name="StartingPlatform" parent="." unique_id=1313610053 instance=ExtResource("1_eduod")]
+position = Vector2(-487, -1)
+scale = Vector2(0.5, 0.5)
+
+[node name="Player" parent="." unique_id=431100071 instance=ExtResource("2_070xk")]
+position = Vector2(5441, -3015)
+
+[node name="Rope" parent="." unique_id=601193952 instance=ExtResource("3_c38dd")]
+
+[node name="SpikePlatform" parent="." unique_id=1188734854 instance=ExtResource("4_c38dd")]
+position = Vector2(217, 267)
+
+[node name="SpikePlatform2" parent="." unique_id=837018305 instance=ExtResource("4_c38dd")]
+position = Vector2(797, 267)
+
+[node name="SpikePlatform3" parent="." unique_id=440039972 instance=ExtResource("4_c38dd")]
+position = Vector2(1377, 267)
+
+[node name="SpikePlatform4" parent="." unique_id=1245294751 instance=ExtResource("4_c38dd")]
+position = Vector2(1957, 267)
+
+[node name="SpikePlatform5" parent="." unique_id=1015144770 instance=ExtResource("4_c38dd")]
+position = Vector2(2537, 267)
+
+[node name="SpikePlatform6" parent="." unique_id=1587562912 instance=ExtResource("4_c38dd")]
+position = Vector2(3117, 267)
+
+[node name="SpikePlatform7" parent="." unique_id=1637065081 instance=ExtResource("4_c38dd")]
+position = Vector2(3697, 267)
+
+[node name="SpikePlatform8" parent="." unique_id=53633676 instance=ExtResource("4_c38dd")]
+position = Vector2(4277, 267)
+
+[node name="SpikePlatform9" parent="." unique_id=1725574919 instance=ExtResource("4_c38dd")]
+position = Vector2(222, -1143)
+rotation = 3.1415927
+
+[node name="SpikePlatform10" parent="." unique_id=1744076332 instance=ExtResource("4_c38dd")]
+position = Vector2(802, -1143)
+rotation = 3.1415927
+
+[node name="SpikePlatform11" parent="." unique_id=170498185 instance=ExtResource("4_c38dd")]
+position = Vector2(1382, -1143)
+rotation = 3.1415927
+
+[node name="SpikePlatform12" parent="." unique_id=249856978 instance=ExtResource("4_c38dd")]
+position = Vector2(1962, -1143)
+rotation = 3.1415927
+
+[node name="SpikePlatform13" parent="." unique_id=2087075998 instance=ExtResource("4_c38dd")]
+position = Vector2(2542, -1143)
+rotation = 3.1415927
+
+[node name="SpikePlatform14" parent="." unique_id=630719555 instance=ExtResource("4_c38dd")]
+position = Vector2(3122, -1143)
+rotation = 3.1415927
+
+[node name="SpikePlatform15" parent="." unique_id=1283559050 instance=ExtResource("4_c38dd")]
+position = Vector2(3702, -1143)
+rotation = 3.1415927
+
+[node name="SpikePlatform16" parent="." unique_id=824948982 instance=ExtResource("4_c38dd")]
+position = Vector2(4282, -1143)
+rotation = 3.1415927
+
+[node name="SwingAnchor" parent="." unique_id=1850682445 instance=ExtResource("5_8srnw")]
+position = Vector2(495, -584)
+
+[node name="SwingAnchor2" parent="." unique_id=665295500 instance=ExtResource("5_8srnw")]
+position = Vector2(1851, -582)
+
+[node name="SwingAnchor3" parent="." unique_id=1637723151 instance=ExtResource("5_8srnw")]
+position = Vector2(3201, -595)
+
+[node name="Lvl3DPlatform" parent="." unique_id=435763508 instance=ExtResource("6_5y1ug")]
+position = Vector2(4319, -127)
+
+[node name="Lvl3DPlatform2" parent="." unique_id=606100249 instance=ExtResource("6_5y1ug")]
+position = Vector2(5732, -129)
+
+[node name="SpikePlatform17" parent="." unique_id=735398266 instance=ExtResource("4_c38dd")]
+position = Vector2(4866, 267)
+
+[node name="SpikePlatform18" parent="." unique_id=1996644551 instance=ExtResource("4_c38dd")]
+position = Vector2(5446, 267)
+
+[node name="SpikePlatform19" parent="." unique_id=1384096990 instance=ExtResource("4_c38dd")]
+position = Vector2(6026, 267)
+
+[node name="SpikePlatform20" parent="." unique_id=72877094 instance=ExtResource("4_c38dd")]
+position = Vector2(6605, 267)
+
+[node name="SpikePlatform21" parent="." unique_id=1191088253 instance=ExtResource("4_c38dd")]
+position = Vector2(6979, -114)
+rotation = -1.5707964
+
+[node name="SpikePlatform22" parent="." unique_id=730827772 instance=ExtResource("4_c38dd")]
+position = Vector2(6979, -691)
+rotation = -1.5707964
+
+[node name="SwingAnchor4" parent="." unique_id=605116122 instance=ExtResource("5_8srnw")]
+position = Vector2(5065, -657)
+
+[node name="SpikePlatform23" parent="." unique_id=20752322 instance=ExtResource("4_c38dd")]
+position = Vector2(4549, -1389)
+rotation = 1.5707964
+
+[node name="SpikePlatform24" parent="." unique_id=1903066287 instance=ExtResource("4_c38dd")]
+position = Vector2(4549, -1966)
+rotation = 1.5707964
+
+[node name="SwingAnchor5" parent="." unique_id=1251438437 instance=ExtResource("5_8srnw")]
+position = Vector2(5992, -811)
+
+[node name="SwingAnchor6" parent="." unique_id=520976962 instance=ExtResource("5_8srnw")]
+position = Vector2(5998, -1873)
+
+[node name="SpikePlatform25" parent="." unique_id=1077817224 instance=ExtResource("4_c38dd")]
+position = Vector2(6979, -1267)
+rotation = -1.5707964
+
+[node name="SpikePlatform26" parent="." unique_id=789775818 instance=ExtResource("4_c38dd")]
+position = Vector2(6979, -1844)
+rotation = -1.5707964
+
+[node name="SpikePlatform27" parent="." unique_id=1865404645 instance=ExtResource("4_c38dd")]
+position = Vector2(6979, -2422)
+rotation = -1.5707964
+
+[node name="SpikePlatform28" parent="." unique_id=1338328196 instance=ExtResource("4_c38dd")]
+position = Vector2(6979, -2999)
+rotation = -1.5707964
+
+[node name="SpikePlatform29" parent="." unique_id=1972828398 instance=ExtResource("4_c38dd")]
+position = Vector2(6979, -3575)
+rotation = -1.5707964
+
+[node name="SpikePlatform30" parent="." unique_id=1533018051 instance=ExtResource("4_c38dd")]
+position = Vector2(6979, -4152)
+rotation = -1.5707964
+
+[node name="SpikePlatform31" parent="." unique_id=1085221802 instance=ExtResource("4_c38dd")]
+position = Vector2(4549, -2541)
+rotation = 1.5707964
+
+[node name="SpikePlatform32" parent="." unique_id=1115711201 instance=ExtResource("4_c38dd")]
+position = Vector2(4549, -3118)
+rotation = 1.5707964
+
+[node name="SpikePlatform33" parent="." unique_id=677879615 instance=ExtResource("4_c38dd")]
+position = Vector2(4549, -1389)
+rotation = 1.5707964
+
+[node name="SpikePlatform34" parent="." unique_id=612361666 instance=ExtResource("4_c38dd")]
+position = Vector2(4549, -1966)
+rotation = 1.5707964
+
+[node name="SpikePlatform35" parent="." unique_id=975341943 instance=ExtResource("4_c38dd")]
+position = Vector2(4549, -2541)
+rotation = 1.5707964
+
+[node name="SpikePlatform36" parent="." unique_id=322579920 instance=ExtResource("4_c38dd")]
+position = Vector2(4549, -3118)
+rotation = 1.5707964
+
+[node name="OneWayPlatform" parent="." unique_id=1962989725 instance=ExtResource("7_8ttqq")]
+position = Vector2(5196, -2696)
+
+[node name="OneWayPlatform2" parent="." unique_id=1073840989 instance=ExtResource("7_8ttqq")]
+position = Vector2(5564, -2696)
+
+[node name="OneWayPlatform3" parent="." unique_id=1079115510 instance=ExtResource("7_8ttqq")]
+position = Vector2(5928, -2696)
+
+[node name="OneWayPlatform4" parent="." unique_id=1645253920 instance=ExtResource("7_8ttqq")]
+position = Vector2(6296, -2696)
+
+[node name="Checkpoint" parent="." unique_id=844906348 instance=ExtResource("8_6joft")]
+position = Vector2(5663, -296)
+
+[node name="OneWayPlatform5" parent="." unique_id=1110125370 instance=ExtResource("7_8ttqq")]
+position = Vector2(6663, -2696)
+
+[node name="OneWayPlatform6" parent="." unique_id=356888843 instance=ExtResource("7_8ttqq")]
+position = Vector2(4896, -2696)
+
+[node name="SpikePlatform37" parent="." unique_id=1992159492 instance=ExtResource("4_c38dd")]
+position = Vector2(2522, -4459)
+rotation = 3.1415927
+
+[node name="SpikePlatform38" parent="." unique_id=414304870 instance=ExtResource("4_c38dd")]
+position = Vector2(3102, -4459)
+rotation = 3.1415927
+
+[node name="SpikePlatform39" parent="." unique_id=290462822 instance=ExtResource("4_c38dd")]
+position = Vector2(3682, -4459)
+rotation = 3.1415927
+
+[node name="SpikePlatform40" parent="." unique_id=1992185961 instance=ExtResource("4_c38dd")]
+position = Vector2(4262, -4459)
+rotation = 3.1415927
+
+[node name="SpikePlatform41" parent="." unique_id=2023994575 instance=ExtResource("4_c38dd")]
+position = Vector2(4842, -4459)
+rotation = 3.1415927
+
+[node name="SpikePlatform42" parent="." unique_id=1820169356 instance=ExtResource("4_c38dd")]
+position = Vector2(5422, -4459)
+rotation = 3.1415927
+
+[node name="SpikePlatform43" parent="." unique_id=1250789667 instance=ExtResource("4_c38dd")]
+position = Vector2(6002, -4459)
+rotation = 3.1415927
+
+[node name="SpikePlatform44" parent="." unique_id=1139828895 instance=ExtResource("4_c38dd")]
+position = Vector2(6582, -4459)
+rotation = 3.1415927
+
+[node name="SpikePlatform46" parent="." unique_id=1357308521 instance=ExtResource("4_c38dd")]
+position = Vector2(201, -4459)
+rotation = 3.1415927
+
+[node name="SpikePlatform47" parent="." unique_id=708125809 instance=ExtResource("4_c38dd")]
+position = Vector2(781, -4459)
+rotation = 3.1415927
+
+[node name="SpikePlatform48" parent="." unique_id=2109999110 instance=ExtResource("4_c38dd")]
+position = Vector2(1361, -4459)
+rotation = 3.1415927
+
+[node name="SpikePlatform49" parent="." unique_id=2008465534 instance=ExtResource("4_c38dd")]
+position = Vector2(1941, -4459)
+rotation = 3.1415927
+
+[node name="SpikePlatform51" parent="." unique_id=528608153 instance=ExtResource("4_c38dd")]
+position = Vector2(-625, -1456)
+rotation = 1.5707964
+
+[node name="SpikePlatform52" parent="." unique_id=104408984 instance=ExtResource("4_c38dd")]
+position = Vector2(-625, -1879)
+rotation = 1.5707964
+
+[node name="SpikePlatform53" parent="." unique_id=1824619413 instance=ExtResource("4_c38dd")]
+position = Vector2(-625, -2456)
+rotation = 1.5707964
+
+[node name="SpikePlatform54" parent="." unique_id=901570853 instance=ExtResource("4_c38dd")]
+position = Vector2(-625, -3034)
+rotation = 1.5707964
+
+[node name="SpikePlatform55" parent="." unique_id=2102068118 instance=ExtResource("4_c38dd")]
+position = Vector2(-625, -3611)
+rotation = 1.5707964
+
+[node name="SpikePlatform56" parent="." unique_id=1389449963 instance=ExtResource("4_c38dd")]
+position = Vector2(-625, -4187)
+rotation = 1.5707964
+
+[node name="SpikePlatform50" parent="." unique_id=251240241 instance=ExtResource("4_c38dd")]
+position = Vector2(222, -1143)
+
+[node name="SpikePlatform58" parent="." unique_id=501881435 instance=ExtResource("4_c38dd")]
+position = Vector2(802, -1143)
+
+[node name="SpikePlatform59" parent="." unique_id=1398154146 instance=ExtResource("4_c38dd")]
+position = Vector2(1382, -1143)
+
+[node name="SpikePlatform60" parent="." unique_id=1490477333 instance=ExtResource("4_c38dd")]
+position = Vector2(1962, -1143)
+
+[node name="SpikePlatform61" parent="." unique_id=1273286846 instance=ExtResource("4_c38dd")]
+position = Vector2(2542, -1143)
+
+[node name="SpikePlatform62" parent="." unique_id=1126299031 instance=ExtResource("4_c38dd")]
+position = Vector2(3122, -1143)
+
+[node name="SpikePlatform63" parent="." unique_id=1294330072 instance=ExtResource("4_c38dd")]
+position = Vector2(3702, -1143)
+
+[node name="SpikePlatform64" parent="." unique_id=766180416 instance=ExtResource("4_c38dd")]
+position = Vector2(4282, -1143)
+
+[node name="SpikePlatform65" parent="." unique_id=1136462305 instance=ExtResource("4_c38dd")]
+position = Vector2(-226, -1142)
+
+[node name="SpikePlatform66" parent="." unique_id=743487039 instance=ExtResource("4_c38dd")]
+position = Vector2(4542, -1410)
+rotation = -1.5707964
+
+[node name="SpikePlatform67" parent="." unique_id=1993459943 instance=ExtResource("4_c38dd")]
+position = Vector2(4542, -1987)
+rotation = -1.5707964
+
+[node name="SpikePlatform68" parent="." unique_id=975761438 instance=ExtResource("4_c38dd")]
+position = Vector2(4542, -2562)
+rotation = -1.5707964
+
+[node name="SpikePlatform69" parent="." unique_id=1172724571 instance=ExtResource("4_c38dd")]
+position = Vector2(4542, -3139)
+rotation = -1.5707964
+
+[node name="SpikePlatform70" parent="." unique_id=2106719646 instance=ExtResource("4_c38dd")]
+position = Vector2(4542, -1410)
+rotation = -1.5707964
+
+[node name="SpikePlatform71" parent="." unique_id=83644858 instance=ExtResource("4_c38dd")]
+position = Vector2(4542, -1987)
+rotation = -1.5707964
+
+[node name="SpikePlatform72" parent="." unique_id=1193018722 instance=ExtResource("4_c38dd")]
+position = Vector2(4542, -2562)
+rotation = -1.5707964
+
+[node name="SpikePlatform73" parent="." unique_id=674454621 instance=ExtResource("4_c38dd")]
+position = Vector2(4542, -3139)
+rotation = -1.5707964
+
+[node name="HazardSpikes" parent="." unique_id=582863723 instance=ExtResource("9_nh2ni")]
+position = Vector2(4546, -3450)
+
+[node name="SwingAnchor7" parent="." unique_id=327859149 instance=ExtResource("5_8srnw")]
+position = Vector2(5312, -3474)
+
+[node name="Checkpoint2" parent="." unique_id=1656770784 instance=ExtResource("8_6joft")]
+position = Vector2(5811, -2846)
+
+[node name="Lvl3DPlatform3" parent="." unique_id=2021201043 instance=ExtResource("6_5y1ug")]
+position = Vector2(3631, -3108)
+
+[node name="OneWayPlatform8" parent="." unique_id=619921661 instance=ExtResource("7_8ttqq")]
+position = Vector2(4215, -3629)
+
+[node name="OneWayPlatform9" parent="." unique_id=402174617 instance=ExtResource("7_8ttqq")]
+position = Vector2(4583, -3629)
+
+[node name="SwingAnchor8" parent="." unique_id=5397923 instance=ExtResource("5_8srnw")]
+position = Vector2(3495, -3999)
+
+[node name="SwingAnchor9" parent="." unique_id=1059988442 instance=ExtResource("5_8srnw")]
+position = Vector2(2253, -3613)
+
+[node name="SwingAnchor10" parent="." unique_id=610720684 instance=ExtResource("5_8srnw")]
+position = Vector2(625, -3339)
+
+[node name="SwingAnchor11" parent="." unique_id=1666843155 instance=ExtResource("5_8srnw")]
+position = Vector2(2114, -2433)
+
+[node name="SwingAnchor12" parent="." unique_id=154210415 instance=ExtResource("5_8srnw")]
+position = Vector2(262, -1958)
+
+[node name="SwingAnchor13" parent="." unique_id=108199508 instance=ExtResource("5_8srnw")]
+position = Vector2(3437, -1980)
+rotation = -0.002954135
+
+[node name="Lvl3DPlatform4" parent="." unique_id=524512101 instance=ExtResource("6_5y1ug")]
+position = Vector2(1211, -1576)
+
+[node name="SpikyBall" parent="." unique_id=304912514 instance=ExtResource("10_cebud")]
+position = Vector2(1092, -2694)
+
+[node name="SpikyBall2" parent="." unique_id=1882746357 instance=ExtResource("10_cebud")]
+position = Vector2(2612, -3099)
+
+[node name="SpikyBall3" parent="." unique_id=2139267709 instance=ExtResource("10_cebud")]
+position = Vector2(2957, -1989)
+
+[node name="SpikyBall4" parent="." unique_id=274857344 instance=ExtResource("10_cebud")]
+position = Vector2(1501, -4016)
+
+[node name="SpikyBall5" parent="." unique_id=1091209089 instance=ExtResource("10_cebud")]
+position = Vector2(4175, -2659)
+
+[node name="SpikyBall6" parent="." unique_id=256970245 instance=ExtResource("10_cebud")]
+position = Vector2(2086, -1636)
+
+[node name="SpikyBall7" parent="." unique_id=1810892731 instance=ExtResource("10_cebud")]
+position = Vector2(15, -3647)
+
+[node name="Flag" parent="." unique_id=1710116324 instance=ExtResource("11_8krhd")]
+position = Vector2(1204, -1711)
