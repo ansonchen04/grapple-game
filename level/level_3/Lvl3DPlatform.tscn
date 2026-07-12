@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://lvl3dplatform1"]
+[gd_scene format=3 uid="uid://behljti4s2ic1"]
 
 [sub_resource type="PolygonShape2D" id="PolygonShape2D_dplat"]
 sections = PackedVector2Array(0, -64, -128, -64, -128, 64, 0, 128, 128, 64, 128, -64)
