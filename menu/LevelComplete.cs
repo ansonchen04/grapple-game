@@ -2,8 +2,6 @@ using Godot;
 
 public partial class LevelComplete : Control
 {
-    private string currentLevelPath = "res://level/level_1/level1.tscn";
-
     public override void _Ready()
     {
         Button menuButton = GetNode<Button>("MenuContainer/MenuButton");
@@ -11,9 +9,6 @@ public partial class LevelComplete : Control
 
         menuButton.Pressed += OnMenuPressed;
         replayButton.Pressed += OnReplayPressed;
-
-        // Capture the current scene path so we can replay it
-        currentLevelPath = GetTree().CurrentScene.SceneFilePath;
     }
 
     private void OnMenuPressed()
@@ -23,12 +18,15 @@ public partial class LevelComplete : Control
 
     private void OnReplayPressed()
     {
-        if (!string.IsNullOrEmpty(currentLevelPath))
+        string levelPath = player.CurrentLevelPath;
+        GD.Print($"LevelComplete: Attempting to replay: {levelPath}");
+        if (!string.IsNullOrEmpty(levelPath))
         {
-            GetTree().ChangeSceneToFile(currentLevelPath);
+            GetTree().ChangeSceneToFile(levelPath);
         }
         else
         {
+            GD.PrintErr("LevelComplete: No level path found, falling back to Level 1");
             GetTree().ChangeSceneToFile("res://level/level_1/level1.tscn");
         }
     }
