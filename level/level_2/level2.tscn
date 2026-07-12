@@ -8,7 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://beg1gitv3x0j1" path="res://level/level_2/Lvl2SmallPlatform.tscn" id="6_2tesa"]
 [ext_resource type="PackedScene" uid="uid://cl7dg85u8fqhc" path="res://level/level_2/Lvl2VerticalMovingPlatform.tscn" id="8_2tesa"]
 [ext_resource type="PackedScene" uid="uid://checkpoint123" path="res://level/common/Checkpoint.tscn" id="9_2tesa"]
-[ext_resource type="PackedScene" uid="uid://cagn6rblc6286" path="res://level/level_1/Lvl1SmallPlatform.tscn" id="9_egy2h"]
 [ext_resource type="PackedScene" uid="uid://onewayplat1" path="res://template/OneWayPlatformTemplate.tscn" id="10_oneway"]
 
 [node name="Level3" type="Node2D" unique_id=1003218659]
@@ -18,7 +17,7 @@ position = Vector2(-487, -1)
 scale = Vector2(0.5, 0.5)
 
 [node name="Player" parent="." unique_id=1511920310 instance=ExtResource("2_a2mxc")]
-position = Vector2(3649, -334)
+position = Vector2(3521, -360)
 
 [node name="Rope" parent="." unique_id=156984277 instance=ExtResource("3_2icyi")]
 
@@ -36,13 +35,34 @@ position = Vector2(2628, -618)
 position = Vector2(3661, 33)
 
 [node name="VerticalMovingPlatform1" parent="." unique_id=2000000040 instance=ExtResource("8_2tesa")]
-position = Vector2(4125, -1516)
+position = Vector2(4421, -1923)
 
 [node name="Checkpoint" parent="." unique_id=731994168 instance=ExtResource("9_2tesa")]
 position = Vector2(3637, -140)
 
-[node name="StartingPlatform2" parent="." unique_id=1610446992 instance=ExtResource("9_egy2h")]
-position = Vector2(3176, -1516)
+[node name="OneWayPlatform" parent="." unique_id=951207826 instance=ExtResource("10_oneway")]
+position = Vector2(4040, -100)
 
-[node name="OneWayPlatform1" parent="." unique_id=2000000050 instance=ExtResource("10_oneway")]
-position = Vector2(2200, -200)
+[node name="OneWayPlatform2" parent="." unique_id=426170034 instance=ExtResource("10_oneway")]
+position = Vector2(4040, -200)
+
+[node name="OneWayPlatform3" parent="." unique_id=46765774 instance=ExtResource("10_oneway")]
+position = Vector2(4039, -303)
+
+[node name="OneWayPlatform4" parent="." unique_id=1787094299 instance=ExtResource("10_oneway")]
+position = Vector2(4040, 4)
+
+[node name="OneWayPlatform5" parent="." unique_id=939458473 instance=ExtResource("10_oneway")]
+position = Vector2(3759, -1776)
+
+[node name="OneWayPlatform6" parent="." unique_id=1867151775 instance=ExtResource("10_oneway")]
+position = Vector2(4113, -1776)
+
+[node name="OneWayPlatform7" parent="." unique_id=482880102 instance=ExtResource("10_oneway")]
+position = Vector2(3397, -1776)
+
+[node name="OneWayPlatform9" parent="." unique_id=1746655054 instance=ExtResource("10_oneway")]
+position = Vector2(3759, -1776)
+
+[node name="OneWayPlatform10" parent="." unique_id=1513109242 instance=ExtResource("10_oneway")]
+position = Vector2(3397, -1776)
