@@ -6,7 +6,8 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_spin"]
 radius = 96.0
 
-[node name="SpinningAnchor" type="Node2D"]
+[node name="SpinningAnchor" type="StaticBody2D"]
+collision_layer = 1
 script = ExtResource("1_script")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
