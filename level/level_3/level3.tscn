@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://dfle6bvgxdi2a" path="res://level/common/HazardSpikes.tscn" id="9_nh2ni"]
 [ext_resource type="PackedScene" uid="uid://spikyball1" path="res://level/common/SpikyBall.tscn" id="10_cebud"]
 [ext_resource type="PackedScene" uid="uid://f1a2b3c4d5e6" path="res://level/common/Flag.tscn" id="11_8krhd"]
+[ext_resource type="PackedScene" uid="uid://cagn6rblc6286" path="res://level/level_1/Lvl1SmallPlatform.tscn" id="12_jw77s"]
 
 [node name="Level3" type="Node2D" unique_id=212584331]
 
@@ -19,7 +20,7 @@ position = Vector2(-487, -1)
 scale = Vector2(0.5, 0.5)
 
 [node name="Player" parent="." unique_id=431100071 instance=ExtResource("2_070xk")]
-position = Vector2(5441, -3015)
+position = Vector2(-452, -164)
 
 [node name="Rope" parent="." unique_id=601193952 instance=ExtResource("3_c38dd")]
 
@@ -394,3 +395,12 @@ position = Vector2(15, -3647)
 
 [node name="Flag" parent="." unique_id=1710116324 instance=ExtResource("11_8krhd")]
 position = Vector2(1204, -1711)
+
+[node name="SwingAnchor14" parent="." unique_id=1714990512 instance=ExtResource("5_8srnw")]
+position = Vector2(-1215, -1643)
+
+[node name="SwingAnchor15" parent="." unique_id=699008870 instance=ExtResource("5_8srnw")]
+position = Vector2(-1093, -4833)
+
+[node name="StartingPlatform2" parent="." unique_id=310334496 instance=ExtResource("12_jw77s")]
+position = Vector2(-280, -1477)
