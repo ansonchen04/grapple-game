@@ -4,7 +4,7 @@
 
 [sub_resource type="Curve2D" id="Curve2D_lvl2vert"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 0, 400, 0, 0, 0, 0, 0, 0, 0, 400, 0, 0, 0, 0)
+"points": PackedVector2Array(0, 0, 0, 0, 0, 400, 0, 0, 0, 0, 0, -5, 0, 400, 0, 0, 0, 403)
 }
 point_count = 3
 
@@ -20,8 +20,7 @@ scale = Vector2(1.0225, 1)
 curve = SubResource("Curve2D_lvl2vert")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="PlatformPath" unique_id=2000000032]
-position = Vector2(0, 0)
-rotation = 0.0
+position = Vector2(0, 400)
 rotates = false
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="PlatformPath/PathFollow2D" unique_id=2000000033]
@@ -31,7 +30,7 @@ update_rotation = false
 [node name="PlatformBody" type="AnimatableBody2D" parent="PlatformPath" unique_id=2000000034]
 position = Vector2(0, 400)
 rotation = 1.570796
-scale = Vector2(0.988058, 1.0123348)
+scale = Vector2(1.0225, 0.9779951)
 collision_mask = 5
 
 [node name="Visual" type="ColorRect" parent="PlatformPath/PlatformBody" unique_id=2000000035]
