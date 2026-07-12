@@ -28,7 +28,7 @@ public partial class player : CharacterBody2D
   	private const float raycastLength = 500.0f;
   	private RayCast2D rayCast;
   	private bool isGrappled = false;
-	private Rope rope;
+	public Rope rope;
 	private Vector2 previousAnchor = Vector2.Zero; // For anchor velocity compensation
 	private ShapeCast2D frictionCast; // For native surface friction detection
 	//Booleans to check if we are on a special surface, if we have different movement options
