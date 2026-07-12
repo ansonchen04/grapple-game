@@ -184,7 +184,7 @@ public partial class Rope : Node2D {
 		hookSprite.GlobalPosition = shotOrigin;
 	}
 
-	void CancelRope() {
+	public void CancelRope() {
 		ropeState = RopeState.Hidden;
 		isShooting = false;
 		hookSprite.Visible = false;
