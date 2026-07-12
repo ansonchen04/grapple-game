@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://lvl2vertmovingplat1"]
+[gd_scene format=3 uid="uid://cl7dg85u8fqhc"]
 
 [ext_resource type="Script" uid="uid://x1katupv4ffn" path="res://template/scripts/MovingPlatformTemplate.cs" id="2_script"]
 
