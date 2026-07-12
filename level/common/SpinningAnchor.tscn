@@ -1,18 +1,18 @@
 [gd_scene format=3 uid="uid://dry3606vhu125"]
 
 [ext_resource type="Script" path="res://level/common/SpinningAnchor.cs" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="2_icon"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_spin"]
-radius = 96.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_spin"]
+size = Vector2(20, 300)
 
 [node name="SpinningAnchor" type="StaticBody2D"]
 collision_layer = 1
 script = ExtResource("1_script")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_icon")
-scale = Vector2(1.5, 1.5)
+[node name="Visual" type="ColorRect" parent="."]
+position = Vector2(-10, -150)
+size = Vector2(20, 300)
+color = Color(1, 0.5, 0, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_spin")
+shape = SubResource("RectangleShape2D_spin")
