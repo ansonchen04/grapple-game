@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://lvl3dplatform1"]
+
+[sub_resource type="PolygonShape2D" id="PolygonShape2D_dplat"]
+sections = PackedVector2Array(0, -64, -128, -64, -128, 64, 0, 128, 128, 64, 128, -64)
+
+[node name="Lvl3DPlatform" type="StaticBody2D"]
+collision_mask = 5
+
+[node name="Visual" type="Polygon2D" parent="."]
+color = Color(1, 0.5, 0, 1)
+polygon = PackedVector2Array(0, -64, -128, -64, -128, 64, 0, 128, 128, 64, 128, -64)
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(0, -64, -128, -64, -128, 64, 0, 128, 128, 64, 128, -64)
