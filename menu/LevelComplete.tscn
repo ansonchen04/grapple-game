@@ -42,5 +42,4 @@ text = "Replay"
 
 [node name="NextLevelButton" type="Button" parent="MenuContainer"]
 custom_minimum_size = Vector2(0, 50)
-text = "Next Level (Coming Soon)"
-disabled = true
+text = "Next Level"
