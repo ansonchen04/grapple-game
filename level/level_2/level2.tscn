@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://checkpoint123" path="res://level/common/Checkpoint.tscn" id="9_2tesa"]
 [ext_resource type="PackedScene" uid="uid://onewayplat1" path="res://template/OneWayPlatformTemplate.tscn" id="10_oneway"]
 [ext_resource type="PackedScene" uid="uid://f1a2b3c4d5e6" path="res://level/common/Flag.tscn" id="10_u681c"]
+[ext_resource type="PackedScene" uid="uid://cwlbwh5jpabhl" path="res://menu/PauseMenu.tscn" id="11_pause"]
 
 [node name="Level3" type="Node2D" unique_id=1003218659]
 
@@ -91,3 +92,5 @@ position = Vector2(3390, -2396)
 
 [node name="Flag" parent="." unique_id=935277841 instance=ExtResource("10_u681c")]
 position = Vector2(3760, -2510)
+
+[node name="PauseMenu" parent="." unique_id=2000000012 instance=ExtResource("11_pause")]

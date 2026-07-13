@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://spikyball1" path="res://level/common/SpikyBall.tscn" id="10_cebud"]
 [ext_resource type="PackedScene" uid="uid://f1a2b3c4d5e6" path="res://level/common/Flag.tscn" id="11_8krhd"]
 [ext_resource type="PackedScene" uid="uid://cagn6rblc6286" path="res://level/level_1/Lvl1SmallPlatform.tscn" id="12_jw77s"]
+[ext_resource type="PackedScene" uid="uid://cwlbwh5jpabhl" path="res://menu/PauseMenu.tscn" id="13_pause"]
 
 [node name="Level3" type="Node2D" unique_id=212584331]
 
@@ -404,3 +405,5 @@ position = Vector2(-1093, -4833)
 
 [node name="StartingPlatform2" parent="." unique_id=310334496 instance=ExtResource("12_jw77s")]
 position = Vector2(-280, -1477)
+
+[node name="PauseMenu" parent="." unique_id=2000000014 instance=ExtResource("13_pause")]
