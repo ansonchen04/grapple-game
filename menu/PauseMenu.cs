@@ -1,10 +1,13 @@
 using Godot;
 
-public partial class PauseMenu : Control
+public partial class PauseMenu : CanvasLayer
 {
 	public override void _Ready()
 	{
-		ProcessMode = Node.ProcessModeEnum.Always;
+		// ProcessMode is set in the .tscn file, but we can ensure it here if needed.
+		// However, since we changed the node type to CanvasLayer, we don't need to set ProcessMode in code 
+		// if it's already set in the scene, but keeping it doesn't hurt.
+		ProcessMode = ProcessModeEnum.Always;
 		
 		// Ensure the menu is hidden when the scene loads
 		Visible = false;
