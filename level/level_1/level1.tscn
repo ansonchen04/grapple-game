@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://f1a2b3c4d5e6" path="res://level/common/Flag.tscn" id="7_flag"]
 [ext_resource type="PackedScene" uid="uid://dc23ns3s1u5s1" path="res://level/level_1/longceiling.tscn" id="8_1vvmk"]
 [ext_resource type="PackedScene" uid="uid://checkpoint123" path="res://level/common/Checkpoint.tscn" id="9_checkpoint"]
+[ext_resource type="PackedScene" uid="uid://pause_menu_uid_placeholder" path="res://menu/PauseMenu.tscn" id="10_pause"]
 
 [node name="Level1" type="Node2D" unique_id=1091476641]
 
@@ -62,3 +63,5 @@ position = Vector2(3712, -238)
 
 [node name="Checkpoint2" parent="." unique_id=968115637 instance=ExtResource("9_checkpoint")]
 position = Vector2(3639, 65)
+
+[node name="PauseMenu" parent="." unique_id=2000000011 instance=ExtResource("10_pause")]
