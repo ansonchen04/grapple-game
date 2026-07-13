@@ -50,6 +50,6 @@ public partial class PauseMenu : Control
 		GetTree().Paused = false;
 		Visible = false;
 		// Load the main menu scene
-		GetTree().ChangeSceneToFile("res://menu/MainMenu.tscn");
+		GetTree().ChangeSceneToFile("res://menu/main_menu.tscn");
 	}
 }
