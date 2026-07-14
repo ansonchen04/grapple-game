@@ -14,3 +14,4 @@
 | rope/hook.tscn | Hook | CircleShape2D | Radius: 1.0 (default) | Radius: 1.75 (scaled by 1.75) | Sprite2D: res://icon.svg (scale 0.25) | N | RigidBody2D, contains PinJoint2D |
 | level/common/Checkpoint.tscn | Checkpoint | RectangleShape2D | 32 x 64 | 32 x 64 | ColorRect (no texture) | N | Area2D, not a platform |
 | level/common/HazardSpikes.tscn | HazardSpikes | RectangleShape2D | 64 x 64 | 64 x 64 | Polygon2D (no texture) | N | Area2D, hazard |
+| template/OneWayPlatformTemplate.tscn | OneWayPlatform | RectangleShape2D | 367.806 x 59.537 | 367.806 x 59.537 | ColorRect (no texture) | N | one_way_collision = true |
