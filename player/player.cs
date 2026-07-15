@@ -30,6 +30,9 @@ public partial class player : CharacterBody2D
   	private bool isGrappled = false;
 	public Rope rope;
 	private AudioStreamPlayer jumpSFX;
+	private AudioStreamPlayer stepSFX;
+	private float stepTimer = 0f;
+	private const float stepInterval = 0.3f; // Play step sound every 0.3 seconds while walking
 	private Vector2 previousAnchor = Vector2.Zero; // For anchor velocity compensation
 	private ShapeCast2D frictionCast; // For native surface friction detection
 	//Booleans to check if we are on a special surface, if we have different movement options
@@ -52,6 +55,7 @@ public partial class player : CharacterBody2D
 		_downwardRaycast.CollisionMask = 1;
 		rope = GetNode<Rope>("../Rope");
 		jumpSFX = GetNode<AudioStreamPlayer>("JumpSFX");
+		stepSFX = GetNode<AudioStreamPlayer>("StepSFX");
 		
 		frictionCast = new ShapeCast2D();
 		frictionCast.Shape = GetNode<CollisionShape2D>("CollisionShape2D").Shape;
@@ -102,6 +106,17 @@ public partial class player : CharacterBody2D
 		if (Input.IsActionJustPressed("Up") && IsOnFloor()) {
 			newVelocity.Y = jumpVelocity;
 			jumpSFX.Play();
+		}
+
+		// 5. Walking SFX
+		if (IsOnFloor() && Math.Abs(newVelocity.X) > 10.0f) {
+			stepTimer += (float)delta;
+			if (stepTimer >= stepInterval) {
+				stepSFX.Play();
+				stepTimer = 0f;
+			}
+		} else {
+			stepTimer = 0f;
 		}
 
 		Velocity = newVelocity;
