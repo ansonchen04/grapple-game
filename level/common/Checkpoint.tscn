@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://checkpoint123"]
 
 [ext_resource type="Script" path="res://level/common/Checkpoint.cs" id="1_script"]
+[ext_resource type="AudioStream" uid="uid://checkpoint_sfx_uid" path="res://sfx/checkpoint.mp3" id="2_checkpoint"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_checkpoint"]
 size = Vector2(32, 64)
@@ -17,3 +18,6 @@ shape = SubResource("RectangleShape2D_checkpoint")
 position = Vector2(-16, -32)
 size = Vector2(32, 64)
 color = Color(1, 0.8, 0, 1)
+
+[node name="CheckpointSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_checkpoint")
