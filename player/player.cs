@@ -32,6 +32,7 @@ public partial class player : CharacterBody2D
 	private AudioStreamPlayer jumpSFX;
 	private AudioStreamPlayer stepSFX;
 	private AudioStreamPlayer landSFX;
+	private AudioStreamPlayer dieSFX;
 	private float stepTimer = 0f;
 	private const float stepInterval = 0.3f; // Play step sound every 0.3 seconds while walking
 	private bool wasOnFloor = false; // Track previous floor state for landing detection
@@ -59,6 +60,7 @@ public partial class player : CharacterBody2D
 		jumpSFX = GetNode<AudioStreamPlayer>("JumpSFX");
 		stepSFX = GetNode<AudioStreamPlayer>("StepSFX");
 		landSFX = GetNode<AudioStreamPlayer>("LandSFX");
+		dieSFX = GetNode<AudioStreamPlayer>("DieSFX");
 		
 		frictionCast = new ShapeCast2D();
 		frictionCast.Shape = GetNode<CollisionShape2D>("CollisionShape2D").Shape;
@@ -221,6 +223,7 @@ public partial class player : CharacterBody2D
 		return false;
 	}
 	public void restart() {
+		dieSFX.Play();
 		//If restart button pressed, reset the position to the last checkpoint and zero out the velocity
 			Position = LastCheckpointPosition;
 			Velocity = Vector2.Zero;
