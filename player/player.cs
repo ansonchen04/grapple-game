@@ -29,6 +29,7 @@ public partial class player : CharacterBody2D
   	private RayCast2D rayCast;
   	private bool isGrappled = false;
 	public Rope rope;
+	private AudioStreamPlayer jumpSFX;
 	private Vector2 previousAnchor = Vector2.Zero; // For anchor velocity compensation
 	private ShapeCast2D frictionCast; // For native surface friction detection
 	//Booleans to check if we are on a special surface, if we have different movement options
@@ -50,6 +51,7 @@ public partial class player : CharacterBody2D
 		rayCast.CollisionMask = 1; // Explicitly target platform layer (Layer 1)
 		_downwardRaycast.CollisionMask = 1;
 		rope = GetNode<Rope>("../Rope");
+		jumpSFX = GetNode<AudioStreamPlayer>("JumpSFX");
 		
 		frictionCast = new ShapeCast2D();
 		frictionCast.Shape = GetNode<CollisionShape2D>("CollisionShape2D").Shape;
@@ -99,6 +101,7 @@ public partial class player : CharacterBody2D
 		// 4. Jump Override (works seamlessly in both states)
 		if (Input.IsActionJustPressed("Up") && IsOnFloor()) {
 			newVelocity.Y = jumpVelocity;
+			jumpSFX.Play();
 		}
 
 		Velocity = newVelocity;
