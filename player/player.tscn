@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b72awo3le0gq8" path="res://player/player.cs" id="1_58q48"]
 [ext_resource type="Texture2D" uid="uid://c7n33ghgp4olt" path="res://icon.svg" id="2_s60mg"]
 [ext_resource type="AudioStream" uid="uid://b3qti178uka8r" path="res://sfx/jump.mp3" id="3_g1dw6"]
+[ext_resource type="AudioStream" uid="uid://step_sfx_uid" path="res://sfx/step.mp3" id="4_step"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1ybm1"]
 size = Vector2(128, 128)
@@ -30,3 +31,6 @@ hit_from_inside = true
 
 [node name="JumpSFX" type="AudioStreamPlayer" parent="." unique_id=479943392]
 stream = ExtResource("3_g1dw6")
+
+[node name="StepSFX" type="AudioStreamPlayer" parent="." unique_id=479943393]
+stream = ExtResource("4_step")
