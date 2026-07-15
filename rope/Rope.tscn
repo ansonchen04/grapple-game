@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://6yotxco8qhu"]
+[gd_scene load_steps=4 format=3 uid="uid://6yotxco8qhu"]
 
 [ext_resource type="Script" path="res://rope/Rope.cs" id="1_wcf07"]
 [ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="2_4v30u"]
+[ext_resource type="AudioStream" uid="uid://shoot_sfx_uid" path="res://sfx/shoot.mp3" id="3_shoot"]
 
 [node name="Rope" type="Node2D"]
 script = ExtResource("1_wcf07")
@@ -13,4 +14,7 @@ width = 4
 [node name="HookSprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_4v30u")
 scale = Vector2(0.25, 0.25)
+
+[node name="ShootSFX" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_shoot")
 

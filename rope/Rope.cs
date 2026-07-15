@@ -13,6 +13,7 @@ public partial class Rope : Node2D {
 
 	Line2D ropeLine;
 	Sprite2D hookSprite;
+	AudioStreamPlayer shootSFX;
 	float SegmentLength; 
 	const float RopeGravity = 200.0f; // Reduced to prevent excessive sagging that exceeds the physics slack buffer
 	bool _isRopeInitialized = false;
@@ -47,6 +48,7 @@ public partial class Rope : Node2D {
 		player = GetNode<CharacterBody2D>("../Player");
 		ropeLine = GetNode<Line2D>("RopeLine");
 		hookSprite = GetNode<Sprite2D>("HookSprite");
+		shootSFX = GetNode<AudioStreamPlayer>("ShootSFX");
 		ropeState = RopeState.Hidden;
 		
 		positions = new Vector2[MaxSegments + 1];
@@ -182,6 +184,8 @@ public partial class Rope : Node2D {
 		
 		hookSprite.Visible = true;
 		hookSprite.GlobalPosition = shotOrigin;
+		
+		shootSFX.Play();
 	}
 
 	public void CancelRope() {
