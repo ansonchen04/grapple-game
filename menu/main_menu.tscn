@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://c9a8b7d6e5f4"]
+[gd_scene load_steps=3 format=3 uid="uid://c9a8b7d6e5f4"]
 
 [ext_resource type="Script" path="res://menu/MainMenu.cs" id="1_script"]
+[ext_resource type="AudioStream" path="res://music/menu.wav" id="2_menu_music"]
 
 [node name="MainMenu" type="Control"]
 anchors_preset = 15
@@ -39,3 +40,6 @@ text = "Play"
 [node name="QuitButton" type="Button" parent="MenuContainer"]
 custom_minimum_size = Vector2(0, 50)
 text = "Quit"
+
+[node name="MenuMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_menu_music")

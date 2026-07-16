@@ -2,6 +2,8 @@ using Godot;
 
 public partial class MainMenu : Control
 {
+    private AudioStreamPlayer menuMusic;
+
     public override void _Ready()
     {
         Button playButton = GetNode<Button>("MenuContainer/PlayButton");
@@ -9,6 +11,9 @@ public partial class MainMenu : Control
 
         playButton.Pressed += OnPlayPressed;
         quitButton.Pressed += OnQuitPressed;
+
+        menuMusic = GetNode<AudioStreamPlayer>("MenuMusic");
+        menuMusic.Play();
     }
 
     private void OnPlayPressed()
