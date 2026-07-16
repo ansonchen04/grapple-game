@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://d1e2f3a4b5c6"]
+[gd_scene load_steps=3 format=3 uid="uid://d1e2f3a4b5c6"]
 
 [ext_resource type="Script" path="res://menu/LevelSelect.cs" id="1_script"]
+[ext_resource type="AudioStream" path="res://music/menu.wav" id="2_menu_music"]
 
 [node name="LevelSelect" type="Control"]
 anchors_preset = 15
@@ -47,3 +48,6 @@ text = "Level 3"
 [node name="BackButton" type="Button" parent="MenuContainer"]
 custom_minimum_size = Vector2(0, 50)
 text = "Back"
+
+[node name="MenuMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_menu_music")

@@ -2,6 +2,8 @@ using Godot;
 
 public partial class LevelSelect : Control
 {
+    private AudioStreamPlayer menuMusic;
+
     public override void _Ready()
     {
         Button level1Button = GetNode<Button>("MenuContainer/Level1Button");
@@ -13,6 +15,9 @@ public partial class LevelSelect : Control
         Button level3Button = GetNode<Button>("MenuContainer/Level3Button");
         level3Button.Pressed += OnLevel3Pressed;
         backButton.Pressed += OnBackPressed;
+
+        menuMusic = GetNode<AudioStreamPlayer>("MenuMusic");
+        menuMusic.Play();
     }
 
     private void OnLevel1Pressed()
