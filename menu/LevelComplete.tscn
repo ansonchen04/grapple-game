@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://e5f6a7b8c9d0"]
+[gd_scene load_steps=3 format=3 uid="uid://e5f6a7b8c9d0"]
 
 [ext_resource type="Script" path="res://menu/LevelComplete.cs" id="1_script"]
+[ext_resource type="AudioStream" path="res://music/victory.wav" id="2_victory_music"]
 
 [node name="LevelComplete" type="Control"]
 anchors_preset = 15
@@ -43,3 +44,6 @@ text = "Replay"
 [node name="NextLevelButton" type="Button" parent="MenuContainer"]
 custom_minimum_size = Vector2(0, 50)
 text = "Next Level"
+
+[node name="VictoryMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_victory_music")

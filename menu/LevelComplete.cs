@@ -3,6 +3,7 @@ using Godot;
 public partial class LevelComplete : Control
 {
     private Button nextLevelButton;
+    private AudioStreamPlayer victoryMusic;
 
     public override void _Ready()
     {
@@ -13,6 +14,9 @@ public partial class LevelComplete : Control
         menuButton.Pressed += OnMenuPressed;
         replayButton.Pressed += OnReplayPressed;
         nextLevelButton.Pressed += OnNextLevelPressed;
+
+        victoryMusic = GetNode<AudioStreamPlayer>("VictoryMusic");
+        victoryMusic.Play();
 
         // Determine if there is a next level
         string currentLevel = player.CurrentLevelPath;
