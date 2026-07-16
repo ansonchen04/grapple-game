@@ -8,11 +8,11 @@ position = Vector2(0, 380)
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=494634843]
 position = Vector2(-1.4944197, 0)
 scale = Vector2(6.297978, 1)
-polygon = PackedVector2Array(-20.721823, 0, 272.7057, 0, 218.56134, 645, 124.245346, 806, 18.655897, 643)
+polygon = PackedVector2Array(-20, 0, 272, 0, 220, 645, 125, 806, 20, 645)
 
 [node name="PolyPlatSprite" type="Polygon2D" parent="." unique_id=118132866]
 position = Vector2(-1.4944197, 0)
 scale = Vector2(6.297978, 1)
 color = Color(1, 0.423529, 0, 1)
-polygon = PackedVector2Array(-20.721823, 0, 272.7057, 0, 218.56134, 645, 124.245346, 806, 18.655897, 643)
+polygon = PackedVector2Array(-20, 0, 272, 0, 220, 645, 125, 806, 20, 645)
 script = ExtResource("1_ca4cx")
