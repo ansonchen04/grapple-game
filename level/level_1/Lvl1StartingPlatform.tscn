@@ -2,20 +2,19 @@
 
 [ext_resource type="Script" uid="uid://bm5ugx2wpquec" path="res://template/scripts/PolyPlatTemplate.cs" id="1_ca4cx"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_flat_top"]
-size = Vector2(293.42752, 100)
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_plat"]
+points = PackedVector2Array(-924.0, 0, 924.0, 0, 583.0, 645, -11.0, 806, -676.0, 643)
 
 [node name="StartingPlatform" type="StaticBody2D" unique_id=1313610053]
 position = Vector2(0, 380)
 collision_layer = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 50)
-shape = SubResource("RectangleShape2D_flat_top")
+position = Vector2(0, 0)
+shape = SubResource("ConvexPolygonShape2D_plat")
 
 [node name="PolyPlatSprite" type="Polygon2D" parent="." unique_id=118132866]
 position = Vector2(0, 0)
-scale = Vector2(6.297978, 1)
 color = Color(1, 0.423529, 0, 1)
-polygon = PackedVector2Array(-146.71376, 0, 146.71376, 0, 92.5694, 645, -1.74659, 806, -107.33604, 643)
+polygon = PackedVector2Array(-924.0, 0, 924.0, 0, 583.0, 645, -11.0, 806, -676.0, 643)
 script = ExtResource("1_ca4cx")
