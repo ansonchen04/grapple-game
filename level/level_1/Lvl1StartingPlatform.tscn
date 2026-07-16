@@ -3,14 +3,14 @@
 [ext_resource type="Script" uid="uid://bm5ugx2wpquec" path="res://template/scripts/PolyPlatTemplate.cs" id="1_ca4cx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_flat_top"]
-size = Vector2(293.42752, 10)
+size = Vector2(293.42752, 100)
 
 [node name="StartingPlatform" type="StaticBody2D" unique_id=1313610053]
 position = Vector2(0, 380)
 collision_layer = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 0)
+position = Vector2(0, 50)
 shape = SubResource("RectangleShape2D_flat_top")
 
 [node name="PolyPlatSprite" type="Polygon2D" parent="." unique_id=118132866]
