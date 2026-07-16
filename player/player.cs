@@ -165,8 +165,8 @@ public partial class player : CharacterBody2D
 		if (direction.X != 0) {
 			if (IsOnFloor()) {
 				// Grounded: snappy direct control with deceleration/acceleration curve
-				GD.Print($"Player: Grounded input X={direction.X}, target velocity={direction.X * speed}, current velocity={velocity.X}");
 				velocity.X = Mathf.MoveToward(velocity.X, direction.X * speed, speed);
+				GD.Print($"Player: Grounded move. Input={direction.X}, NewVelX={velocity.X}, IsOnFloor={IsOnFloor()}");
 			} else {
 				// Airborne: acceleration-based to match swing tangential input feel
 				float airAccel = speed * 1.0f; // Lowered for smoother, more controlled buildup
