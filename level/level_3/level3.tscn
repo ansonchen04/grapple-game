@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cs7aery6d41b5"]
 
-[ext_resource type="PackedScene" uid="uid://6vx1riphdci0" path="res://level/level_1/Lvl1StartingPlatform.tscn" id="1_eduod"]
+[ext_resource type="PackedScene" uid="uid://6vx1riphdci0" path="res://level/common/PolygonPlatformTemplate.tscn" id="1_eduod"]
 [ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="2_070xk"]
 [ext_resource type="PackedScene" uid="uid://6yotxco8qhu" path="res://rope/Rope.tscn" id="3_c38dd"]
 [ext_resource type="PackedScene" uid="uid://behe5gd0wwyu5" path="res://level/common/SpikePlatform.tscn" id="4_c38dd"]
@@ -17,7 +17,7 @@
 [node name="Level3" type="Node2D" unique_id=212584331]
 
 [node name="StartingPlatform" parent="." unique_id=1313610053 instance=ExtResource("1_eduod")]
-position = Vector2(-487, -1)
+position = Vector2(-861, 6)
 scale = Vector2(0.5, 0.5)
 
 [node name="Player" parent="." unique_id=431100071 instance=ExtResource("2_070xk")]

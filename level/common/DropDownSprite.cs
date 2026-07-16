@@ -7,10 +7,10 @@ public partial class DropDownSprite : Polygon2D
 	public override void _Ready()
 	{
 		var collisionPoly = new CollisionPolygon2D();
-        collisionPoly.Polygon = this.Polygon;
-        collisionPoly.Position = this.Position;
+		collisionPoly.Polygon = this.Polygon;
+		collisionPoly.Position = this.Position;
 		collisionPoly.OneWayCollision = true;		
-        GetParent().CallDeferred("add_child", collisionPoly);
+		GetParent().CallDeferred("add_child", collisionPoly);
 	
 	}
 
