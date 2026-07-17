@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://f1a2b3c4d5e6"]
 
 [ext_resource type="Script" path="res://level/common/Flag.cs" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://banana_uid" path="res://sprites/banana.webp" id="2_banana"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_flag"]
 size = Vector2(32, 64)
@@ -13,7 +14,5 @@ script = ExtResource("1_script")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_flag")
 
-[node name="Visual" type="ColorRect" parent="."]
-position = Vector2(-16, -32)
-size = Vector2(32, 64)
-color = Color(1, 0.8, 0, 1)
+[node name="Visual" type="Sprite2D" parent="."]
+texture = ExtResource("2_banana")
