@@ -33,6 +33,7 @@ public partial class player : CharacterBody2D
 	private AudioStreamPlayer stepSFX;
 	private AudioStreamPlayer landSFX;
 	private AudioStreamPlayer dieSFX;
+	private Sprite2D playerSprite;
 	private float stepTimer = 0f;
 	private const float stepInterval = 0.3f; // Play step sound every 0.3 seconds while walking
 	private bool wasOnFloor = false; // Track previous floor state for landing detection
@@ -61,6 +62,7 @@ public partial class player : CharacterBody2D
 		stepSFX = GetNode<AudioStreamPlayer>("StepSFX");
 		landSFX = GetNode<AudioStreamPlayer>("LandSFX");
 		dieSFX = GetNode<AudioStreamPlayer>("DieSFX");
+		playerSprite = GetNode<Sprite2D>("Sprite2D");
 		
 		frictionCast = new ShapeCast2D();
 		frictionCast.Shape = GetNode<CollisionShape2D>("CollisionShape2D").Shape;
@@ -129,6 +131,12 @@ public partial class player : CharacterBody2D
 			landSFX.Play();
 		}
 		wasOnFloor = IsOnFloor();
+
+		// 7. Flip sprite based on input direction
+		float inputX = Input.GetActionStrength("Right") - Input.GetActionStrength("Left");
+		if (inputX != 0) {
+			playerSprite.FlipH = inputX < 0;
+		}
 
 		Velocity = newVelocity;
 		MoveAndSlide();
