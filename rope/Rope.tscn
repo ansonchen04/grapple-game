@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://rope/Rope.cs" id="1_wcf07"]
 [ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="2_4v30u"]
+[ext_resource type="Texture2D" uid="uid://target_uid" path="res://sprites/target.png" id="3_target"]
 [ext_resource type="AudioStream" uid="uid://shoot_sfx_uid" path="res://sfx/shoot.mp3" id="3_shoot"]
 
 [node name="Rope" type="Node2D"]
@@ -12,7 +13,7 @@ default_color = Color(1, 1, 1, 1)
 width = 4
 
 [node name="HookSprite" type="Sprite2D" parent="."]
-texture = ExtResource("2_4v30u")
+texture = ExtResource("3_target")
 scale = Vector2(0.25, 0.25)
 
 [node name="ShootSFX" type="AudioStreamPlayer" parent="."]
