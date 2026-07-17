@@ -13,8 +13,13 @@ default_color = Color(1, 1, 1, 1)
 width = 4
 
 [node name="HookSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_4v30u")
+scale = Vector2(0.25, 0.25)
+
+[node name="AimSprite" type="Sprite2D" parent="."]
 texture = ExtResource("3_target")
 scale = Vector2(0.25, 0.25)
+visible = false
 
 [node name="ShootSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_shoot")

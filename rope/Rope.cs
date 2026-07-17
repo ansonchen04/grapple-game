@@ -13,6 +13,7 @@ public partial class Rope : Node2D {
 
 	Line2D ropeLine;
 	Sprite2D hookSprite;
+	Sprite2D aimSprite;
 	AudioStreamPlayer shootSFX;
 	float SegmentLength; 
 	const float RopeGravity = 200.0f; // Reduced to prevent excessive sagging that exceeds the physics slack buffer
@@ -48,6 +49,7 @@ public partial class Rope : Node2D {
 		player = GetNode<CharacterBody2D>("../Player");
 		ropeLine = GetNode<Line2D>("RopeLine");
 		hookSprite = GetNode<Sprite2D>("HookSprite");
+		aimSprite = GetNode<Sprite2D>("AimSprite");
 		shootSFX = GetNode<AudioStreamPlayer>("ShootSFX");
 		ropeState = RopeState.Hidden;
 		
@@ -62,6 +64,7 @@ public partial class Rope : Node2D {
 			UpdateShot(delta);
 		} else {
 			hookSprite.Visible = false;
+			aimSprite.Visible = false;
 		}
 	}
 
@@ -92,7 +95,8 @@ public partial class Rope : Node2D {
 	}
 
 	void UpdateAim() {
-		hookSprite.Visible = true;
+		aimSprite.Visible = true;
+		hookSprite.Visible = false;
 		
 		Vector2 mousePos = GetGlobalMousePosition();
 		Vector2 direction = (mousePos - player.GlobalPosition).Normalized();
@@ -121,12 +125,12 @@ public partial class Rope : Node2D {
 				lastValidLocalHit = lastHitCollider.ToLocal(debugHit);
 			}
 			hasLastHit = true;
-			hookSprite.GlobalPosition = debugHit;
+			aimSprite.GlobalPosition = debugHit;
 		} else {
 			hasHit = false;
 			hasLastHit = false;
 			lastHitCollider = null;
-			hookSprite.GlobalPosition = end;
+			aimSprite.GlobalPosition = end;
 		}
 		
 		QueueRedraw();
@@ -182,6 +186,7 @@ public partial class Rope : Node2D {
 		isShooting = true;
 		ropeState = RopeState.Shot;
 		
+		aimSprite.Visible = false;
 		hookSprite.Visible = true;
 		hookSprite.GlobalPosition = shotOrigin;
 		
