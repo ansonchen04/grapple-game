@@ -5,9 +5,6 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_anchor"]
 radius = 96.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_visual"]
-radius = 1.0
-
 [node name="SwingAnchor" type="StaticBody2D"]
 collision_layer = 1
 
@@ -15,6 +12,7 @@ collision_layer = 1
 shape = SubResource("CircleShape2D_anchor")
 
 [node name="AnchorVisual" type="Sprite2D" parent="."]
-texture = SubResource("CircleShape2D_visual")
-scale = Vector2(96, 96)
-modulate = Color(1, 0.5, 0, 1)
+# TODO: Replace with your actual sprite path, e.g., res://art/anchor.png
+# The sprite should be 192x192 pixels to match the 96 radius hitbox
+# If your sprite is 192x192, no scale is needed. If it's different, adjust scale accordingly.
+# texture = preload("res://path/to/your/anchor.png")
