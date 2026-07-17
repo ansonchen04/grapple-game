@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b282xwf1pp77f"]
 
 [ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="1_icon"]
-[ext_resource type="Texture2D" uid="uid://swinganchor_uid" path="res://sprites/swinganchor.jpg" id="2_anchor_tex"]
+[ext_resource type="Texture2D" uid="uid://swinganchor_uid" path="res://sprites/swinganchor.png" id="2_anchor_tex"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_anchor"]
 radius = 96.0
