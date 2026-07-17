@@ -52,7 +52,7 @@ position = Vector2(5426, 290)
 position = Vector2(5866, 187)
 
 [node name="Flag2" parent="." unique_id=1115610753 instance=ExtResource("7_flag")]
-position = Vector2(6247, 110)
+position = Vector2(6257, 136)
 
 [node name="Longceiling" parent="." unique_id=446949100 instance=ExtResource("8_1vvmk")]
 position = Vector2(3712, -238)

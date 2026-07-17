@@ -1,16 +1,16 @@
 [gd_scene format=3 uid="uid://b282xwf1pp77f"]
 
-[ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="1_icon"]
-[ext_resource type="Texture2D" uid="uid://swinganchor_uid" path="res://sprites/swinganchor.png" id="2_anchor_tex"]
+[ext_resource type="Texture2D" uid="uid://dv07bn3ohfbps" path="res://sprites/swinganchor.png" id="2_anchor_tex"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_anchor"]
 radius = 96.0
 
-[node name="SwingAnchor" type="StaticBody2D"]
-collision_layer = 1
+[node name="SwingAnchor" type="StaticBody2D" unique_id=1455160271]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1735089588]
 shape = SubResource("CircleShape2D_anchor")
 
-[node name="AnchorVisual" type="Sprite2D" parent="."]
+[node name="AnchorVisual" type="Sprite2D" parent="." unique_id=501530212]
+position = Vector2(-4.7683716e-07, -1.9999999)
+scale = Vector2(1.0306122, 1.0816326)
 texture = ExtResource("2_anchor_tex")
