@@ -32,6 +32,7 @@ public partial class Rope : Node2D {
 
 	public Vector2 GetAnchor() => currentAnchor;
 	public float GetMaxRopeLength() => deployedLength;
+	public Vector2 GetHookPosition() => hookSprite.GlobalPosition;
 	float deployedLength = MaxLength;
 	Node2D anchorNode = null;
 	Vector2 anchorLocalOffset = Vector2.Zero;
