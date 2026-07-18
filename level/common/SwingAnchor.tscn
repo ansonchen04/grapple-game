@@ -11,6 +11,6 @@ radius = 96.0
 shape = SubResource("CircleShape2D_anchor")
 
 [node name="AnchorVisual" type="Sprite2D" parent="." unique_id=501530212]
-position = Vector2(-4.7683716e-07, -1.9999999)
-scale = Vector2(1.0306122, 1.0816326)
+position = Vector2(-3.0000038, -3.4999962)
+scale = Vector2(0.74125874, 0.80544746)
 texture = ExtResource("2_anchor_tex")

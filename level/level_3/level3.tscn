@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://f1a2b3c4d5e6" path="res://level/common/Flag.tscn" id="11_8krhd"]
 [ext_resource type="PackedScene" uid="uid://cagn6rblc6286" path="res://level/level_1/Lvl1SmallPlatform.tscn" id="12_jw77s"]
 [ext_resource type="PackedScene" uid="uid://cwlbwh5jpabhl" path="res://menu/PauseMenu.tscn" id="13_pause"]
+[ext_resource type="Texture2D" uid="uid://bo4kg6xdqfeml" path="res://sprites/exit_sign.jpg" id="14_bg8f3"]
 
 [node name="Level3" type="Node2D" unique_id=212584331]
 
@@ -407,3 +408,28 @@ position = Vector2(-1093, -4833)
 position = Vector2(-280, -1477)
 
 [node name="PauseMenu" parent="." unique_id=2000000014 instance=ExtResource("13_pause")]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1484518549]
+position = Vector2(-470, -396)
+scale = Vector2(0.18888889, 0.18888889)
+texture = ExtResource("14_bg8f3")
+
+[node name="Sprite2D2" type="Sprite2D" parent="." unique_id=1770720516]
+position = Vector2(5911, -470.99988)
+rotation = -1.865757
+scale = Vector2(0.18888889, 0.18888889)
+texture = ExtResource("14_bg8f3")
+
+[node name="Sprite2D3" type="Sprite2D" parent="." unique_id=1127006227]
+position = Vector2(5285.0005, -2807.0005)
+rotation = 0.62133723
+scale = Vector2(0.18888889, 0.18888889)
+texture = ExtResource("14_bg8f3")
+flip_h = true
+
+[node name="Sprite2D4" type="Sprite2D" parent="." unique_id=1092773881]
+position = Vector2(-1216, -1366)
+rotation = 1.5707964
+scale = Vector2(0.18888889, 0.18888889)
+texture = ExtResource("14_bg8f3")
+flip_h = true

@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://onewayplat1" path="res://template/OneWayPlatformTemplate.tscn" id="10_oneway"]
 [ext_resource type="PackedScene" uid="uid://f1a2b3c4d5e6" path="res://level/common/Flag.tscn" id="10_u681c"]
 [ext_resource type="PackedScene" uid="uid://cwlbwh5jpabhl" path="res://menu/PauseMenu.tscn" id="11_pause"]
+[ext_resource type="Texture2D" uid="uid://bo4kg6xdqfeml" path="res://sprites/exit_sign.jpg" id="12_c4t85"]
 
 [node name="Level3" type="Node2D" unique_id=1003218659]
 
@@ -94,3 +95,14 @@ position = Vector2(3390, -2396)
 position = Vector2(3760, -2510)
 
 [node name="PauseMenu" parent="." unique_id=2000000012 instance=ExtResource("11_pause")]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1898462688]
+position = Vector2(-458.00003, -444)
+scale = Vector2(0.18888889, 0.18888889)
+texture = ExtResource("12_c4t85")
+
+[node name="Sprite2D2" type="Sprite2D" parent="." unique_id=1203739953]
+position = Vector2(3790.9998, -96)
+rotation = -1.5707964
+scale = Vector2(0.18888889, 0.18888889)
+texture = ExtResource("12_c4t85")

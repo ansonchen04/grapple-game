@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://f1a2b3c4d5e6" path="res://level/common/Flag.tscn" id="7_flag"]
 [ext_resource type="PackedScene" uid="uid://dc23ns3s1u5s1" path="res://level/level_1/longceiling.tscn" id="8_1vvmk"]
 [ext_resource type="PackedScene" uid="uid://checkpoint123" path="res://level/common/Checkpoint.tscn" id="9_checkpoint"]
+[ext_resource type="Texture2D" uid="uid://bo4kg6xdqfeml" path="res://sprites/exit_sign.jpg" id="10_hjicb"]
 [ext_resource type="PackedScene" uid="uid://cwlbwh5jpabhl" path="res://menu/PauseMenu.tscn" id="10_pause"]
 
 [node name="Level1" type="Node2D" unique_id=1091476641]
@@ -64,3 +65,18 @@ position = Vector2(3639, 65)
 
 [node name="StartingPlatform2" parent="." unique_id=304103313 instance=ExtResource("4_qugjk")]
 position = Vector2(6251, 187)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=414184808]
+position = Vector2(-498.00003, -423)
+scale = Vector2(0.18888889, 0.18888889)
+texture = ExtResource("10_hjicb")
+
+[node name="Sprite2D2" type="Sprite2D" parent="." unique_id=1879305569]
+position = Vector2(3642.0005, -60.99997)
+scale = Vector2(0.18888889, 0.18888889)
+texture = ExtResource("10_hjicb")
+
+[node name="Sprite2D3" type="Sprite2D" parent="." unique_id=249275928]
+position = Vector2(5873, 132)
+scale = Vector2(0.18888889, 0.18888889)
+texture = ExtResource("10_hjicb")
