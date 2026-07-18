@@ -35,13 +35,13 @@ position = Vector2(0, 65)
 hit_from_inside = true
 
 [node name="JumpSFX" type="AudioStreamPlayer" parent="." unique_id=479943392]
-stream = ExtResource("3_g1dw6")
+stream = ExtResource("4_g1dw6")
 
 [node name="StepSFX" type="AudioStreamPlayer" parent="." unique_id=479943393]
-stream = ExtResource("4_step")
+stream = ExtResource("5_step")
 
 [node name="LandSFX" type="AudioStreamPlayer" parent="." unique_id=479943394]
-stream = ExtResource("5_land")
+stream = ExtResource("6_land")
 
 [node name="DieSFX" type="AudioStreamPlayer" parent="." unique_id=479943395]
-stream = ExtResource("6_die")
+stream = ExtResource("7_die")
