@@ -165,21 +165,23 @@ public partial class player : CharacterBody2D
 			// Keep arm centered on player
 			monkeArm.GlobalPosition = GlobalPosition;
 
+			float rotationOffset = Mathf.Pi / 2.0f; // Adjust if arm is drawn pointing up
+
 			if (rope.ropeState == RopeState.Hidden) {
 				// Point at mouse cursor
 				Vector2 mousePos = GetGlobalMousePosition();
 				Vector2 direction = mousePos - GlobalPosition;
-				monkeArm.Rotation = Mathf.Atan2(direction.Y, direction.X);
+				monkeArm.Rotation = Mathf.Atan2(direction.Y, direction.X) + rotationOffset;
 			} else if (rope.ropeState == RopeState.Shot) {
 				// Point at the moving hook
 				Vector2 hookPos = rope.GetHookPosition();
 				Vector2 direction = hookPos - GlobalPosition;
-				monkeArm.Rotation = Mathf.Atan2(direction.Y, direction.X);
+				monkeArm.Rotation = Mathf.Atan2(direction.Y, direction.X) + rotationOffset;
 			} else if (rope.ropeState == RopeState.Hooked || rope.ropeState == RopeState.Retracting) {
 				// Point at the anchor
 				Vector2 anchor = rope.GetAnchor();
 				Vector2 direction = anchor - GlobalPosition;
-				monkeArm.Rotation = Mathf.Atan2(direction.Y, direction.X);
+				monkeArm.Rotation = Mathf.Atan2(direction.Y, direction.X) + rotationOffset;
 			}
 		}
 
