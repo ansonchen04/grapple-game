@@ -144,7 +144,7 @@ public partial class player : CharacterBody2D
 			playerSprite.FlipH = inputX < 0;
 		}
 
-		// 8. Switch sprite based on state
+		// 8. Switch sprite based on state and update monke arm
 		if (isSwinging || !IsOnFloor()) {
 			if (playerSprite.Texture != swingTexture) {
 				playerSprite.Texture = swingTexture;
@@ -154,7 +154,33 @@ public partial class player : CharacterBody2D
 			if (playerSprite.Texture != standingTexture) {
 				playerSprite.Texture = standingTexture;
 			}
-			monkeArm.Visible = false;
+			// Hide arm if not swinging/airborne AND rope is not aiming
+			if (rope.ropeState != RopeState.Hidden) {
+				monkeArm.Visible = false;
+			}
+		}
+
+		// 9. Update monke arm position and rotation
+		if (monkeArm.Visible) {
+			// Keep arm centered on player
+			monkeArm.GlobalPosition = GlobalPosition;
+
+			if (rope.ropeState == RopeState.Hidden) {
+				// Point at mouse cursor
+				Vector2 mousePos = GetGlobalMousePosition();
+				Vector2 direction = mousePos - GlobalPosition;
+				monkeArm.Rotation = Mathf.Atan2(direction.Y, direction.X);
+			} else if (rope.ropeState == RopeState.Shot) {
+				// Point at the moving hook
+				Vector2 hookPos = rope.GetHookPosition();
+				Vector2 direction = hookPos - GlobalPosition;
+				monkeArm.Rotation = Mathf.Atan2(direction.Y, direction.X);
+			} else if (rope.ropeState == RopeState.Hooked || rope.ropeState == RopeState.Retracting) {
+				// Point at the anchor
+				Vector2 anchor = rope.GetAnchor();
+				Vector2 direction = anchor - GlobalPosition;
+				monkeArm.Rotation = Mathf.Atan2(direction.Y, direction.X);
+			}
 		}
 
 		Velocity = newVelocity;
