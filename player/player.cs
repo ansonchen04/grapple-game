@@ -38,6 +38,7 @@ public partial class player : CharacterBody2D
 	private Texture2D standingTexture;
 	private Texture2D swingTexture;
 	private float stepTimer = 0f;
+	public const float ArmTipOffset = 40.0f; // Distance from player center to arm tip
 	private const float stepInterval = 0.3f; // Play step sound every 0.3 seconds while walking
 	private bool wasOnFloor = false; // Track previous floor state for landing detection
 	private Vector2 previousAnchor = Vector2.Zero; // For anchor velocity compensation
@@ -295,6 +296,12 @@ public partial class player : CharacterBody2D
 
 	public Vector2 GetHookStartPos() {
 		return hookStartPos + GlobalPosition;
+	}
+
+	public Vector2 GetArmTipPosition() {
+		if (monkeArm == null) return GlobalPosition;
+		Vector2 direction = new Vector2(Mathf.Cos(monkeArm.Rotation), Mathf.Sin(monkeArm.Rotation));
+		return monkeArm.GlobalPosition + direction * ArmTipOffset;
 	}
 
 	float GetSurfaceFriction(Node collider) {

@@ -58,6 +58,8 @@ public partial class Rope : Node2D {
 		previousPositions = new Vector2[MaxSegments + 1];
 	}
 
+	public CharacterBody2D GetPlayer() => player;
+
 	public override void _Process(double delta) {
 		if (ropeState == RopeState.Hidden) {
 			UpdateAim();
@@ -99,13 +101,14 @@ public partial class Rope : Node2D {
 		aimSprite.Visible = true;
 		hookSprite.Visible = false;
 		
+		Vector2 armTip = player.GetArmTipPosition();
 		Vector2 mousePos = GetGlobalMousePosition();
-		Vector2 direction = (mousePos - player.GlobalPosition).Normalized();
+		Vector2 direction = (mousePos - armTip).Normalized();
 		float dist = MaxLength; // Always aim/shoot to max distance
 		
 		// Small offset prevents tunneling into nearby walls; Exclude handles self-collision
 		float offset = 10.0f;
-		Vector2 origin = player.GlobalPosition + direction * offset;
+		Vector2 origin = armTip + direction * offset;
 		Vector2 end = origin + direction * (dist - offset);
 		
 		var spaceState = GetWorld2D().DirectSpaceState;
@@ -180,7 +183,7 @@ public partial class Rope : Node2D {
 	void StartShot() {
 		if (ropeState != RopeState.Hidden) return;
 		
-		shotOrigin = player.GlobalPosition;
+		shotOrigin = player.GetArmTipPosition();
 		shotDirection = (debugEnd - shotOrigin).Normalized();
 		shotDistance = MaxLength; // Always shoot to max distance
 		shotTraveled = 0f;
@@ -236,7 +239,7 @@ public partial class Rope : Node2D {
 	}
 
 	void InitializeRope(Vector2 anchor) {
-		Vector2 end = player.GlobalPosition;
+		Vector2 end = player.GetArmTipPosition();
 		float dist = anchor.DistanceTo(end);
 		SegmentLength = dist / MaxSegments;
 		
@@ -266,8 +269,9 @@ public partial class Rope : Node2D {
 		positions[0] = currentAnchor;
 		previousPositions[0] = currentAnchor;
 
-		positions[MaxSegments] = player.GlobalPosition;
-		previousPositions[MaxSegments] = player.GlobalPosition;
+		Vector2 armTip = player.GetArmTipPosition();
+		positions[MaxSegments] = armTip;
+		previousPositions[MaxSegments] = armTip;
 
 		int iterations = 15;
 		for (int iter = 0; iter < iterations; iter++) {
