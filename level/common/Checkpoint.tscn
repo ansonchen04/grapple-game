@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://level/common/Checkpoint.cs" id="1_script"]
 [ext_resource type="AudioStream" uid="uid://checkpoint_sfx_uid" path="res://sfx/checkpoint.mp3" id="2_checkpoint"]
+[ext_resource type="Texture2D" uid="uid://banana_uid" path="res://sprites/banana.png" id="3_banana"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_checkpoint"]
 size = Vector2(32, 64)
@@ -14,10 +15,10 @@ script = ExtResource("1_script")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_checkpoint")
 
-[node name="Visual" type="ColorRect" parent="."]
+[node name="Visual" type="Sprite2D" parent="."]
 position = Vector2(-16, -32)
-size = Vector2(32, 64)
-color = Color(1, 0.8, 0, 1)
+scale = Vector2(1, 1)
+texture = ExtResource("3_banana")
 
 [node name="CheckpointSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_checkpoint")
