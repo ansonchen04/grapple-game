@@ -146,12 +146,8 @@ public partial class player : CharacterBody2D
 			playerSprite.FlipH = inputX < 0;
 		}
 
-		// 8. Update monke arm visibility
-		if (isSwinging || !IsOnFloor() || rope.ropeState != RopeState.Hidden) {
-			monkeArm.Visible = true;
-		} else {
-			monkeArm.Visible = false;
-		}
+		// 8. Always show monke arm
+		monkeArm.Visible = true;
 
 		// 9. Update monke arm position and rotation
 		if (monkeArm.Visible) {
