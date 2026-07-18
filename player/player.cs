@@ -300,9 +300,8 @@ public partial class player : CharacterBody2D
 
 	public Vector2 GetArmTipPosition() {
 		if (monkeArm == null) return GlobalPosition;
-		// Use the visual rotation direction (including the Pi/2 offset used for aiming)
-		float visualRotation = monkeArm.Rotation + Mathf.Pi / 2.0f;
-		Vector2 direction = new Vector2(Mathf.Cos(visualRotation), Mathf.Sin(visualRotation));
+		// Use the visual rotation direction (which already includes the Pi/2 offset from _PhysicsProcess)
+		Vector2 direction = new Vector2(Mathf.Cos(monkeArm.Rotation), Mathf.Sin(monkeArm.Rotation));
 		return monkeArm.GlobalPosition + direction * ArmTipOffset;
 	}
 
