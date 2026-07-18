@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://f1a2b3c4d5e6"]
 
 [ext_resource type="Script" uid="uid://dffmai0p0r2fv" path="res://level/common/Flag.cs" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://cugvuknnfm01f" path="res://sprites/banana.webp" id="2_banana"]
+[ext_resource type="Texture2D" uid="uid://exitdoor" path="res://sprites/exitdoor.png" id="2_exitdoor"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_flag"]
 size = Vector2(32, 64)
@@ -16,4 +16,4 @@ shape = SubResource("RectangleShape2D_flag")
 [node name="Visual" type="Sprite2D" parent="." unique_id=1716294451]
 position = Vector2(-6.999999, 4.7683716e-07)
 scale = Vector2(0.20238094, 0.1815476)
-texture = ExtResource("2_banana")
+texture = ExtResource("2_exitdoor")
