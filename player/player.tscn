@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://cneiixvf5cb8u"]
 
 [ext_resource type="Script" uid="uid://b72awo3le0gq8" path="res://player/player.cs" id="1_58q48"]
-[ext_resource type="Texture2D" uid="uid://c7n33ghgp4olt" path="res://sprites/player/standing.png" id="2_s60mg"]
+[ext_resource type="Texture2D" uid="uid://dp1un6sb3h4us" path="res://sprites/player/standing.png" id="2_g6k8r"]
 [ext_resource type="AudioStream" uid="uid://b3qti178uka8r" path="res://sfx/jump.mp3" id="3_g1dw6"]
-[ext_resource type="AudioStream" uid="uid://step_sfx_uid" path="res://sfx/step.mp3" id="4_step"]
-[ext_resource type="AudioStream" uid="uid://land_sfx_uid" path="res://sfx/land.mp3" id="5_land"]
-[ext_resource type="AudioStream" uid="uid://die_sfx_uid" path="res://sfx/die.mp3" id="6_die"]
+[ext_resource type="AudioStream" uid="uid://dsm7ypu6n1dwg" path="res://sfx/step.mp3" id="4_step"]
+[ext_resource type="AudioStream" uid="uid://xlf0wi0wx86u" path="res://sfx/land.mp3" id="5_land"]
+[ext_resource type="AudioStream" uid="uid://bksok3vqye65o" path="res://sfx/die.mp3" id="6_die"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1ybm1"]
 size = Vector2(128, 128)
@@ -16,7 +16,9 @@ collision_mask = 253
 script = ExtResource("1_58q48")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1443144402]
-texture = ExtResource("2_s60mg")
+position = Vector2(-1.5, 0.5)
+scale = Vector2(0.20597483, 0.21934366)
+texture = ExtResource("2_g6k8r")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=524345955]
 shape = SubResource("RectangleShape2D_1ybm1")
