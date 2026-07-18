@@ -34,6 +34,8 @@ public partial class player : CharacterBody2D
 	private AudioStreamPlayer landSFX;
 	private AudioStreamPlayer dieSFX;
 	private Sprite2D playerSprite;
+	private Texture2D standingTexture;
+	private Texture2D swingTexture;
 	private float stepTimer = 0f;
 	private const float stepInterval = 0.3f; // Play step sound every 0.3 seconds while walking
 	private bool wasOnFloor = false; // Track previous floor state for landing detection
@@ -63,6 +65,8 @@ public partial class player : CharacterBody2D
 		landSFX = GetNode<AudioStreamPlayer>("LandSFX");
 		dieSFX = GetNode<AudioStreamPlayer>("DieSFX");
 		playerSprite = GetNode<Sprite2D>("Sprite2D");
+		standingTexture = playerSprite.Texture;
+		swingTexture = GD.Load<Texture2D>("res://sprites/player/swing_body.png");
 		
 		frictionCast = new ShapeCast2D();
 		frictionCast.Shape = GetNode<CollisionShape2D>("CollisionShape2D").Shape;
@@ -136,6 +140,17 @@ public partial class player : CharacterBody2D
 		float inputX = Input.GetActionStrength("Right") - Input.GetActionStrength("Left");
 		if (inputX != 0) {
 			playerSprite.FlipH = inputX < 0;
+		}
+
+		// 8. Switch sprite based on state
+		if (isSwinging || !IsOnFloor()) {
+			if (playerSprite.Texture != swingTexture) {
+				playerSprite.Texture = swingTexture;
+			}
+		} else {
+			if (playerSprite.Texture != standingTexture) {
+				playerSprite.Texture = standingTexture;
+			}
 		}
 
 		Velocity = newVelocity;
