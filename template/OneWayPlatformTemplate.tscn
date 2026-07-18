@@ -3,19 +3,21 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oneway"]
 size = Vector2(367.806, 59.537)
 
-[node name="OneWayPlatform" type="StaticBody2D"]
+[node name="OneWayPlatform" type="StaticBody2D" unique_id=1911222428]
 collision_mask = 5
 
-[node name="Visual" type="ColorRect" parent="."]
-position = Vector2(-183.903, -29.7685)
-size = Vector2(367.806, 59.537)
+[node name="Visual" type="ColorRect" parent="." unique_id=1863646394]
+offset_left = -183.903
+offset_top = -29.7685
+offset_right = 183.903
+offset_bottom = 29.7685
 color = Color(0.5, 0.5, 1, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-one_way_collision = true
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=795815110]
 shape = SubResource("RectangleShape2D_oneway")
+one_way_collision = true
 
-[node name="Arrow" type="Polygon2D" parent="."]
-position = Vector2(0, -20)
+[node name="Arrow" type="Polygon2D" parent="." unique_id=1968640164]
+position = Vector2(0, 3)
 color = Color(1, 1, 1, 0.8)
 polygon = PackedVector2Array(0, -20, -10, 10, 0, 0, 10, 10)

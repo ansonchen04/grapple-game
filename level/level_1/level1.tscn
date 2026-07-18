@@ -18,7 +18,7 @@ position = Vector2(-463, -2)
 scale = Vector2(0.5, 0.5)
 
 [node name="Player" parent="." unique_id=876559661 instance=ExtResource("1_q2th1")]
-position = Vector2(-510, -166)
+position = Vector2(-454, -122)
 
 [node name="Rope" parent="." unique_id=682919283 instance=ExtResource("3_mubsx")]
 
@@ -53,7 +53,7 @@ position = Vector2(5426, 290)
 position = Vector2(5866, 187)
 
 [node name="Flag2" parent="." unique_id=1115610753 instance=ExtResource("7_flag")]
-position = Vector2(6257, 136)
+position = Vector2(6250, 138)
 
 [node name="Longceiling" parent="." unique_id=446949100 instance=ExtResource("8_1vvmk")]
 position = Vector2(3712, -238)
@@ -72,11 +72,6 @@ scale = Vector2(0.18888889, 0.18888889)
 texture = ExtResource("10_hjicb")
 
 [node name="Sprite2D2" type="Sprite2D" parent="." unique_id=1879305569]
-position = Vector2(3642.0005, -60.99997)
-scale = Vector2(0.18888889, 0.18888889)
-texture = ExtResource("10_hjicb")
-
-[node name="Sprite2D3" type="Sprite2D" parent="." unique_id=249275928]
-position = Vector2(5873, 132)
+position = Vector2(3616.9998, -161.00002)
 scale = Vector2(0.18888889, 0.18888889)
 texture = ExtResource("10_hjicb")

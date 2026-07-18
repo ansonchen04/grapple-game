@@ -1,24 +1,22 @@
 [gd_scene format=3 uid="uid://checkpoint123"]
 
-[ext_resource type="Script" path="res://level/common/Checkpoint.cs" id="1_script"]
-[ext_resource type="AudioStream" uid="uid://checkpoint_sfx_uid" path="res://sfx/checkpoint.mp3" id="2_checkpoint"]
-[ext_resource type="Texture2D" uid="uid://banana_uid" path="res://sprites/banana.webp" id="3_banana"]
+[ext_resource type="Script" uid="uid://c4f1mbgck1t5f" path="res://level/common/Checkpoint.cs" id="1_script"]
+[ext_resource type="AudioStream" uid="uid://dpq3c8fd4ibg0" path="res://sfx/checkpoint.mp3" id="2_checkpoint"]
+[ext_resource type="Texture2D" uid="uid://cugvuknnfm01f" path="res://sprites/banana.webp" id="3_banana"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_checkpoint"]
 size = Vector2(32, 64)
 
-[node name="Checkpoint" type="Area2D"]
+[node name="Checkpoint" type="Area2D" unique_id=135683651]
 collision_mask = 4
-monitoring = true
 script = ExtResource("1_script")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1561502315]
 shape = SubResource("RectangleShape2D_checkpoint")
 
-[node name="Visual" type="Sprite2D" parent="."]
-position = Vector2(-16, -32)
-scale = Vector2(1, 1)
+[node name="Visual" type="Sprite2D" parent="." unique_id=1181762998]
+scale = Vector2(0.19285715, 0.19285715)
 texture = ExtResource("3_banana")
 
-[node name="CheckpointSFX" type="AudioStreamPlayer" parent="."]
+[node name="CheckpointSFX" type="AudioStreamPlayer" parent="." unique_id=610919942]
 stream = ExtResource("2_checkpoint")

@@ -396,7 +396,7 @@ position = Vector2(2086, -1636)
 position = Vector2(15, -3647)
 
 [node name="Flag" parent="." unique_id=1710116324 instance=ExtResource("11_8krhd")]
-position = Vector2(1204, -1711)
+position = Vector2(1209, -1716)
 
 [node name="SwingAnchor14" parent="." unique_id=1714990512 instance=ExtResource("5_8srnw")]
 position = Vector2(-1215, -1643)

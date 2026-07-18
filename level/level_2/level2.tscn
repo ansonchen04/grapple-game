@@ -92,7 +92,7 @@ position = Vector2(3752, -2396)
 position = Vector2(3390, -2396)
 
 [node name="Flag" parent="." unique_id=935277841 instance=ExtResource("10_u681c")]
-position = Vector2(3760, -2510)
+position = Vector2(3751, -2509)
 
 [node name="PauseMenu" parent="." unique_id=2000000012 instance=ExtResource("11_pause")]
 
