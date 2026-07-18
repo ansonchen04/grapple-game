@@ -37,7 +37,6 @@ public partial class player : CharacterBody2D
 	private AudioStreamPlayer dieSFX;
 	private Sprite2D playerSprite;
 	private Sprite2D monkeArm;
-	private Texture2D standingTexture;
 	private Texture2D swingTexture;
 	private float stepTimer = 0f;
 	public const float ArmTipOffset = 40.0f; // Distance from player center to arm tip
@@ -70,8 +69,8 @@ public partial class player : CharacterBody2D
 		dieSFX = GetNode<AudioStreamPlayer>("DieSFX");
 		playerSprite = GetNode<Sprite2D>("Sprite2D");
 		monkeArm = GetNode<Sprite2D>("MonkeArm");
-		standingTexture = playerSprite.Texture;
 		swingTexture = GD.Load<Texture2D>("res://sprites/player/swing_body.png");
+		playerSprite.Texture = swingTexture;
 		
 		frictionCast = new ShapeCast2D();
 		frictionCast.Shape = GetNode<CollisionShape2D>("CollisionShape2D").Shape;
@@ -147,20 +146,11 @@ public partial class player : CharacterBody2D
 			playerSprite.FlipH = inputX < 0;
 		}
 
-		// 8. Switch sprite based on state and update monke arm
-		if (isSwinging || !IsOnFloor()) {
-			if (playerSprite.Texture != swingTexture) {
-				playerSprite.Texture = swingTexture;
-			}
+		// 8. Update monke arm visibility
+		if (isSwinging || !IsOnFloor() || rope.ropeState != RopeState.Hidden) {
 			monkeArm.Visible = true;
 		} else {
-			if (playerSprite.Texture != standingTexture) {
-				playerSprite.Texture = standingTexture;
-			}
-			// Hide arm if not swinging/airborne AND rope is not aiming
-			if (rope.ropeState != RopeState.Hidden) {
-				monkeArm.Visible = false;
-			}
+			monkeArm.Visible = false;
 		}
 
 		// 9. Update monke arm position and rotation
