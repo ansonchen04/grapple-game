@@ -33,17 +33,17 @@ text = "Level Complete!"
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 48
 
-[node name="MenuButton" type="Button" parent="MenuContainer"]
+[node name="NextLevelButton" type="Button" parent="MenuContainer"]
 custom_minimum_size = Vector2(0, 50)
-text = "Main Menu"
+text = "Next Level"
 
 [node name="ReplayButton" type="Button" parent="MenuContainer"]
 custom_minimum_size = Vector2(0, 50)
 text = "Replay"
 
-[node name="NextLevelButton" type="Button" parent="MenuContainer"]
+[node name="MenuButton" type="Button" parent="MenuContainer"]
 custom_minimum_size = Vector2(0, 50)
-text = "Next Level"
+text = "Main Menu"
 
 [node name="VictoryMusic" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_victory_music")
