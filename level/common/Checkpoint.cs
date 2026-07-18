@@ -2,17 +2,17 @@ using Godot;
 
 public partial class Checkpoint : Area2D
 {
-    private ColorRect visual;
+    private Sprite2D visual;
     private bool isActivated = false;
     private AudioStreamPlayer checkpointSFX;
+    private Texture2D eatenBananaTexture;
 
     public override void _Ready()
     {
         BodyEntered += OnBodyEntered;
-        visual = GetNode<ColorRect>("Visual");
+        visual = GetNode<Sprite2D>("Visual");
         checkpointSFX = GetNode<AudioStreamPlayer>("CheckpointSFX");
-        // Initially show as inactive (yellow/orange like the flag)
-        visual.Color = new Color(1.0f, 0.8f, 0.0f, 1.0f);
+        eatenBananaTexture = GD.Load<Texture2D>("res://sprites/eatenbanana.png");
     }
 
     private void OnBodyEntered(Node body)
@@ -22,8 +22,11 @@ public partial class Checkpoint : Area2D
             isActivated = true;
             player.LastCheckpointPosition = GlobalPosition;
             
-            // Visual feedback: change to active state (bright green)
-            visual.Color = new Color(0.0f, 1.0f, 0.0f, 1.0f);
+            // Visual feedback: switch to eaten banana sprite
+            if (visual != null && eatenBananaTexture != null)
+            {
+                visual.Texture = eatenBananaTexture;
+            }
             
             checkpointSFX.Play();
             
