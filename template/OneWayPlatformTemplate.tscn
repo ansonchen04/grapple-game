@@ -18,4 +18,4 @@ shape = SubResource("RectangleShape2D_oneway")
 [node name="Arrow" type="Polygon2D" parent="."]
 position = Vector2(0, -20)
 color = Color(1, 1, 1, 0.8)
-polygon = PackedVector2Array(0, -10, -5, 5, 0, 0, 5, 5)
+polygon = PackedVector2Array(0, -20, -10, 10, 0, 0, 10, 10)
