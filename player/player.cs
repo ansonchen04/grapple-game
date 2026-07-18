@@ -34,6 +34,7 @@ public partial class player : CharacterBody2D
 	private AudioStreamPlayer landSFX;
 	private AudioStreamPlayer dieSFX;
 	private Sprite2D playerSprite;
+	private Sprite2D monkeArm;
 	private Texture2D standingTexture;
 	private Texture2D swingTexture;
 	private float stepTimer = 0f;
@@ -65,6 +66,7 @@ public partial class player : CharacterBody2D
 		landSFX = GetNode<AudioStreamPlayer>("LandSFX");
 		dieSFX = GetNode<AudioStreamPlayer>("DieSFX");
 		playerSprite = GetNode<Sprite2D>("Sprite2D");
+		monkeArm = GetNode<Sprite2D>("MonkeArm");
 		standingTexture = playerSprite.Texture;
 		swingTexture = GD.Load<Texture2D>("res://sprites/player/swing_body.png");
 		
@@ -147,10 +149,12 @@ public partial class player : CharacterBody2D
 			if (playerSprite.Texture != swingTexture) {
 				playerSprite.Texture = swingTexture;
 			}
+			monkeArm.Visible = true;
 		} else {
 			if (playerSprite.Texture != standingTexture) {
 				playerSprite.Texture = standingTexture;
 			}
+			monkeArm.Visible = false;
 		}
 
 		Velocity = newVelocity;
