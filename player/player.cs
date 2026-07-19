@@ -10,6 +10,7 @@ public partial class player : CharacterBody2D
 	// Test commit comment
 	// Test commit 2 - verifying git workflow
 	// Test commit 3 - small change for verification
+	// Test commit 4 - quick test commit
 	//How fast the player moves and how high they can jump
 	private const float speed = 450.0f;
 	private const float jumpVelocity = -700.0f;
