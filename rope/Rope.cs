@@ -86,6 +86,12 @@ public partial class Rope : Node2D {
 			}
 			
 			UpdateVerlet(delta);
+			
+			// Rotate hook to face the anchor
+			Vector2 toAnchor = currentAnchor - hookSprite.GlobalPosition;
+			if (toAnchor.Length() > 0.001f) {
+				hookSprite.Rotation = Mathf.Atan2(toAnchor.Y, toAnchor.X);
+			}
 		} else {
 			anchorNode = null; // Reset tracking when rope is released/hidden
 			ropeLine.Points = new Vector2[0];
@@ -216,6 +222,9 @@ public partial class Rope : Node2D {
 		
 		hookSprite.GlobalPosition += shotDirection * moveStep;
 		shotTraveled += moveStep;
+		
+		// Rotate hook to face direction of movement
+		hookSprite.Rotation = Mathf.Atan2(shotDirection.Y, shotDirection.X);
 		
 		if (shotTraveled >= shotDistance) {
 			if (hasLastHit) {
