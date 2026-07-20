@@ -1,4 +1,5 @@
 using Godot;
+using System.Linq;
 
 public partial class BackgroundScaler : CanvasLayer
 {
@@ -20,7 +21,7 @@ public partial class BackgroundScaler : CanvasLayer
 
     public override void _Notification(int what)
     {
-        if (what == NotificationResized)
+        if (what == NOTIFICATION_RESIZED)
         {
             UpdateBackgroundScale();
         }
@@ -28,7 +29,7 @@ public partial class BackgroundScaler : CanvasLayer
 
     private void UpdateBackgroundScale()
     {
-        var viewportSize = GetViewportRect().Size;
+        var viewportSize = GetViewport().Size;
         float scaleX = viewportSize.X / baseWidth;
         float scaleY = viewportSize.Y / baseHeight;
         
