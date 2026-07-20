@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://cagn6rblc6286" path="res://level/level_1/Lvl1SmallPlatform.tscn" id="12_jw77s"]
 [ext_resource type="PackedScene" uid="uid://cwlbwh5jpabhl" path="res://menu/PauseMenu.tscn" id="13_pause"]
 [ext_resource type="Texture2D" uid="uid://bo4kg6xdqfeml" path="res://sprites/exit_sign.jpg" id="14_bg8f3"]
+[ext_resource type="Texture2D" uid="uid://bhe0c0m2hvq28" path="res://sprites/reactor.png" id="15_reactor"]
 
 [node name="Level3" type="Node2D" unique_id=212584331]
 
@@ -434,10 +435,16 @@ scale = Vector2(0.18888889, 0.18888889)
 texture = ExtResource("14_bg8f3")
 flip_h = true
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=2146445303]
-z_index = -3
-offset_left = -7147.0
-offset_top = -8336.0
-offset_right = 13678.0
-offset_bottom = 3637.0
+[node name="BackgroundLayer" type="CanvasLayer" parent="." unique_id=2000000012]
+layer = -1
+
+[node name="BlackBackground" type="ColorRect" parent="BackgroundLayer" unique_id=2000000014]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 color = Color(0, 0, 0, 1)
+
+[node name="BackgroundSprite" type="Sprite2D" parent="BackgroundLayer" unique_id=2000000013]
+position = Vector2(807.00006, 774)
+scale = Vector2(0.77922463, 0.7792245)
+texture = ExtResource("15_reactor")
