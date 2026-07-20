@@ -30,6 +30,8 @@ public partial class BackgroundScaler : CanvasLayer
     private void UpdateBackgroundScale()
     {
         var viewportSize = GetViewport().GetVisibleRect().Size;
+        var viewportCenter = viewportSize / 2.0f;
+        
         float scaleX = viewportSize.X / baseWidth;
         float scaleY = viewportSize.Y / baseHeight;
         
@@ -41,6 +43,8 @@ public partial class BackgroundScaler : CanvasLayer
             if (sprite != null)
             {
                 sprite.Scale = new Vector2(scale, scale);
+                // Center the sprite in the viewport
+                sprite.Position = viewportCenter;
             }
         }
     }
