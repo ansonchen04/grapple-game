@@ -21,7 +21,7 @@ public partial class BackgroundScaler : CanvasLayer
 
     public override void _Notification(int what)
     {
-        if (what == NOTIFICATION_RESIZED)
+        if (what == 36) // NOTIFICATION_RESIZED
         {
             UpdateBackgroundScale();
         }
@@ -29,7 +29,7 @@ public partial class BackgroundScaler : CanvasLayer
 
     private void UpdateBackgroundScale()
     {
-        var viewportSize = GetViewport().Size;
+        var viewportSize = GetViewportRect().Size;
         float scaleX = viewportSize.X / baseWidth;
         float scaleY = viewportSize.Y / baseHeight;
         
