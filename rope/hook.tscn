@@ -1,34 +1,34 @@
-[gd_scene load_steps=4 format=3 uid="uid://b8debkwn61e2y"]
+[gd_scene format=3 uid="uid://b8debkwn61e2y"]
 
-[ext_resource type="Script" path="res://rope/hook.cs" id="1_bqsvh"]
-[ext_resource type="Texture2D" uid="uid://bmuexrcaxeyrg" path="res://icon.svg" id="2_4v30u"]
+[ext_resource type="Script" uid="uid://du3kprjprdsg6" path="res://rope/hook.cs" id="1_bqsvh"]
+[ext_resource type="Texture2D" uid="uid://djjsqnk72hwdd" path="res://sprites/grapple.png" id="2_jueim"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rqdvu"]
 
-[node name="Hook" type="RigidBody2D" groups=["Player"]]
+[node name="Hook" type="RigidBody2D" unique_id=130980786 groups=["Player"]]
 collision_layer = 2
 collision_mask = 253
 gravity_scale = 0.0
 script = ExtResource("1_bqsvh")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("2_4v30u")
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1287098477]
+scale = Vector2(0.5775, 0.5775)
+texture = ExtResource("2_jueim")
 
-[node name="RayCast2D" type="RayCast2D" parent="."]
+[node name="RayCast2D" type="RayCast2D" parent="." unique_id=929978477]
 target_position = Vector2(0, -42)
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." unique_id=1097268370]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1009465150]
 scale = Vector2(1.75, 1.75)
 shape = SubResource("CircleShape2D_rqdvu")
 
-[node name="Collision" type="CollisionShape2D" parent="." groups=["NotHookable"]]
+[node name="Collision" type="CollisionShape2D" parent="." unique_id=971054126 groups=["NotHookable"]]
 scale = Vector2(1.75, 1.75)
 shape = SubResource("CircleShape2D_rqdvu")
 
-[node name="PinJoint2D" type="PinJoint2D" parent="."]
+[node name="PinJoint2D" type="PinJoint2D" parent="." unique_id=887202418]
 position = Vector2(0, 18)
 node_a = NodePath("..")
 
