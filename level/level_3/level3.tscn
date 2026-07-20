@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cs7aery6d41b5"]
 
 [ext_resource type="PackedScene" uid="uid://6vx1riphdci0" path="res://level/level_1/Lvl1StartingPlatform.tscn" id="1_eduod"]
+[ext_resource type="Script" uid="uid://dlhwv1udqpmt" path="res://level/level_3/Level3.cs" id="1_wa2v1"]
 [ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="2_070xk"]
 [ext_resource type="PackedScene" uid="uid://6yotxco8qhu" path="res://rope/Rope.tscn" id="3_c38dd"]
 [ext_resource type="PackedScene" uid="uid://behe5gd0wwyu5" path="res://level/common/SpikePlatform.tscn" id="4_c38dd"]
@@ -16,8 +17,10 @@
 [ext_resource type="Texture2D" uid="uid://bo4kg6xdqfeml" path="res://sprites/exit_sign.jpg" id="14_bg8f3"]
 [ext_resource type="Texture2D" uid="uid://bhe0c0m2hvq28" path="res://sprites/reactor.png" id="15_reactor"]
 [ext_resource type="Texture2D" uid="uid://cnody5mmicgex" path="res://sprites/moon.png" id="16_moon"]
+[ext_resource type="AudioStream" uid="uid://dkyej7o8yko5g" path="res://music/level.wav" id="17_r3fym"]
 
 [node name="Level3" type="Node2D" unique_id=212584331]
+script = ExtResource("1_wa2v1")
 
 [node name="StartingPlatform" parent="." unique_id=1313610053 instance=ExtResource("1_eduod")]
 position = Vector2(-464, -1)
@@ -439,7 +442,7 @@ flip_h = true
 [node name="BackgroundLayer" type="CanvasLayer" parent="." unique_id=2000000012]
 layer = -1
 
-[node name="BlackBackground" type="ColorRect" parent="BackgroundLayer" unique_id=2000000014]
+[node name="BlackBackground" type="ColorRect" parent="BackgroundLayer" unique_id=1687354349]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -454,3 +457,7 @@ texture = ExtResource("15_reactor")
 position = Vector2(199, 180.00002)
 scale = Vector2(2.48, 2.48)
 texture = ExtResource("16_moon")
+
+[node name="Music" type="AudioStreamPlayer" parent="." unique_id=347507871]
+stream = ExtResource("17_r3fym")
+volume_db = -15.0

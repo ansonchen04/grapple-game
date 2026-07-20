@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://bwkhhnsjxt441"]
 
+[ext_resource type="Script" uid="uid://cxfvorvwdg1bx" path="res://level/level_1/Level1.cs" id="1_h4geu"]
 [ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="1_q2th1"]
 [ext_resource type="PackedScene" uid="uid://6vx1riphdci0" path="res://level/level_1/Lvl1StartingPlatform.tscn" id="2_fp37s"]
 [ext_resource type="PackedScene" uid="uid://6yotxco8qhu" path="res://rope/Rope.tscn" id="3_mubsx"]
@@ -10,10 +11,21 @@
 [ext_resource type="PackedScene" uid="uid://checkpoint123" path="res://level/common/Checkpoint.tscn" id="9_checkpoint"]
 [ext_resource type="Texture2D" uid="uid://bo4kg6xdqfeml" path="res://sprites/exit_sign.jpg" id="10_hjicb"]
 [ext_resource type="PackedScene" uid="uid://cwlbwh5jpabhl" path="res://menu/PauseMenu.tscn" id="10_pause"]
-[ext_resource type="Texture2D" uid="uid://bhe0c0m2hvq28" path="res://sprites/reactor.png" id="11_2lxcw"]
+[ext_resource type="Texture2D" uid="uid://cq73lckcg1nq" path="res://sprites/test_bg.png" id="12_h4geu"]
 [ext_resource type="Texture2D" uid="uid://cnody5mmicgex" path="res://sprites/moon.png" id="12_ldy2b"]
+[ext_resource type="AudioStream" uid="uid://dkyej7o8yko5g" path="res://music/level.wav" id="13_rovgo"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ldy2b"]
+font_size = 33
+
+[sub_resource type="LabelSettings" id="LabelSettings_rovgo"]
+font_size = 33
+
+[sub_resource type="LabelSettings" id="LabelSettings_h4geu"]
+font_size = 33
 
 [node name="Level1" type="Node2D" unique_id=1091476641]
+script = ExtResource("1_h4geu")
 
 [node name="StartingPlatform" parent="." unique_id=1249440026 instance=ExtResource("2_fp37s")]
 position = Vector2(-463, -2)
@@ -44,9 +56,6 @@ position = Vector2(2534, 125)
 
 [node name="SwingAnchor2" parent="." unique_id=1377495335 instance=ExtResource("6_3f3yr")]
 position = Vector2(3076, -261)
-
-[node name="Checkpoint1" parent="." unique_id=2000000010 instance=ExtResource("9_checkpoint")]
-position = Vector2(1441, 83)
 
 [node name="SwingPlatform4" parent="." unique_id=351847565 instance=ExtResource("4_qugjk")]
 position = Vector2(5426, 290)
@@ -85,20 +94,52 @@ layer = -1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -2348.0
-offset_top = -1553.0
-offset_right = 3035.1113
-offset_bottom = 1475.0
+offset_left = -2417.0
+offset_top = -1569.0
+offset_right = 2966.1113
+offset_bottom = 1459.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
 [node name="BackgroundSprite" type="Sprite2D" parent="BackgroundLayer" unique_id=2000000013]
-position = Vector2(807.00006, 774)
-scale = Vector2(0.77922463, 0.7792245)
-texture = ExtResource("11_2lxcw")
+position = Vector2(1274.0557, 666.09375)
+scale = Vector2(1.6525607, 1.5321904)
+texture = ExtResource("12_h4geu")
 
 [node name="Moon" type="Sprite2D" parent="BackgroundLayer" unique_id=1674583170]
 position = Vector2(199, 180.00002)
 scale = Vector2(2.48, 2.48)
 texture = ExtResource("12_ldy2b")
+
+[node name="Label" type="Label" parent="." unique_id=1602539779]
+offset_left = -725.0
+offset_top = -682.0
+offset_right = -249.0
+offset_bottom = -587.0
+text = "Press A/D to move Left/Right. 
+Press W or Space to Jump."
+label_settings = SubResource("LabelSettings_ldy2b")
+
+[node name="Label2" type="Label" parent="." unique_id=654136040]
+offset_left = 1553.0
+offset_top = -656.0
+offset_right = 2426.0
+offset_bottom = -512.0
+text = "Left Click the mouse to shoot the grapple. 
+
+If you've hooked something, Left Click again to release."
+label_settings = SubResource("LabelSettings_rovgo")
+
+[node name="Label3" type="Label" parent="." unique_id=1177792258]
+offset_left = 3172.0
+offset_top = -534.0
+offset_right = 4476.0
+offset_bottom = -439.0
+text = "The bananas are checkpoints. 
+If you die, you respawn at the last one you touched."
+label_settings = SubResource("LabelSettings_h4geu")
+
+[node name="Music" type="AudioStreamPlayer" parent="." unique_id=1483759230]
+stream = ExtResource("13_rovgo")
+volume_db = -15.0
