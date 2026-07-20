@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://cq73lckcg1nq" path="res://sprites/test_bg.png" id="12_h4geu"]
 [ext_resource type="Texture2D" uid="uid://cnody5mmicgex" path="res://sprites/moon.png" id="12_ldy2b"]
 [ext_resource type="AudioStream" uid="uid://dkyej7o8yko5g" path="res://music/level.wav" id="13_rovgo"]
+[ext_resource type="Script" uid="uid://bg_scaler_uid" path="res://scripts/BackgroundScaler.cs" id="1_bg_scaler"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ldy2b"]
 font_size = 33
@@ -89,6 +90,7 @@ texture = ExtResource("10_hjicb")
 
 [node name="BackgroundLayer" type="CanvasLayer" parent="." unique_id=2000000012]
 layer = -1
+script = ExtResource("1_bg_scaler")
 
 [node name="BlackBackground" type="ColorRect" parent="BackgroundLayer" unique_id=2000000014]
 anchors_preset = 15
