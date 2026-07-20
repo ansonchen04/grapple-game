@@ -29,7 +29,7 @@ public partial class BackgroundScaler : CanvasLayer
 
     private void UpdateBackgroundScale()
     {
-        var viewportSize = GetViewportRect().Size;
+        var viewportSize = GetViewport().GetVisibleRect().Size;
         float scaleX = viewportSize.X / baseWidth;
         float scaleY = viewportSize.Y / baseHeight;
         
