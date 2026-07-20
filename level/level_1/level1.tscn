@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://bo4kg6xdqfeml" path="res://sprites/exit_sign.jpg" id="10_hjicb"]
 [ext_resource type="PackedScene" uid="uid://cwlbwh5jpabhl" path="res://menu/PauseMenu.tscn" id="10_pause"]
 [ext_resource type="Texture2D" uid="uid://bhe0c0m2hvq28" path="res://sprites/reactor.png" id="11_2lxcw"]
+[ext_resource type="Texture2D" uid="uid://cnody5mmicgex" path="res://sprites/moon.png" id="12_ldy2b"]
 
 [node name="Level1" type="Node2D" unique_id=1091476641]
 
@@ -82,13 +83,22 @@ layer = -1
 
 [node name="BlackBackground" type="ColorRect" parent="BackgroundLayer" unique_id=2000000014]
 anchors_preset = 15
-anchor_left = 0.0
-anchor_top = 0.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -2348.0
+offset_top = -1553.0
+offset_right = 3035.1113
+offset_bottom = 1475.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
 [node name="BackgroundSprite" type="Sprite2D" parent="BackgroundLayer" unique_id=2000000013]
 position = Vector2(807.00006, 774)
 scale = Vector2(0.77922463, 0.7792245)
 texture = ExtResource("11_2lxcw")
+
+[node name="Moon" type="Sprite2D" parent="BackgroundLayer" unique_id=1674583170]
+position = Vector2(199, 180.00002)
+scale = Vector2(2.48, 2.48)
+texture = ExtResource("12_ldy2b")
