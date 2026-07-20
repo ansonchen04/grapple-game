@@ -75,3 +75,11 @@ texture = ExtResource("10_hjicb")
 position = Vector2(3616.9998, -161.00002)
 scale = Vector2(0.18888889, 0.18888889)
 texture = ExtResource("10_hjicb")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=365414553]
+z_index = -3
+offset_left = -8606.0
+offset_top = -6404.0
+offset_right = 12219.0
+offset_bottom = 5569.0
+color = Color(0, 0, 0, 1)
