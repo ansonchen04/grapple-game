@@ -80,6 +80,11 @@ public partial class player : CharacterBody2D
 		frictionCast.Shape = GetNode<CollisionShape2D>("CollisionShape2D").Shape;
 		frictionCast.CollisionMask = CollisionMask; // Match player's collision mask
 		AddChild(frictionCast);
+
+		// Set up fixed background image on camera
+		Camera2D camera = GetNode<Camera2D>("Camera2D");
+		Texture2D backgroundTexture = GD.Load<Texture2D>("res://sprites/reactor.png");
+		camera.SetBackgroundImage(backgroundTexture);
 	}
 	public override void _PhysicsProcess(double delta) {
 		if (Position.Y > outOfBounds || Input.IsActionJustPressed("Restart")) {
