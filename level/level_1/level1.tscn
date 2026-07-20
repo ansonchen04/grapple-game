@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://checkpoint123" path="res://level/common/Checkpoint.tscn" id="9_checkpoint"]
 [ext_resource type="Texture2D" uid="uid://bo4kg6xdqfeml" path="res://sprites/exit_sign.jpg" id="10_hjicb"]
 [ext_resource type="PackedScene" uid="uid://cwlbwh5jpabhl" path="res://menu/PauseMenu.tscn" id="10_pause"]
+[ext_resource type="Texture2D" uid="uid://bhe0c0m2hvq28" path="res://sprites/reactor.png" id="11_2lxcw"]
 
 [node name="Level1" type="Node2D" unique_id=1091476641]
 
@@ -76,10 +77,8 @@ position = Vector2(3616.9998, -161.00002)
 scale = Vector2(0.18888889, 0.18888889)
 texture = ExtResource("10_hjicb")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=365414553]
+[node name="Sprite2D3" type="Sprite2D" parent="." unique_id=510202259]
 z_index = -3
-offset_left = -8606.0
-offset_top = -6404.0
-offset_right = 12219.0
-offset_bottom = 5569.0
-color = Color(0, 0, 0, 1)
+position = Vector2(3373, 172.00049)
+scale = Vector2(9.037037, 9.037036)
+texture = ExtResource("11_2lxcw")
