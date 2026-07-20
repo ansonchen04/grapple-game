@@ -81,6 +81,6 @@ texture = ExtResource("10_hjicb")
 layer = -1
 
 [node name="BackgroundSprite" type="Sprite2D" parent="BackgroundLayer" unique_id=2000000013]
-scale = Vector2(9.037037, 9.037036)
+position = Vector2(807.00006, 774)
+scale = Vector2(0.77922463, 0.7792245)
 texture = ExtResource("11_2lxcw")
-
