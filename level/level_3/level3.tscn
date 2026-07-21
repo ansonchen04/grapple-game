@@ -443,6 +443,7 @@ flip_h = true
 [node name="BackgroundLayer" type="CanvasLayer" parent="." unique_id=2000000012]
 layer = -1
 script = ExtResource("1_bg_scaler")
+script = ExtResource("1_bg_scaler")
 
 [node name="BlackBackground" type="ColorRect" parent="BackgroundLayer" unique_id=1687354349]
 anchors_preset = 15

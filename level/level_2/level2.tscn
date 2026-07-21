@@ -116,6 +116,7 @@ texture = ExtResource("12_c4t85")
 [node name="BackgroundLayer" type="CanvasLayer" parent="." unique_id=222278990]
 layer = -1
 script = ExtResource("1_bg_scaler")
+script = ExtResource("1_bg_scaler")
 
 [node name="BlackBackground" type="ColorRect" parent="BackgroundLayer" unique_id=2000000014]
 anchors_preset = 15
