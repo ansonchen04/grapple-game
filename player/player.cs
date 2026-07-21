@@ -47,6 +47,7 @@ public partial class player : CharacterBody2D
 	private const float stepInterval = 0.3f; // Play step sound every 0.3 seconds while walking
 	private bool wasOnFloor = false; // Track previous floor state for landing detection
 	private Vector2 previousAnchor = Vector2.Zero; // For anchor velocity compensation
+	private Vector2 smoothedAnchorVel = Vector2.Zero; // Smoothed anchor velocity to prevent spikes
 	private ShapeCast2D frictionCast; // For native surface friction detection
 	//Booleans to check if we are on a special surface, if we have different movement options
 	private bool onClimbableSurface = false;
@@ -311,6 +312,17 @@ public partial class player : CharacterBody2D
 		if (previousAnchor == Vector2.Zero) previousAnchor = anchor;
 		Vector2 anchorVel = (anchor - previousAnchor) / (float)delta;
 		previousAnchor = anchor;
+		
+		// Smooth anchor velocity to prevent spikes from moving platforms
+		smoothedAnchorVel = smoothedAnchorVel * 0.8f + anchorVel * 0.2f;
+		
+		// Clamp anchor velocity to prevent extreme spikes
+		if (smoothedAnchorVel.Length() > 1000.0f) {
+			smoothedAnchorVel = smoothedAnchorVel.Normalized() * 1000.0f;
+		}
+		
+		// Use smoothed anchor velocity for compensation
+		Vector2 anchorVelComp = smoothedAnchorVel;
 
 		Vector2 toPlayer = GlobalPosition - anchor;
 		float dist = toPlayer.Length();
@@ -325,7 +337,7 @@ public partial class player : CharacterBody2D
 			Vector2 tangentDir = new Vector2(radialDir.Y, -radialDir.X);
 			
 			// Work in relative velocity space to account for moving anchor
-			Vector2 relVel = vel - anchorVel;
+			Vector2 relVel = vel - anchorVelComp;
 			
 			float radialSpeed = relVel.Dot(radialDir);
 			float tangentialSpeed = relVel.Dot(tangentDir);
@@ -388,7 +400,7 @@ public partial class player : CharacterBody2D
 			}
 			
 			// Convert back to absolute velocity
-			vel = relVel + anchorVel;
+			vel = relVel + anchorVelComp;
 
 			// Step 14: Native Surface Friction Integration (Localized to swing state)
 			if (frictionCast.IsColliding()) {

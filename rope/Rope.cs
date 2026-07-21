@@ -19,6 +19,7 @@ public partial class Rope : Node2D {
 	const float RopeGravity = 200.0f; // Reduced to prevent excessive sagging that exceeds the physics slack buffer
 	bool _isRopeInitialized = false;
 	Vector2 currentAnchor = Vector2.Zero;
+	Vector2 previousAnchor = Vector2.Zero;
 	
 	// Debug visualization & aim caching
 	Vector2 debugOrigin = Vector2.Zero;
@@ -75,7 +76,17 @@ public partial class Rope : Node2D {
 		if (ropeState == RopeState.Hooked || ropeState == RopeState.Retracting) {
 			// Dynamic anchor tracking: update global position based on moving platform
 			if (anchorNode != null && GodotObject.IsInstanceValid(anchorNode)) {
-				currentAnchor = anchorNode.ToGlobal(anchorLocalOffset);
+				Vector2 newAnchor = anchorNode.ToGlobal(anchorLocalOffset);
+				
+				// Smooth anchor transition to prevent Verlet instability
+				if (previousAnchor == Vector2.Zero) {
+					previousAnchor = currentAnchor;
+				}
+				
+				// Lerp towards new anchor position to smooth out sudden jumps
+				float smoothFactor = 0.5f; // Adjust as needed
+				currentAnchor = currentAnchor.Lerp(newAnchor, smoothFactor);
+				previousAnchor = currentAnchor;
 			} else {
 				anchorNode = null; // Platform destroyed or left scene, lock to last known position
 			}
@@ -94,6 +105,7 @@ public partial class Rope : Node2D {
 			}
 		} else {
 			anchorNode = null; // Reset tracking when rope is released/hidden
+			previousAnchor = Vector2.Zero; // Reset anchor tracking
 			ropeLine.Points = new Vector2[0];
 			for(int i=0; i<=MaxSegments; i++) {
 				positions[i] = Vector2.Zero;
