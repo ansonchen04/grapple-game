@@ -3,9 +3,6 @@ using System.Linq;
 
 public partial class BackgroundScaler : CanvasLayer
 {
-    [Export] private float baseWidth = 1920.0f;
-    [Export] private float baseHeight = 1080.0f;
-
     private Sprite2D[] _backgroundSprites;
 
     public override void _Ready()
@@ -31,20 +28,26 @@ public partial class BackgroundScaler : CanvasLayer
     {
         var viewportSize = GetViewport().GetVisibleRect().Size;
         var viewportCenter = viewportSize / 2.0f;
-        
-        float scaleX = viewportSize.X / baseWidth;
-        float scaleY = viewportSize.Y / baseHeight;
-        
-        // Use the larger scale to ensure the background covers the screen
-        float scale = Mathf.Max(scaleX, scaleY);
 
         foreach (var sprite in _backgroundSprites)
         {
             if (sprite != null)
             {
-                sprite.Scale = new Vector2(scale, scale);
-                // Center the sprite in the viewport
-                sprite.Position = viewportCenter;
+                var texture = sprite.Texture;
+                if (texture != null)
+                {
+                    var textureSize = texture.GetSize();
+                    
+                    float scaleX = viewportSize.X / textureSize.X;
+                    float scaleY = viewportSize.Y / textureSize.Y;
+                    
+                    // Use the larger scale to ensure the background covers the screen
+                    float scale = Mathf.Max(scaleX, scaleY);
+
+                    sprite.Scale = new Vector2(scale, scale);
+                    // Center the sprite in the viewport
+                    sprite.Position = viewportCenter;
+                }
             }
         }
     }
