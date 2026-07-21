@@ -38,6 +38,7 @@ public partial class Rope : Node2D {
 	Node2D anchorNode = null;
 	Vector2 anchorLocalOffset = Vector2.Zero;
 	Node2D lastHitCollider = null;
+	Vector2 lastAnchorGlobal = Vector2.Zero; // Track global anchor position to avoid ToLocal/ToGlobal issues with scaled platforms
 
 	// Shooting hook state
 	Vector2 shotOrigin = Vector2.Zero;
@@ -76,7 +77,8 @@ public partial class Rope : Node2D {
 		if (ropeState == RopeState.Hooked || ropeState == RopeState.Retracting) {
 			// Dynamic anchor tracking: update global position based on moving platform
 			if (anchorNode != null && GodotObject.IsInstanceValid(anchorNode)) {
-				Vector2 newAnchor = anchorNode.ToGlobal(anchorLocalOffset);
+				// Use global position directly to avoid ToLocal/ToGlobal issues with scaled platforms
+				Vector2 newAnchor = anchorNode.GlobalPosition + anchorLocalOffset;
 				
 				// Smooth anchor transition to prevent Verlet instability
 				if (previousAnchor == Vector2.Zero) {
@@ -243,8 +245,10 @@ public partial class Rope : Node2D {
 				// Successfully hit something, hook!
 				anchorNode = lastHitCollider;
 				if (anchorNode != null) {
-					anchorLocalOffset = lastValidLocalHit;
-					currentAnchor = anchorNode.ToGlobal(anchorLocalOffset);
+					// Store global hit position directly to avoid ToLocal/ToGlobal issues with scaled platforms
+					lastAnchorGlobal = lastValidHit;
+					anchorLocalOffset = lastValidHit - anchorNode.GlobalPosition;
+					currentAnchor = lastValidHit;
 				} else {
 					currentAnchor = lastValidHit;
 				}
@@ -271,6 +275,7 @@ public partial class Rope : Node2D {
 			previousPositions[i] = pos;
 		}
 		currentAnchor = anchor;
+		previousAnchor = anchor; // Initialize previous anchor to prevent first-frame spike
 	}
 
 	void UpdateVerlet(double delta) {
