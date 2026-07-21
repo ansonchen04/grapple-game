@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://bwkhhnsjxt441"]
 
+[ext_resource type="Script" uid="uid://d2iebh1f1ub2f" path="res://scripts/BackgroundScaler.cs" id="1_bg_scaler"]
 [ext_resource type="Script" uid="uid://cxfvorvwdg1bx" path="res://level/level_1/Level1.cs" id="1_h4geu"]
 [ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="1_q2th1"]
 [ext_resource type="PackedScene" uid="uid://6vx1riphdci0" path="res://level/level_1/Lvl1StartingPlatform.tscn" id="2_fp37s"]
@@ -11,19 +12,23 @@
 [ext_resource type="PackedScene" uid="uid://checkpoint123" path="res://level/common/Checkpoint.tscn" id="9_checkpoint"]
 [ext_resource type="Texture2D" uid="uid://bo4kg6xdqfeml" path="res://sprites/exit_sign.jpg" id="10_hjicb"]
 [ext_resource type="PackedScene" uid="uid://cwlbwh5jpabhl" path="res://menu/PauseMenu.tscn" id="10_pause"]
-[ext_resource type="Texture2D" uid="uid://cq73lckcg1nq" path="res://sprites/test_bg.png" id="12_h4geu"]
-[ext_resource type="Texture2D" uid="uid://cnody5mmicgex" path="res://sprites/moon.png" id="12_ldy2b"]
+[ext_resource type="Texture2D" uid="uid://bhe0c0m2hvq28" path="res://sprites/reactor.png" id="13_h4geu"]
 [ext_resource type="AudioStream" uid="uid://dkyej7o8yko5g" path="res://music/level.wav" id="13_rovgo"]
-[ext_resource type="Script" uid="uid://bg_scaler_uid" path="res://scripts/BackgroundScaler.cs" id="1_bg_scaler"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ldy2b"]
-font_size = 33
+font_size = 50
+outline_size = 7
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_rovgo"]
-font_size = 33
+font_size = 50
+outline_size = 7
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_h4geu"]
-font_size = 33
+font_size = 50
+outline_size = 7
+outline_color = Color(0, 0, 0, 1)
 
 [node name="Level1" type="Node2D" unique_id=1091476641]
 script = ExtResource("1_h4geu")
@@ -92,44 +97,26 @@ texture = ExtResource("10_hjicb")
 layer = -1
 script = ExtResource("1_bg_scaler")
 
-[node name="BlackBackground" type="ColorRect" parent="BackgroundLayer" unique_id=2000000014]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -2417.0
-offset_top = -1569.0
-offset_right = 2966.1113
-offset_bottom = 1459.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 1)
-
 [node name="BackgroundSprite" type="Sprite2D" parent="BackgroundLayer" unique_id=2000000013]
-position = Vector2(1274.0557, 666.09375)
-scale = Vector2(1.6525607, 1.5321904)
-texture = ExtResource("12_h4geu")
-
-[node name="Moon" type="Sprite2D" parent="BackgroundLayer" unique_id=1674583170]
-position = Vector2(199, 180.00002)
-scale = Vector2(2.48, 2.48)
-texture = ExtResource("12_ldy2b")
+position = Vector2(1288.4365, 673.5938)
+scale = Vector2(1.671286, 1.5495515)
+texture = ExtResource("13_h4geu")
 
 [node name="Label" type="Label" parent="." unique_id=1602539779]
-offset_left = -725.0
-offset_top = -682.0
-offset_right = -249.0
-offset_bottom = -587.0
+offset_left = 264.0
+offset_top = -608.0
+offset_right = 984.0
+offset_bottom = -467.0
 text = "Press A/D to move Left/Right. 
 Press W or Space to Jump."
 label_settings = SubResource("LabelSettings_ldy2b")
 
 [node name="Label2" type="Label" parent="." unique_id=654136040]
-offset_left = 1553.0
-offset_top = -656.0
-offset_right = 2426.0
-offset_bottom = -512.0
+offset_left = 1354.0
+offset_top = -638.0
+offset_right = 2676.0
+offset_bottom = -494.0
 text = "Left Click the mouse to shoot the grapple. 
-
 If you've hooked something, Left Click again to release."
 label_settings = SubResource("LabelSettings_rovgo")
 

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c7qjfhi1vllb8"]
 
 [ext_resource type="PackedScene" uid="uid://6vx1riphdci0" path="res://level/level_1/Lvl1StartingPlatform.tscn" id="1_2snaw"]
+[ext_resource type="Script" uid="uid://d2iebh1f1ub2f" path="res://scripts/BackgroundScaler.cs" id="1_bg_scaler"]
 [ext_resource type="Script" uid="uid://ix6u8kcrjhw2" path="res://level/level_2/Level2.cs" id="1_cam7r"]
 [ext_resource type="PackedScene" uid="uid://cneiixvf5cb8u" path="res://player/player.tscn" id="2_a2mxc"]
 [ext_resource type="PackedScene" uid="uid://6yotxco8qhu" path="res://rope/Rope.tscn" id="3_2icyi"]
@@ -14,9 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://cwlbwh5jpabhl" path="res://menu/PauseMenu.tscn" id="11_pause"]
 [ext_resource type="Texture2D" uid="uid://bo4kg6xdqfeml" path="res://sprites/exit_sign.jpg" id="12_c4t85"]
 [ext_resource type="Texture2D" uid="uid://bhe0c0m2hvq28" path="res://sprites/reactor.png" id="13_reactor"]
-[ext_resource type="Texture2D" uid="uid://cnody5mmicgex" path="res://sprites/moon.png" id="14_moon"]
 [ext_resource type="AudioStream" uid="uid://dkyej7o8yko5g" path="res://music/level.wav" id="15_x28xn"]
-[ext_resource type="Script" uid="uid://bg_scaler_uid" path="res://scripts/BackgroundScaler.cs" id="1_bg_scaler"]
 
 [node name="Level4" type="Node2D" unique_id=1003218659]
 script = ExtResource("1_cam7r")
@@ -116,7 +115,6 @@ texture = ExtResource("12_c4t85")
 [node name="BackgroundLayer" type="CanvasLayer" parent="." unique_id=222278990]
 layer = -1
 script = ExtResource("1_bg_scaler")
-script = ExtResource("1_bg_scaler")
 
 [node name="BlackBackground" type="ColorRect" parent="BackgroundLayer" unique_id=2000000014]
 anchors_preset = 15
@@ -128,11 +126,6 @@ color = Color(0, 0, 0, 1)
 position = Vector2(807.00006, 774)
 scale = Vector2(0.77922463, 0.7792245)
 texture = ExtResource("13_reactor")
-
-[node name="Moon" type="Sprite2D" parent="BackgroundLayer" unique_id=1674583171]
-position = Vector2(199, 180.00002)
-scale = Vector2(2.48, 2.48)
-texture = ExtResource("14_moon")
 
 [node name="Music" type="AudioStreamPlayer" parent="." unique_id=1568443543]
 stream = ExtResource("15_x28xn")
