@@ -189,6 +189,12 @@ public partial class Rope : Node2D
 		}
 	}
 
+	// Helper to cast player to the specific player class for method access.
+	private player GetPlayerInstance()
+	{
+		return player as player;
+	}
+
 	// Updates the aim visualization and raycast.
 	// This method is called every frame when the rope is hidden.
 	// It casts a ray from the player's arm tip towards the mouse cursor to find a potential anchor point.
@@ -197,7 +203,7 @@ public partial class Rope : Node2D
 		aimSprite.Visible = true;
 		hookSprite.Visible = false;
 
-		Vector2 armTip = player.GetArmTipPosition();
+		Vector2 armTip = GetPlayerInstance().GetArmTipPosition();
 		Vector2 mousePos = GetGlobalMousePosition();
 		Vector2 direction = (mousePos - armTip).Normalized();
 		float dist = MaxLength;
@@ -311,7 +317,7 @@ public partial class Rope : Node2D
 	{
 		if (ropeState != RopeState.Hidden) return;
 
-		shotOrigin = player.GetArmTipPosition();
+		shotOrigin = GetPlayerInstance().GetArmTipPosition();
 		shotDirection = (debugEnd - shotOrigin).Normalized();
 		shotDistance = MaxLength;
 		shotTraveled = 0f;
@@ -386,7 +392,7 @@ public partial class Rope : Node2D
 	// This method is called when the rope is first hooked.
 	private void InitializeRope(Vector2 anchor)
 	{
-		Vector2 end = player.GetArmTipPosition();
+		Vector2 end = GetPlayerInstance().GetArmTipPosition();
 		float dist = anchor.DistanceTo(end);
 		SegmentLength = dist / MaxSegments;
 
@@ -431,7 +437,7 @@ public partial class Rope : Node2D
 		previousPositions[0] = currentAnchor;
 
 		// Pin the last segment to the player's arm tip.
-		Vector2 armTip = player.GetArmTipPosition();
+		Vector2 armTip = GetPlayerInstance().GetArmTipPosition();
 		positions[MaxSegments] = armTip;
 		previousPositions[MaxSegments] = armTip;
 
