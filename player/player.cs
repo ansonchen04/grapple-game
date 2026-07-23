@@ -4,149 +4,94 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 
-/// <summary>
-/// The main player character controller. Handles movement, jumping, climbing, and grapple/swing physics.
-/// </summary>
+// Main player character controller. Handles movement, jumping, climbing, and grapple/swing physics.
 public partial class player : CharacterBody2D
 {
-	/// <summary>
-	/// Base movement speed on the ground.
-	/// </summary>
+	// Base movement speed on the ground.
 	private const float speed = 450.0f;
-	/// <summary>
-	/// Initial velocity applied when jumping.
-	/// </summary>
+	// Initial velocity applied when jumping.
 	private const float jumpVelocity = -700.0f;
 
-	/// <summary>
-	/// Velocity applied when climbing.
-	/// </summary>
+	// Velocity applied when climbing.
 	private const float climbVelocity = -200.0f;
 
-	/// <summary>
-	/// Dead zone for rope constraint to allow horizontal drift and match visual sag.
-	/// </summary>
+	// Dead zone for rope constraint to allow horizontal drift and match visual sag.
 	private const float slackBuffer = 40.0f;
 
-	/// <summary>
-	/// Tunable friction for swinging against surfaces (0.0-0.3 recommended).
-	/// </summary>
+	// Tunable friction for swinging against surfaces (0.0-0.3 recommended).
 	public float swingFriction = 0.01f;
 
-	/// <summary>
-	/// The player's starting position in the current level.
-	/// </summary>
+	// The player's starting position in the current level.
 	private Vector2 startPosition;
 
-	/// <summary>
-	/// The position of the last checkpoint the player touched.
-	/// </summary>
+	// The position of the last checkpoint the player touched.
 	public static Vector2 LastCheckpointPosition { get; set; }
 
-	/// <summary>
-	/// The file path of the current level.
-	/// </summary>
+	// The file path of the current level.
 	public static string CurrentLevelPath { get; set; } = "res://level/level_1/level1.tscn";
 
-	/// <summary>
-	/// The Y-coordinate threshold for falling out of bounds.
-	/// </summary>
+	// The Y-coordinate threshold for falling out of bounds.
 	private float outOfBounds;
 
-	/// <summary>
-	/// The initial direction of the hook shot.
-	/// </summary>
+	// The initial direction of the hook shot.
 	private Vector2 hookStartPos;
 
-	/// <summary>
-	/// Gravity value from project settings.
-	/// </summary>
+	// Gravity value from project settings.
 	private float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
-	/// <summary>
-	/// Raycast pointing downward to detect platforms.
-	/// </summary>
+	// Raycast pointing downward to detect platforms.
 	private RayCast2D _downwardRaycast;
 
-	/// <summary>
-	/// Length of the grapple raycast.
-	/// </summary>
+	// Length of the grapple raycast.
 	private const float raycastLength = 500.0f;
 
-	/// <summary>
-	/// Raycast used for grapple aiming.
-	/// </summary>
+	// Raycast used for grapple aiming.
 	private RayCast2D rayCast;
 
-	/// <summary>
-	/// Flag indicating if the player is currently grappled.
-	/// </summary>
+	// Flag indicating if the player is currently grappled.
 	private bool isGrappled = false;
 
-	/// <summary>
-	 /// Reference to the Rope node.
-	/// </summary>
+	// Reference to the Rope node.
 	public Rope rope;
 
-	/// <summary>
-	/// Audio players for various sound effects.
-	/// </summary>
+	// Audio players for various sound effects.
 	private AudioStreamPlayer jumpSFX;
 	private AudioStreamPlayer stepSFX;
 	private AudioStreamPlayer landSFX;
 	private AudioStreamPlayer dieSFX;
 
-	/// <summary>
-	/// Visual components for the player.
-	/// </summary>
+	// Visual components for the player.
 	private Sprite2D playerSprite;
 	private Sprite2D monkeArm;
 	private Texture2D swingTexture;
 
-	/// <summary>
-	/// Timer for playing step sounds.
-	/// </summary>
+	// Timer for playing step sounds.
 	private float stepTimer = 0f;
 
-	/// <summary>
-	/// Distance from player center to the arm tip.
-	/// </summary>
+	// Distance from player center to the arm tip.
 	public const float ArmTipOffset = 40.0f;
 
-	/// <summary>
-	/// Interval in seconds between step sounds.
-	/// </summary>
+	// Interval in seconds between step sounds.
 	private const float stepInterval = 0.3f;
 
-	/// <summary>
-	/// Tracks if the player was on the floor in the previous frame.
-	/// </summary>
+	// Tracks if the player was on the floor in the previous frame.
 	private bool wasOnFloor = false;
 
-	/// <summary>
-	/// Previous anchor position for velocity compensation.
-	/// </summary>
+	// Previous anchor position for velocity compensation.
 	private Vector2 previousAnchor = Vector2.Zero;
 
-	/// <summary>
-	/// Smoothed anchor velocity to prevent spikes.
-	/// </summary>
+	// Smoothed anchor velocity to prevent spikes.
 	private Vector2 smoothedAnchorVel = Vector2.Zero;
 
-	/// <summary>
-	/// ShapeCast2D for detecting surface friction while swinging.
-	/// </summary>
+	// ShapeCast2D for detecting surface friction while swinging.
 	private ShapeCast2D frictionCast;
 
-	/// <summary>
-	/// Flags for special surface interactions.
-	/// </summary>
+	// Flags for special surface interactions.
 	private bool onClimbableSurface = false;
 	private bool onOneWaySurface = false;
-	/// <summary>
-	/// Called when the node enters the scene tree for the first time.
-	/// Initializes nodes, variables, and event listeners.
-	/// </summary>
+
+	// Called when the node enters the scene tree for the first time.
+	// Initializes nodes, variables, and event listeners.
 	public override void _Ready()
 	{
 		// Load out-of-bounds threshold
@@ -186,9 +131,7 @@ public partial class player : CharacterBody2D
 		GD.Print($"Player: Loaded level {CurrentLevelPath}");
 		GD.Print(startPosition);
 	}
-	/// <summary>
-	/// Called every physics frame. Handles movement, gravity, swinging, and visual updates.
-	/// </summary>
+	// Called every physics frame. Handles movement, gravity, swinging, and visual updates.
 	public override void _PhysicsProcess(double delta)
 	{
 		// Check for out-of-bounds or restart
@@ -307,9 +250,7 @@ public partial class player : CharacterBody2D
 		Velocity = newVelocity;
 		MoveAndSlide();
 	}
-	/// <summary>
-	/// Handles input events, specifically grapple aiming.
-	/// </summary>
+	// Handles input events, specifically grapple aiming.
 	public override void _Input(InputEvent @event)
 	{
 		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left)
@@ -323,9 +264,7 @@ public partial class player : CharacterBody2D
 			rayCast.ForceRaycastUpdate();
 		}
 	}
-	/// <summary>
-	/// Handles basic movement on the ground and in the air.
-	/// </summary>
+	// Handles basic movement on the ground and in the air.
 	private Vector2 baseMovement(Vector2 velocity, float dt)
 	{
 		Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
@@ -361,9 +300,7 @@ public partial class player : CharacterBody2D
 		}
 		return velocity;
 	}
-	/// <summary>
-	/// Handles movement while climbing.
-	/// </summary>
+	// Handles movement while climbing.
 	private Vector2 climbMovement(Vector2 velocity)
 	{
 		Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
@@ -385,9 +322,7 @@ public partial class player : CharacterBody2D
 
 		return velocity;
 	}
-	/// <summary>
-	/// Checks if the platform is a one-way platform.
-	/// </summary>
+	// Checks if the platform is a one-way platform.
 	private bool checkOneway(Node2D platform)
 	{
 		Node[] children = platform.FindChildren("*", "CollisionPolygon2D", false, false).ToArray();
@@ -413,9 +348,7 @@ public partial class player : CharacterBody2D
 		}
 		return false;
 	}
-	/// <summary>
-	/// Restarts the player at the last checkpoint.
-	/// </summary>
+	// Restarts the player at the last checkpoint.
 	public void restart()
 	{
 		dieSFX.Play();
@@ -423,41 +356,31 @@ public partial class player : CharacterBody2D
 		Velocity = Vector2.Zero;
 	}
 
-	/// <summary>
-	/// Sets the climbing state.
-	/// </summary>
+	// Sets the climbing state.
 	public void setClimbing(bool onClimbableSurface)
 	{
 		this.onClimbableSurface = onClimbableSurface;
 	}
 
-	/// <summary>
-	/// Sets the one-way surface state.
-	/// </summary>
+	// Sets the one-way surface state.
 	public void setOneWay(bool onOneWaySurface)
 	{
 		this.onOneWaySurface = onOneWaySurface;
 	}
 
-	/// <summary>
-	/// Gets the global position of the raycast.
-	/// </summary>
+	// Gets the global position of the raycast.
 	public Vector2 GetRaycastPos()
 	{
 		return rayCast.GlobalPosition;
 	}
 
-	/// <summary>
-	/// Gets the start position of the hook.
-	/// </summary>
+	// Gets the start position of the hook.
 	public Vector2 GetHookStartPos()
 	{
 		return hookStartPos + GlobalPosition;
 	}
 
-	/// <summary>
-	/// Gets the position of the arm tip.
-	/// </summary>
+	// Gets the position of the arm tip.
 	public Vector2 GetArmTipPosition()
 	{
 		if (monkeArm == null) return GlobalPosition;
@@ -466,17 +389,13 @@ public partial class player : CharacterBody2D
 		return monkeArm.GlobalPosition + direction * ArmTipOffset;
 	}
 
-	/// <summary>
-	/// Gets the surface friction coefficient.
-	/// </summary>
+	// Gets the surface friction coefficient.
 	private float GetSurfaceFriction(Node collider)
 	{
 		return swingFriction;
 	}
 
-	/// <summary>
-	/// Applies swing physics constraints and forces.
-	/// </summary>
+	// Applies swing physics constraints and forces.
 	private void ApplySwingPhysics(ref Vector2 vel, double delta)
 	{
 		Vector2 anchor = rope.GetAnchor();

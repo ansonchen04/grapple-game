@@ -1,124 +1,80 @@
 using Godot;
 using System;
 
-/// <summary>
-/// Manages the grapple rope, including shooting, hooking, and Verlet simulation.
-/// </summary>
+// Manages the grapple rope, including shooting, hooking, and Verlet simulation.
 public partial class Rope : Node2D
 {
-	/// <summary>
-	/// Reference to the player character.
-	/// </summary>
+	// Reference to the player character.
 	CharacterBody2D player;
 
-	/// <summary>
-	/// Current state of the rope.
-	/// </summary>
+	// Current state of the rope.
 	public RopeState ropeState;
 
-	/// <summary>
-	/// Maximum length of the rope.
-	/// </summary>
+	// Maximum length of the rope.
 	const float MaxLength = 500.0f;
 
-	/// <summary>
-	/// Positions of the rope segments.
-	/// </summary>
+	// Positions of the rope segments.
 	Vector2[] positions;
 	Vector2[] previousPositions;
 
-	/// <summary>
-	/// Maximum number of segments in the rope.
-	/// </summary>
+	// Maximum number of segments in the rope.
 	const int MaxSegments = 30;
 
-	/// <summary>
-	/// Visual components.
-	/// </summary>
+	// Visual components.
 	Line2D ropeLine;
 	Sprite2D hookSprite;
 	Sprite2D aimSprite;
 	AudioStreamPlayer shootSFX;
 
-	/// <summary>
-	/// Length of each segment.
-	/// </summary>
+	// Length of each segment.
 	float SegmentLength;
 
-	/// <summary>
-	/// Gravity applied to the rope.
-	/// </summary>
+	// Gravity applied to the rope.
 	const float RopeGravity = 200.0f;
 
-	/// <summary>
-	/// Flag indicating if the rope has been initialized.
-	/// </summary>
+	// Flag indicating if the rope has been initialized.
 	bool _isRopeInitialized = false;
 
-	/// <summary>
-	/// Current and previous anchor positions.
-	/// </summary>
+	// Current and previous anchor positions.
 	Vector2 currentAnchor = Vector2.Zero;
 	Vector2 previousAnchor = Vector2.Zero;
 
-	/// <summary>
-	/// Debug visualization variables.
-	/// </summary>
+	// Debug visualization variables.
 	Vector2 debugOrigin = Vector2.Zero;
 	Vector2 debugEnd = Vector2.Zero;
 	Vector2 debugHit = Vector2.Zero;
 	bool hasHit = false;
 
-	/// <summary>
-	/// Last valid hit information.
-	/// </summary>
+	// Last valid hit information.
 	Vector2 lastValidHit = Vector2.Zero;
 	Vector2 lastValidLocalHit = Vector2.Zero;
 	bool hasLastHit = false;
 
-	/// <summary>
-	/// Gets the current anchor position.
-	/// </summary>
+	// Gets the current anchor position.
 	public Vector2 GetAnchor() => currentAnchor;
 
-	/// <summary>
-	/// Gets the maximum rope length.
-	/// </summary>
+	// Gets the maximum rope length.
 	public float GetMaxRopeLength() => deployedLength;
 
-	/// <summary>
-	/// Gets the hook's global position.
-	/// </summary>
+	// Gets the hook's global position.
 	public Vector2 GetHookPosition() => hookSprite.GlobalPosition;
 
-	/// <summary>
-	/// Current deployed length of the rope.
-	/// </summary>
+	// Current deployed length of the rope.
 	float deployedLength = MaxLength;
 
-	/// <summary>
-	/// The node the rope is anchored to.
-	/// </summary>
+	// The node the rope is anchored to.
 	Node2D anchorNode = null;
 
-	/// <summary>
-	/// Local offset of the anchor on the anchor node.
-	/// </summary>
+	// Local offset of the anchor on the anchor node.
 	Vector2 anchorLocalOffset = Vector2.Zero;
 
-	/// <summary>
-	/// The last collider hit by the hook.
-	/// </summary>
+	// The last collider hit by the hook.
 	Node2D lastHitCollider = null;
 
-	/// <summary>
-	/// Last known global anchor position.
-	/// </summary>
+	// Last known global anchor position.
 	Vector2 lastAnchorGlobal = Vector2.Zero;
 
-	/// <summary>
-	/// Shooting state variables.
-	/// </summary>
+	// Shooting state variables.
 	Vector2 shotOrigin = Vector2.Zero;
 	Vector2 shotDirection = Vector2.Zero;
 	float shotDistance = 0f;
@@ -126,9 +82,7 @@ public partial class Rope : Node2D
 	const float ShotSpeed = 1500.0f;
 	bool isShooting = false;
 
-	/// <summary>
-	/// Called when the node enters the scene tree.
-	/// </summary>
+	// Called when the node enters the scene tree.
 	public override void _Ready()
 	{
 		player = GetNode<CharacterBody2D>("../Player");
@@ -142,14 +96,10 @@ public partial class Rope : Node2D
 		previousPositions = new Vector2[MaxSegments + 1];
 	}
 
-	/// <summary>
-	/// Gets the player character.
-	/// </summary>
+	// Gets the player character.
 	public CharacterBody2D GetPlayer() => player;
 
-	/// <summary>
-	/// Called every frame. Updates aim or shot state.
-	/// </summary>
+	// Called every frame. Updates aim or shot state.
 	public override void _Process(double delta)
 	{
 		if (ropeState == RopeState.Hidden)
@@ -167,9 +117,7 @@ public partial class Rope : Node2D
 		}
 	}
 
-	/// <summary>
-	/// Called every physics frame. Updates anchor tracking and Verlet simulation.
-	/// </summary>
+	// Called every physics frame. Updates anchor tracking and Verlet simulation.
 	public override void _PhysicsProcess(double delta)
 	{
 		if (ropeState == RopeState.Hooked || ropeState == RopeState.Retracting)
@@ -223,9 +171,7 @@ public partial class Rope : Node2D
 		}
 	}
 
-	/// <summary>
-	/// Updates the aim visualization and raycast.
-	/// </summary>
+	// Updates the aim visualization and raycast.
 	private void UpdateAim()
 	{
 		aimSprite.Visible = true;
@@ -273,9 +219,7 @@ public partial class Rope : Node2D
 		QueueRedraw();
 	}
 
-	/// <summary>
-	/// Draws the aim line or shot line.
-	/// </summary>
+	// Draws the aim line or shot line.
 	public override void _Draw()
 	{
 		if (ropeState == RopeState.Hidden)
@@ -296,9 +240,7 @@ public partial class Rope : Node2D
 		}
 	}
 
-	/// <summary>
-	/// Handles input for shooting, canceling, and retracting the rope.
-	/// </summary>
+	// Handles input for shooting, canceling, and retracting the rope.
 	public override void _Input(InputEvent @event)
 	{
 		if (@event is InputEventMouseButton mouseEvent && mouseEvent.ButtonIndex == MouseButton.Left)
@@ -332,9 +274,7 @@ public partial class Rope : Node2D
 		}
 	}
 
-	/// <summary>
-	/// Starts shooting the hook.
-	/// </summary>
+	// Starts shooting the hook.
 	private void StartShot()
 	{
 		if (ropeState != RopeState.Hidden) return;
@@ -353,9 +293,7 @@ public partial class Rope : Node2D
 		shootSFX.Play();
 	}
 
-	/// <summary>
-	/// Cancels the rope and resets state.
-	/// </summary>
+	// Cancels the rope and resets state.
 	public void CancelRope()
 	{
 		ropeState = RopeState.Hidden;
@@ -371,9 +309,7 @@ public partial class Rope : Node2D
 		anchorNode = null;
 	}
 
-	/// <summary>
-	/// Updates the shot animation and checks for collisions.
-	/// </summary>
+	// Updates the shot animation and checks for collisions.
 	private void UpdateShot(double delta)
 	{
 		float dt = (float)delta;
@@ -411,9 +347,7 @@ public partial class Rope : Node2D
 		QueueRedraw();
 	}
 
-	/// <summary>
-	/// Initializes the rope segments between the anchor and the player.
-	/// </summary>
+	// Initializes the rope segments between the anchor and the player.
 	private void InitializeRope(Vector2 anchor)
 	{
 		Vector2 end = player.GetArmTipPosition();
@@ -431,9 +365,7 @@ public partial class Rope : Node2D
 		previousAnchor = anchor;
 	}
 
-	/// <summary>
-	/// Updates the Verlet simulation for the rope.
-	/// </summary>
+	// Updates the Verlet simulation for the rope.
 	private void UpdateVerlet(double delta)
 	{
 		float dt = Mathf.Clamp((float)delta, 0.0f, 0.033f);

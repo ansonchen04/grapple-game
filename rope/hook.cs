@@ -1,30 +1,22 @@
 using Godot;
 using System;
 
-/// <summary>
-/// Represents the grapple hook.
-/// </summary>
+// Represents the grapple hook.
 public partial class hook : RigidBody2D
 {
-    /// <summary>
-    /// Called when the node enters the scene tree.
-    /// </summary>
+    // Called when the node enters the scene tree.
     public override void _Ready()
     {
         HideHook();
     }
 
-    /// <summary>
-    /// Hides the hook.
-    /// </summary>
+    // Hides the hook.
     public void HideHook()
     {
         Visible = false;
     }
 
-    /// <summary>
-    /// Shows the hook.
-    /// </summary>
+    // Shows the hook.
     public void ShowHook()
     {
         Visible = true;

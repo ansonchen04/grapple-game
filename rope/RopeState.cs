@@ -1,30 +1,18 @@
-/// <summary>
-/// Represents the possible states of the rope.
-/// </summary>
+// Represents the possible states of the rope.
 public enum RopeState
 {
-    /// <summary>
-    /// The rope is hidden.
-    /// </summary>
+    // The rope is hidden.
     Hidden,
 
-    /// <summary>
-    /// The hook is being shot.
-    /// </summary>
+    // The hook is being shot.
     Shot,
 
-    /// <summary>
-    /// The hook is attached to something.
-    /// </summary>
+    // The hook is attached to something.
     Hooked,
 
-    /// <summary>
-    /// The rope is retracting.
-    /// </summary>
+    // The rope is retracting.
     Retracting,
 
-    /// <summary>
-    /// The rope is slack.
-    /// </summary>
+    // The rope is slack.
     Slack
 }
