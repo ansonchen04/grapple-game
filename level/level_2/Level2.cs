@@ -1,18 +1,25 @@
 using Godot;
 using System;
 
+/// <summary>
+/// Level 2 scene controller.
+/// </summary>
 public partial class Level2 : Node2D
 {
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
-	{
-		var music = GetNode<AudioStreamPlayer>("Music");
-		music.Play();
-		music.Finished += () => music.Play();
-	}
+    /// <summary>
+    /// Called when the node enters the scene tree.
+    /// </summary>
+    public override void _Ready()
+    {
+        var music = GetNode<AudioStreamPlayer>("Music");
+        music.Play();
+        music.Finished += () => music.Play();
+    }
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
-	}
+    /// <summary>
+    /// Called every frame.
+    /// </summary>
+    public override void _Process(double delta)
+    {
+    }
 }

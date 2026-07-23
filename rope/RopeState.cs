@@ -1,7 +1,30 @@
-public enum RopeState {
-    Hidden,  // rope is hidden
-    Shot,  // when you click the mouse - when you shoot the grapple out
-    Hooked,  // when the hook hits something
-    Retracting,  // when you right click - pulling yourself towards the hook
-    Slack  // either you run out of line when casting or the rope hits something before the hook does
+/// <summary>
+/// Represents the possible states of the rope.
+/// </summary>
+public enum RopeState
+{
+    /// <summary>
+    /// The rope is hidden.
+    /// </summary>
+    Hidden,
+
+    /// <summary>
+    /// The hook is being shot.
+    /// </summary>
+    Shot,
+
+    /// <summary>
+    /// The hook is attached to something.
+    /// </summary>
+    Hooked,
+
+    /// <summary>
+    /// The rope is retracting.
+    /// </summary>
+    Retracting,
+
+    /// <summary>
+    /// The rope is slack.
+    /// </summary>
+    Slack
 }

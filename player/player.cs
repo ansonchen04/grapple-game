@@ -4,69 +4,162 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 
+/// <summary>
+/// The main player character controller. Handles movement, jumping, climbing, and grapple/swing physics.
+/// </summary>
 public partial class player : CharacterBody2D
 {
-
-	// Test commit comment
-	// Test commit 2 - verifying git workflow
-	// Test commit 3 - small change for verification
-	// Test commit 4 - quick test commit
-	// Test commit 5 - another quick test
-	// Test commit 6 - quick test commit
-	//How fast the player moves and how high they can jump
+	/// <summary>
+	/// Base movement speed on the ground.
+	/// </summary>
 	private const float speed = 450.0f;
+	/// <summary>
+	/// Initial velocity applied when jumping.
+	/// </summary>
 	private const float jumpVelocity = -700.0f;
+
+	/// <summary>
+	/// Velocity applied when climbing.
+	/// </summary>
 	private const float climbVelocity = -200.0f;
-	private const float slackBuffer = 40.0f; // Dead zone for rope constraint to allow horizontal drift/match visual sag
-	public float swingFriction = 0.01f; // Tunable friction (0.0-0.3 recommended). Higher values act like glue due to per-frame damping.
-	//Starting Position, should be updated whenever player enters a new scene
+
+	/// <summary>
+	/// Dead zone for rope constraint to allow horizontal drift and match visual sag.
+	/// </summary>
+	private const float slackBuffer = 40.0f;
+
+	/// <summary>
+	/// Tunable friction for swinging against surfaces (0.0-0.3 recommended).
+	/// </summary>
+	public float swingFriction = 0.01f;
+
+	/// <summary>
+	/// The player's starting position in the current level.
+	/// </summary>
 	private Vector2 startPosition;
+
+	/// <summary>
+	/// The position of the last checkpoint the player touched.
+	/// </summary>
 	public static Vector2 LastCheckpointPosition { get; set; }
+
+	/// <summary>
+	/// The file path of the current level.
+	/// </summary>
 	public static string CurrentLevelPath { get; set; } = "res://level/level_1/level1.tscn";
-	//Gets at what y value it is out of bounds 
+
+	/// <summary>
+	/// The Y-coordinate threshold for falling out of bounds.
+	/// </summary>
 	private float outOfBounds;
+
+	/// <summary>
+	/// The initial direction of the hook shot.
+	/// </summary>
 	private Vector2 hookStartPos;
-	// Get the gravity from the project settings to be synced with RigidBody nodes.
+
+	/// <summary>
+	/// Gravity value from project settings.
+	/// </summary>
 	private float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
-	//Ray is in the center of the player model, checking what platform the player is on
+
+	/// <summary>
+	/// Raycast pointing downward to detect platforms.
+	/// </summary>
 	private RayCast2D _downwardRaycast;
-  //TODO Rename raycast length to a clearer name
-  	private const float raycastLength = 500.0f;
-  	private RayCast2D rayCast;
-  	private bool isGrappled = false;
+
+	/// <summary>
+	/// Length of the grapple raycast.
+	/// </summary>
+	private const float raycastLength = 500.0f;
+
+	/// <summary>
+	/// Raycast used for grapple aiming.
+	/// </summary>
+	private RayCast2D rayCast;
+
+	/// <summary>
+	/// Flag indicating if the player is currently grappled.
+	/// </summary>
+	private bool isGrappled = false;
+
+	/// <summary>
+	 /// Reference to the Rope node.
+	/// </summary>
 	public Rope rope;
+
+	/// <summary>
+	/// Audio players for various sound effects.
+	/// </summary>
 	private AudioStreamPlayer jumpSFX;
 	private AudioStreamPlayer stepSFX;
 	private AudioStreamPlayer landSFX;
 	private AudioStreamPlayer dieSFX;
+
+	/// <summary>
+	/// Visual components for the player.
+	/// </summary>
 	private Sprite2D playerSprite;
 	private Sprite2D monkeArm;
 	private Texture2D swingTexture;
+
+	/// <summary>
+	/// Timer for playing step sounds.
+	/// </summary>
 	private float stepTimer = 0f;
-	public const float ArmTipOffset = 40.0f; // Distance from player center to arm tip
-	private const float stepInterval = 0.3f; // Play step sound every 0.3 seconds while walking
-	private bool wasOnFloor = false; // Track previous floor state for landing detection
-	private Vector2 previousAnchor = Vector2.Zero; // For anchor velocity compensation
-	private Vector2 smoothedAnchorVel = Vector2.Zero; // Smoothed anchor velocity to prevent spikes
-	private ShapeCast2D frictionCast; // For native surface friction detection
-	//Booleans to check if we are on a special surface, if we have different movement options
+
+	/// <summary>
+	/// Distance from player center to the arm tip.
+	/// </summary>
+	public const float ArmTipOffset = 40.0f;
+
+	/// <summary>
+	/// Interval in seconds between step sounds.
+	/// </summary>
+	private const float stepInterval = 0.3f;
+
+	/// <summary>
+	/// Tracks if the player was on the floor in the previous frame.
+	/// </summary>
+	private bool wasOnFloor = false;
+
+	/// <summary>
+	/// Previous anchor position for velocity compensation.
+	/// </summary>
+	private Vector2 previousAnchor = Vector2.Zero;
+
+	/// <summary>
+	/// Smoothed anchor velocity to prevent spikes.
+	/// </summary>
+	private Vector2 smoothedAnchorVel = Vector2.Zero;
+
+	/// <summary>
+	/// ShapeCast2D for detecting surface friction while swinging.
+	/// </summary>
+	private ShapeCast2D frictionCast;
+
+	/// <summary>
+	/// Flags for special surface interactions.
+	/// </summary>
 	private bool onClimbableSurface = false;
 	private bool onOneWaySurface = false;
-	public override void _Ready() {
-		//Hardcoded, TODO make this varible for the level
+	/// <summary>
+	/// Called when the node enters the scene tree for the first time.
+	/// Initializes nodes, variables, and event listeners.
+	/// </summary>
+	public override void _Ready()
+	{
+		// Load out-of-bounds threshold
 		WorldBoundaryShape2D worldBoundary = GD.Load<WorldBoundaryShape2D>("res://template/outofbounds.tres");
 		outOfBounds = worldBoundary.Distance;
-		// Initialize the RayCast2D node
+
+		// Initialize nodes
 		_downwardRaycast = GetNode<RayCast2D>("DownwardRaycast");
-		startPosition = this.GlobalPosition;
-		LastCheckpointPosition = startPosition; // Initialize checkpoint to start position
-		CurrentLevelPath = GetTree().CurrentScene.SceneFilePath;
-		GD.Print($"Player: Loaded level {CurrentLevelPath}");
-		GD.Print(startPosition);
 		rayCast = GetNode<RayCast2D>("RayCast2D");
-		rayCast.Enabled = true;  // disabled by default, we'll turn it on when we click
-		rayCast.CollisionMask = 1; // Explicitly target platform layer (Layer 1)
+		rayCast.Enabled = true;
+		rayCast.CollisionMask = 1; // Target platform layer
 		_downwardRaycast.CollisionMask = 1;
+
 		rope = GetNode<Rope>("../Rope");
 		jumpSFX = GetNode<AudioStreamPlayer>("JumpSFX");
 		stepSFX = GetNode<AudioStreamPlayer>("StepSFX");
@@ -74,26 +167,44 @@ public partial class player : CharacterBody2D
 		dieSFX = GetNode<AudioStreamPlayer>("DieSFX");
 		playerSprite = GetNode<Sprite2D>("Sprite2D");
 		monkeArm = GetNode<Sprite2D>("MonkeArm");
+
+		// Load textures
 		swingTexture = GD.Load<Texture2D>("res://sprites/player/swing_body.png");
 		playerSprite.Texture = swingTexture;
-		
+
+		// Initialize friction cast
 		frictionCast = new ShapeCast2D();
 		frictionCast.Shape = GetNode<CollisionShape2D>("CollisionShape2D").Shape;
-		frictionCast.CollisionMask = CollisionMask; // Match player's collision mask
+		frictionCast.CollisionMask = CollisionMask;
 		AddChild(frictionCast);
 
+		// Set initial positions and paths
+		startPosition = this.GlobalPosition;
+		LastCheckpointPosition = startPosition;
+		CurrentLevelPath = GetTree().CurrentScene.SceneFilePath;
+
+		GD.Print($"Player: Loaded level {CurrentLevelPath}");
+		GD.Print(startPosition);
 	}
-	public override void _PhysicsProcess(double delta) {
-		if (Position.Y > outOfBounds || Input.IsActionJustPressed("Restart")) {
-			this.restart();
+	/// <summary>
+	/// Called every physics frame. Handles movement, gravity, swinging, and visual updates.
+	/// </summary>
+	public override void _PhysicsProcess(double delta)
+	{
+		// Check for out-of-bounds or restart
+		if (Position.Y > outOfBounds || Input.IsActionJustPressed("Restart"))
+		{
+			restart();
 			return;
 		}
 
 		// Check platform state
-		if (_downwardRaycast.IsColliding()) {
+		if (_downwardRaycast.IsColliding())
+		{
 			var collider = _downwardRaycast.GetCollider();
-			if (collider is Node2D platform) {
-				this.setOneWay(this.checkOneway(platform));
+			if (collider is Node2D platform)
+			{
+				setOneWay(checkOneway(platform));
 			}
 		}
 
@@ -101,321 +212,384 @@ public partial class player : CharacterBody2D
 		float dt = (float)delta;
 		bool isSwinging = rope.ropeState == RopeState.Hooked || rope.ropeState == RopeState.Retracting;
 
-		// 1. Gravity (applied first for deterministic integration, skipped when swinging as swing solver handles it)
-		if (!IsOnFloor() && !onClimbableSurface && !isSwinging) {
+		// 1. Gravity
+		if (!IsOnFloor() && !onClimbableSurface && !isSwinging)
+		{
 			newVelocity.Y += gravity * dt * 1.5f;
 		}
 
-		// 2. Base Input Handling (gated during airborne swings to prevent momentum override)
-		if (onClimbableSurface) {
+		// 2. Base Input Handling
+		if (onClimbableSurface)
+		{
 			newVelocity = climbMovement(newVelocity);
-		} else if (!isSwinging && onOneWaySurface && IsOnFloor() && Input.IsActionJustPressed("Down")) {
+		}
+		else if (!isSwinging && onOneWaySurface && IsOnFloor() && Input.IsActionJustPressed("Down"))
+		{
 			Position += new Vector2(0, 5); // Drop through one-way platform
-			newVelocity.Y = 100.0f; // Give a small downward push to ensure we fall through
-		} else if (!isSwinging || IsOnFloor()) {
+			newVelocity.Y = 100.0f;
+		}
+		else if (!isSwinging || IsOnFloor())
+		{
 			newVelocity = baseMovement(newVelocity, dt);
 		}
 
-		// 3. Rope Constraints & Tangential Input (modifies velocity if hooked/retracting)
-		if (isSwinging) {
+		// 3. Rope Constraints & Tangential Input
+		if (isSwinging)
+		{
 			ApplySwingPhysics(ref newVelocity, delta);
-		} else {
-			previousAnchor = Vector2.Zero; // Reset anchor tracking when not grappled
+		}
+		else
+		{
+			previousAnchor = Vector2.Zero;
 		}
 
-		// 4. Jump Override (works seamlessly in both states)
-		if (Input.IsActionJustPressed("Up") && IsOnFloor()) {
+		// 4. Jump Override
+		if (Input.IsActionJustPressed("Up") && IsOnFloor())
+		{
 			newVelocity.Y = jumpVelocity;
 			jumpSFX.Play();
 		}
 
 		// 5. Walking SFX
-		if (IsOnFloor() && Math.Abs(newVelocity.X) > 10.0f) {
+		if (IsOnFloor() && Math.Abs(newVelocity.X) > 10.0f)
+		{
 			stepTimer += (float)delta;
-			if (stepTimer >= stepInterval) {
+			if (stepTimer >= stepInterval)
+			{
 				stepSFX.Play();
 				stepTimer = 0f;
 			}
-		} else {
+		}
+		else
+		{
 			stepTimer = 0f;
 		}
 
 		// 6. Landing SFX
-		if (IsOnFloor() && !wasOnFloor) {
+		if (IsOnFloor() && !wasOnFloor)
+		{
 			landSFX.Play();
 		}
 		wasOnFloor = IsOnFloor();
 
-		// 7. Flip sprite based on input direction
+		// 7. Flip sprite
 		float inputX = Input.GetActionStrength("Right") - Input.GetActionStrength("Left");
-		if (inputX != 0) {
+		if (inputX != 0)
+		{
 			playerSprite.FlipH = inputX < 0;
 		}
 
-		// 8. Always show monke arm
+		// 8. Update monke arm
 		monkeArm.Visible = true;
+		monkeArm.GlobalPosition = GlobalPosition;
 
-		// 9. Update monke arm position and rotation
-		if (monkeArm.Visible) {
-			// Keep arm centered on player
-			monkeArm.GlobalPosition = GlobalPosition;
+		float rotationOffset = Mathf.Pi / 2.0f;
 
-			float rotationOffset = Mathf.Pi / 2.0f; // Adjust if arm is drawn pointing up
-
-			if (rope.ropeState == RopeState.Hidden) {
-				// Point at mouse cursor
-				Vector2 mousePos = GetGlobalMousePosition();
-				Vector2 direction = mousePos - GlobalPosition;
-				monkeArm.Rotation = Mathf.Atan2(direction.Y, direction.X) + rotationOffset;
-			} else if (rope.ropeState == RopeState.Shot) {
-				// Point at the moving hook
-				Vector2 hookPos = rope.GetHookPosition();
-				Vector2 direction = hookPos - GlobalPosition;
-				monkeArm.Rotation = Mathf.Atan2(direction.Y, direction.X) + rotationOffset;
-			} else if (rope.ropeState == RopeState.Hooked || rope.ropeState == RopeState.Retracting) {
-				// Point at the anchor
-				Vector2 anchor = rope.GetAnchor();
-				Vector2 direction = anchor - GlobalPosition;
-				monkeArm.Rotation = Mathf.Atan2(direction.Y, direction.X) + rotationOffset;
-			}
+		if (rope.ropeState == RopeState.Hidden)
+		{
+			Vector2 mousePos = GetGlobalMousePosition();
+			Vector2 direction = mousePos - GlobalPosition;
+			monkeArm.Rotation = Mathf.Atan2(direction.Y, direction.X) + rotationOffset;
+		}
+		else if (rope.ropeState == RopeState.Shot)
+		{
+			Vector2 hookPos = rope.GetHookPosition();
+			Vector2 direction = hookPos - GlobalPosition;
+			monkeArm.Rotation = Mathf.Atan2(direction.Y, direction.X) + rotationOffset;
+		}
+		else if (rope.ropeState == RopeState.Hooked || rope.ropeState == RopeState.Retracting)
+		{
+			Vector2 anchor = rope.GetAnchor();
+			Vector2 direction = anchor - GlobalPosition;
+			monkeArm.Rotation = Mathf.Atan2(direction.Y, direction.X) + rotationOffset;
 		}
 
 		Velocity = newVelocity;
 		MoveAndSlide();
 	}
-  	public override void _Input(InputEvent @event) {
-		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left) {
-			// i will probably need this raycast later to check if there's an object in between the starting pos of the gun and the player
-			// Get the global position of the mouse click
-			
+	/// <summary>
+	/// Handles input events, specifically grapple aiming.
+	/// </summary>
+	public override void _Input(InputEvent @event)
+	{
+		if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left)
+		{
 			Vector2 mousePosition = GetGlobalMousePosition();
 			Vector2 direction = (mousePosition - GlobalPosition).Normalized();
-			direction *= raycastLength;  // need to rename this later!!!
+			direction *= raycastLength;
 
 			hookStartPos = direction;
-			
-			// Set the raycast's target position relative to the character's position
-			rayCast.TargetPosition = direction;  
-			
-			// Optionally update the raycast (not needed if auto_update is true)
+			rayCast.TargetPosition = direction;
 			rayCast.ForceRaycastUpdate();
-
-			/*
-			if (rayCast.IsColliding()) {
-				GD.Print("collided! distance: " + GlobalPosition.DistanceTo(rayCast.GetCollisionPoint()));
-			} else {
-				GD.Print("did not collide with anything.");
-			}
-			*/
 		}
 	}
-	private Vector2 baseMovement(Vector2 velocity, float dt) {
+	/// <summary>
+	/// Handles basic movement on the ground and in the air.
+	/// </summary>
+	private Vector2 baseMovement(Vector2 velocity, float dt)
+	{
 		Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
-		
-		if (direction.X != 0) {
-			if (IsOnFloor()) {
-				// Grounded: snappy direct control with deceleration/acceleration curve
+
+		if (direction.X != 0)
+		{
+			if (IsOnFloor())
+			{
+				// Grounded: snappy direct control
 				velocity.X = Mathf.MoveToward(velocity.X, direction.X * speed, speed);
-			} else {
-				// Airborne: acceleration-based to match swing tangential input feel
-				float airAccel = speed * 1.0f; // Lowered for smoother, more controlled buildup
+			}
+			else
+			{
+				// Airborne: acceleration-based
+				float airAccel = speed * 1.0f;
 				velocity.X += direction.X * airAccel * dt;
-				
-				// Soft cap to prevent runaway speeds, but high enough for momentum preservation
+
+				// Soft cap
 				float maxAirSpeed = speed * 3.0f;
 				velocity.X = Mathf.Clamp(velocity.X, -maxAirSpeed, maxAirSpeed);
 			}
-		} else {
-			if (!IsOnFloor()) {
-				// Preserve aerial momentum when no input is pressed (Step 8: Aerial Momentum Preservation)
-			} else {
+		}
+		else
+		{
+			if (!IsOnFloor())
+			{
+				// Preserve aerial momentum
+			}
+			else
+			{
 				velocity.X = Mathf.MoveToward(velocity.X, 0, speed);
 			}
 		}
 		return velocity;
 	}
-	private Vector2 climbMovement(Vector2 velocity) {
-		// Get the input direction and handle the movement/deceleration.
+	/// <summary>
+	/// Handles movement while climbing.
+	/// </summary>
+	private Vector2 climbMovement(Vector2 velocity)
+	{
 		Vector2 direction = Input.GetVector("Left", "Right", "Up", "Down");
-		if (direction != Vector2.Zero) {
+		if (direction != Vector2.Zero)
+		{
 			velocity.X = direction.X * speed;
 		}
-		else {
+		else
+		{
 			velocity.X = Mathf.MoveToward(Velocity.X, 0, speed);
 		}
-		// Handle Jump.
+
 		if (Input.IsActionPressed("Up"))
 			velocity.Y = climbVelocity;
 		else if (Input.IsActionPressed("Down"))
 			velocity.Y = -climbVelocity;
 		else
 			velocity.Y = 0;
+
 		return velocity;
 	}
-	private Boolean checkOneway(Node2D platform) {
-		//Gets the collision polygon or collision shape of the platform
-		Node[] children = platform.FindChildren("*","CollisionPolygon2D",false,false).ToArray();
-		if (children.Length == 0) {
-			children = platform.FindChildren("*","CollisionShape2D",true,false).ToArray();
-			CollisionShape2D collisionPolygon = (CollisionShape2D)children[0];
-			if (collisionPolygon != null && collisionPolygon.OneWayCollision == true) {
+	/// <summary>
+	/// Checks if the platform is a one-way platform.
+	/// </summary>
+	private bool checkOneway(Node2D platform)
+	{
+		Node[] children = platform.FindChildren("*", "CollisionPolygon2D", false, false).ToArray();
+		if (children.Length == 0)
+		{
+			children = platform.FindChildren("*", "CollisionShape2D", true, false).ToArray();
+			if (children.Length > 0)
+			{
+				CollisionShape2D collisionShape = (CollisionShape2D)children[0];
+				if (collisionShape != null && collisionShape.OneWayCollision)
+				{
+					return true;
+				}
+			}
+		}
+		else
+		{
+			CollisionPolygon2D collisionPolygon = (CollisionPolygon2D)children[0];
+			if (collisionPolygon != null && collisionPolygon.OneWayCollision)
+			{
 				return true;
 			}
 		}
-		else {
-			CollisionPolygon2D collisionPolygon = (CollisionPolygon2D)children[0];
-				if (collisionPolygon != null) {
-					if (collisionPolygon.OneWayCollision == true) {
-						return true;
-					}
-				}
-		}
 		return false;
 	}
-	public void restart() {
+	/// <summary>
+	/// Restarts the player at the last checkpoint.
+	/// </summary>
+	public void restart()
+	{
 		dieSFX.Play();
-		//If restart button pressed, reset the position to the last checkpoint and zero out the velocity
-			Position = LastCheckpointPosition;
-			Velocity = Vector2.Zero;
+		Position = LastCheckpointPosition;
+		Velocity = Vector2.Zero;
 	}
-	public void setClimbing(bool onClimbableSurface) {
+
+	/// <summary>
+	/// Sets the climbing state.
+	/// </summary>
+	public void setClimbing(bool onClimbableSurface)
+	{
 		this.onClimbableSurface = onClimbableSurface;
 	}
-	public void setOneWay(bool onOneWaySurface) {
+
+	/// <summary>
+	/// Sets the one-way surface state.
+	/// </summary>
+	public void setOneWay(bool onOneWaySurface)
+	{
 		this.onOneWaySurface = onOneWaySurface;
 	}
-	public Vector2 GetRaycastPos() {
+
+	/// <summary>
+	/// Gets the global position of the raycast.
+	/// </summary>
+	public Vector2 GetRaycastPos()
+	{
 		return rayCast.GlobalPosition;
 	}
 
-	public Vector2 GetHookStartPos() {
+	/// <summary>
+	/// Gets the start position of the hook.
+	/// </summary>
+	public Vector2 GetHookStartPos()
+	{
 		return hookStartPos + GlobalPosition;
 	}
 
-	public Vector2 GetArmTipPosition() {
+	/// <summary>
+	/// Gets the position of the arm tip.
+	/// </summary>
+	public Vector2 GetArmTipPosition()
+	{
 		if (monkeArm == null) return GlobalPosition;
-		// Use the visual rotation direction (which already includes the Pi/2 offset from _PhysicsProcess)
-		// Subtract Pi/2 to correct the 90-degree offset
 		float visualRotation = monkeArm.Rotation - Mathf.Pi / 2.0f;
 		Vector2 direction = new Vector2(Mathf.Cos(visualRotation), Mathf.Sin(visualRotation));
 		return monkeArm.GlobalPosition + direction * ArmTipOffset;
 	}
 
-	float GetSurfaceFriction(Node collider) {
+	/// <summary>
+	/// Gets the surface friction coefficient.
+	/// </summary>
+	private float GetSurfaceFriction(Node collider)
+	{
 		return swingFriction;
 	}
 
-	void ApplySwingPhysics(ref Vector2 vel, double delta) {
+	/// <summary>
+	/// Applies swing physics constraints and forces.
+	/// </summary>
+	private void ApplySwingPhysics(ref Vector2 vel, double delta)
+	{
 		Vector2 anchor = rope.GetAnchor();
 		float maxLen = rope.GetMaxRopeLength();
-		
+
 		if (previousAnchor == Vector2.Zero) previousAnchor = anchor;
 		Vector2 anchorVel = (anchor - previousAnchor) / (float)delta;
 		previousAnchor = anchor;
-		
-		// Smooth anchor velocity to prevent spikes from moving platforms
+
+		// Smooth anchor velocity
 		smoothedAnchorVel = smoothedAnchorVel * 0.8f + anchorVel * 0.2f;
-		
-		// Clamp anchor velocity to prevent extreme spikes
-		if (smoothedAnchorVel.Length() > 1000.0f) {
+
+		// Clamp anchor velocity
+		if (smoothedAnchorVel.Length() > 1000.0f)
+		{
 			smoothedAnchorVel = smoothedAnchorVel.Normalized() * 1000.0f;
 		}
-		
-		// Use smoothed anchor velocity for compensation
-		Vector2 anchorVelComp = smoothedAnchorVel;
 
+		Vector2 anchorVelComp = smoothedAnchorVel;
 		Vector2 toPlayer = GlobalPosition - anchor;
 		float dist = toPlayer.Length();
-		
-		// 1. Gravity (applied first per integration order)
+
+		// Gravity
 		vel.Y += gravity * (float)delta;
-		
+
 		bool isRetracting = rope.ropeState == RopeState.Retracting;
 
-		if (dist > 0.001f) {
+		if (dist > 0.001f)
+		{
 			Vector2 radialDir = toPlayer / dist;
 			Vector2 tangentDir = new Vector2(radialDir.Y, -radialDir.X);
-			
-			// Work in relative velocity space to account for moving anchor
+
+			// Relative velocity
 			Vector2 relVel = vel - anchorVelComp;
-			
+
 			float radialSpeed = relVel.Dot(radialDir);
 			float tangentialSpeed = relVel.Dot(tangentDir);
 			Vector2 radialVel = radialSpeed * radialDir;
 			Vector2 tangentialVel = tangentialSpeed * tangentDir;
 
-			if (isRetracting) {
-				// Retracting: Direct inward pull, NO damping, preserve tangential velocity
-				float retractForce = 1500.0f; 
-				
-				relVel -= radialVel; // Remove radial relative velocity
-				relVel += tangentialVel; // Explicitly restore tangential relative velocity
-				
-				// Apply inward force
+			if (isRetracting)
+			{
+				// Retracting: Direct inward pull
+				float retractForce = 1500.0f;
+				relVel -= radialVel;
+				relVel += tangentialVel;
 				relVel -= radialDir * retractForce * (float)delta;
-			} else {
-				// Hooked: Strictly Unidirectional Spring/Damping Constraint
+			}
+			else
+			{
+				// Hooked: Spring/Damping Constraint
 				float effectiveMaxLen = maxLen + slackBuffer;
-				if (dist > effectiveMaxLen && radialSpeed > 0) {
+				if (dist > effectiveMaxLen && radialSpeed > 0)
+				{
 					Vector2 radialVelCurrent = radialSpeed * radialDir;
-					
+
 					float blendStart = effectiveMaxLen;
-					float blendEnd = effectiveMaxLen * 1.2f; // Widened for softer elasticity
+					float blendEnd = effectiveMaxLen * 1.2f;
 					float blendFactor = Mathf.Clamp((dist - blendStart) / (blendEnd - blendStart), 0.0f, 1.0f);
-					
-					// Fix 1: Soft Position Correction - removed hard clamp, rely on dynamic spring stiffness
-					float k = 350.0f; // Lowered for noticeable web-like stretch
-					if (dist > effectiveMaxLen * 1.3f) {
+
+					float k = 350.0f;
+					if (dist > effectiveMaxLen * 1.3f)
+					{
 						k *= Mathf.Clamp((dist - effectiveMaxLen * 1.3f) / (effectiveMaxLen * 0.2f), 1.0f, 5.0f);
 					}
-					float c = 2.0f * Mathf.Sqrt(k); 
+					float c = 2.0f * Mathf.Sqrt(k);
 					float stretch = dist - maxLen;
-					
+
 					Vector2 springForce = (-k * stretch) * radialDir;
 					Vector2 dampingForce = -c * radialVelCurrent;
-					
+
 					relVel += (springForce + dampingForce) * blendFactor * (float)delta;
-					
-					// Fix 3: Conditional Radial Damping - only strip if moving outward relative to anchor
-					if (radialSpeed > 0) {
+
+					// Remove radial velocity if moving outward
+					if (radialSpeed > 0)
+					{
 						relVel -= radialVelCurrent;
 					}
 				}
 			}
-			
-			// 3. Tangential Input (Screen-Space Projection) - No speed cap to preserve momentum
-			if (dist > 0.1f && !IsOnFloor()) { 
+
+			// Tangential Input
+			if (dist > 0.1f && !IsOnFloor())
+			{
 				float inputX = Input.GetActionStrength("Right") - Input.GetActionStrength("Left");
 				Vector2 inputDir = new Vector2(inputX, 0);
-				
-				// Project raw horizontal input onto the tangent plane to prevent control reversal below anchor
 				Vector2 tangentialInput = inputDir - (inputDir.Dot(radialDir) * radialDir);
-				
-				// Dampen vertical input influence when falling to let gravity dominate
-				if (relVel.Y > 0) {
+
+				if (relVel.Y > 0)
+				{
 					tangentialInput.Y *= 0.4f;
 				}
-				
+
 				relVel += tangentialInput * speed * (float)delta * 2.0f;
 			}
-			
+
 			// Convert back to absolute velocity
 			vel = relVel + anchorVelComp;
 
-			// Step 14: Native Surface Friction Integration (Localized to swing state)
-			if (frictionCast.IsColliding()) {
+			// Surface Friction
+			if (frictionCast.IsColliding())
+			{
 				Node collider = frictionCast.GetCollider(0) as Node;
-				if (collider != null && collider != this) { // Ignore self-collision and nulls
+				if (collider != null && collider != this)
+				{
 					Vector2 normal = frictionCast.GetCollisionNormal(0);
 					float frictionCoeff = GetSurfaceFriction(collider);
-					
-					// Decompose velocity into perpendicular and parallel components relative to surface
+
 					Vector2 vPerp = normal * vel.Dot(normal);
 					Vector2 vParallel = vel - vPerp;
-					
-					// Apply friction damping to parallel component (with deadzone)
-					if (vParallel.Length() > 10.0f) {
-						// Linear decay per frame for predictable tuning without exponential overkill
+
+					if (vParallel.Length() > 10.0f)
+					{
 						float dampFactor = Math.Max(0.0f, 1.0f - frictionCoeff * (float)delta * 60.0f);
 						vParallel *= dampFactor;
 					}
