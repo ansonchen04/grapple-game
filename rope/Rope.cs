@@ -2,18 +2,21 @@ using Godot;
 using System;
 
 // Manages the grapple rope, including shooting, hooking, and Verlet simulation.
+// The rope is simulated as a chain of points (Verlet integration) for visual sag and flexibility.
+// The player's physics are handled separately in player.cs using a spring-damper constraint.
 public partial class Rope : Node2D
 {
 	// Reference to the player character.
 	CharacterBody2D player;
 
-	// Current state of the rope.
+	// Current state of the rope (Hidden, Shot, Hooked, Retracting, Slack).
 	public RopeState ropeState;
 
 	// Maximum length of the rope.
 	const float MaxLength = 500.0f;
 
-	// Positions of the rope segments.
+	// Positions of the rope segments for Verlet simulation.
+	// positions[i] is the current position, previousPositions[i] is the position from the last frame.
 	Vector2[] positions;
 	Vector2[] previousPositions;
 
@@ -26,16 +29,18 @@ public partial class Rope : Node2D
 	Sprite2D aimSprite;
 	AudioStreamPlayer shootSFX;
 
-	// Length of each segment.
+	// Length of each segment, calculated when the rope is initialized.
 	float SegmentLength;
 
-	// Gravity applied to the rope.
+	// Gravity applied to the rope segments to create sag.
 	const float RopeGravity = 200.0f;
 
 	// Flag indicating if the rope has been initialized.
 	bool _isRopeInitialized = false;
 
 	// Current and previous anchor positions.
+	// currentAnchor is the position the rope is attached to.
+	// previousAnchor is used to smooth out anchor movement for moving platforms.
 	Vector2 currentAnchor = Vector2.Zero;
 	Vector2 previousAnchor = Vector2.Zero;
 
@@ -66,6 +71,7 @@ public partial class Rope : Node2D
 	Node2D anchorNode = null;
 
 	// Local offset of the anchor on the anchor node.
+	// Used to track the anchor point on moving platforms.
 	Vector2 anchorLocalOffset = Vector2.Zero;
 
 	// The last collider hit by the hook.
@@ -83,6 +89,7 @@ public partial class Rope : Node2D
 	bool isShooting = false;
 
 	// Called when the node enters the scene tree.
+	// Initializes nodes and arrays for Verlet simulation.
 	public override void _Ready()
 	{
 		player = GetNode<CharacterBody2D>("../Player");
@@ -92,6 +99,8 @@ public partial class Rope : Node2D
 		shootSFX = GetNode<AudioStreamPlayer>("ShootSFX");
 		ropeState = RopeState.Hidden;
 
+		// Allocate arrays for Verlet simulation.
+		// MaxSegments + 1 because we have segments between points, so N segments need N+1 points.
 		positions = new Vector2[MaxSegments + 1];
 		previousPositions = new Vector2[MaxSegments + 1];
 	}
@@ -100,6 +109,7 @@ public partial class Rope : Node2D
 	public CharacterBody2D GetPlayer() => player;
 
 	// Called every frame. Updates aim or shot state.
+	// _Process is used for visual updates and non-physics logic.
 	public override void _Process(double delta)
 	{
 		if (ropeState == RopeState.Hidden)
@@ -118,39 +128,46 @@ public partial class Rope : Node2D
 	}
 
 	// Called every physics frame. Updates anchor tracking and Verlet simulation.
+	// _PhysicsProcess is used for physics-related updates.
 	public override void _PhysicsProcess(double delta)
 	{
 		if (ropeState == RopeState.Hooked || ropeState == RopeState.Retracting)
 		{
-			// Dynamic anchor tracking
+			// Dynamic anchor tracking: update the anchor position if it's attached to a moving platform.
 			if (anchorNode != null && GodotObject.IsInstanceValid(anchorNode))
 			{
+				// Calculate the new anchor position based on the platform's global position and the local offset.
 				Vector2 newAnchor = anchorNode.GlobalPosition + anchorLocalOffset;
 
+				// Initialize previousAnchor if it's the first frame.
 				if (previousAnchor == Vector2.Zero)
 				{
 					previousAnchor = currentAnchor;
 				}
 
-				// Smooth anchor transition
+				// Smooth anchor transition to prevent sudden jumps that cause Verlet instability.
+				// Lerp towards the new anchor position with a smoothing factor.
 				float smoothFactor = 0.5f;
 				currentAnchor = currentAnchor.Lerp(newAnchor, smoothFactor);
 				previousAnchor = currentAnchor;
 			}
 			else
 			{
+				// If the anchor node is invalid, clear it.
 				anchorNode = null;
 			}
 
+			// Initialize the rope if it hasn't been initialized yet.
 			if (!_isRopeInitialized)
 			{
 				InitializeRope(currentAnchor);
 				_isRopeInitialized = true;
 			}
 
+			// Update the Verlet simulation for the rope.
 			UpdateVerlet(delta);
 
-			// Rotate hook
+			// Rotate the hook sprite to face the anchor.
 			Vector2 toAnchor = currentAnchor - hookSprite.GlobalPosition;
 			if (toAnchor.Length() > 0.001f)
 			{
@@ -159,6 +176,7 @@ public partial class Rope : Node2D
 		}
 		else
 		{
+			// Reset the rope state if it's not hooked or retracting.
 			anchorNode = null;
 			previousAnchor = Vector2.Zero;
 			ropeLine.Points = new Vector2[0];
@@ -172,6 +190,8 @@ public partial class Rope : Node2D
 	}
 
 	// Updates the aim visualization and raycast.
+	// This method is called every frame when the rope is hidden.
+	// It casts a ray from the player's arm tip towards the mouse cursor to find a potential anchor point.
 	private void UpdateAim()
 	{
 		aimSprite.Visible = true;
@@ -182,14 +202,16 @@ public partial class Rope : Node2D
 		Vector2 direction = (mousePos - armTip).Normalized();
 		float dist = MaxLength;
 
+		// Add a small offset to prevent the ray from hitting the player's own collider.
 		float offset = 10.0f;
 		Vector2 origin = armTip + direction * offset;
 		Vector2 end = origin + direction * (dist - offset);
 
+		// Perform a raycast to find the first collider in the path.
 		var spaceState = GetWorld2D().DirectSpaceState;
 		var query = PhysicsRayQueryParameters2D.Create(origin, end);
-		query.Exclude = new Godot.Collections.Array<Rid> { player.GetRid() };
-		query.HitFromInside = true;
+		query.Exclude = new Godot.Collections.Array<Rid> { player.GetRid() }; // Exclude the player from the raycast.
+		query.HitFromInside = true; // Allow the ray to hit colliders even if it starts inside one.
 		var result = spaceState.IntersectRay(query);
 
 		debugOrigin = origin;
@@ -197,12 +219,15 @@ public partial class Rope : Node2D
 
 		if (result.Count > 0)
 		{
+			// If the ray hit something, store the hit position and collider.
 			debugHit = (Vector2)result["position"];
 			hasHit = true;
 			lastValidHit = debugHit;
 			lastHitCollider = result.ContainsKey("collider") ? result["collider"].As<Node2D>() : null;
 			if (lastHitCollider != null)
 			{
+				// Store the local offset of the hit point on the collider.
+				// This is used to track the anchor point on moving platforms.
 				lastValidLocalHit = lastHitCollider.ToLocal(debugHit);
 			}
 			hasLastHit = true;
@@ -210,32 +235,39 @@ public partial class Rope : Node2D
 		}
 		else
 		{
+			// If the ray didn't hit anything, reset the hit state.
 			hasHit = false;
 			hasLastHit = false;
 			lastHitCollider = null;
 			aimSprite.GlobalPosition = end;
 		}
 
+		// Request a redraw to update the aim line.
 		QueueRedraw();
 	}
 
 	// Draws the aim line or shot line.
+	// This method is called by Godot to draw custom shapes.
 	public override void _Draw()
 	{
 		if (ropeState == RopeState.Hidden)
 		{
+			// Draw the aim line from the arm tip to the mouse cursor or hit point.
 			DrawLine(ToLocal(debugOrigin), ToLocal(debugEnd), Colors.Cyan, 2.0f);
 			if (hasHit)
 			{
+				// Draw a red circle at the hit point.
 				DrawCircle(ToLocal(debugHit), 6.0f, Colors.Red);
 			}
 			else
 			{
+				// Draw a yellow circle at the end of the aim line.
 				DrawCircle(ToLocal(debugEnd), 6.0f, Colors.Yellow);
 			}
 		}
 		else if (ropeState == RopeState.Shot)
 		{
+			// Draw the shot line from the player to the moving hook.
 			DrawLine(ToLocal(player.GlobalPosition), ToLocal(hookSprite.GlobalPosition), Colors.White, 2.0f);
 		}
 	}
@@ -310,6 +342,7 @@ public partial class Rope : Node2D
 	}
 
 	// Updates the shot animation and checks for collisions.
+	// This method is called every frame when the rope is in the "Shot" state.
 	private void UpdateShot(double delta)
 	{
 		float dt = (float)delta;
@@ -324,6 +357,7 @@ public partial class Rope : Node2D
 		{
 			if (hasLastHit)
 			{
+				// If the hook hit something, set the anchor point and switch to the "Hooked" state.
 				anchorNode = lastHitCollider;
 				if (anchorNode != null)
 				{
@@ -340,6 +374,7 @@ public partial class Rope : Node2D
 			}
 			else
 			{
+				// If the hook didn't hit anything, cancel the rope.
 				CancelRope();
 			}
 		}
@@ -348,6 +383,7 @@ public partial class Rope : Node2D
 	}
 
 	// Initializes the rope segments between the anchor and the player.
+	// This method is called when the rope is first hooked.
 	private void InitializeRope(Vector2 anchor)
 	{
 		Vector2 end = player.GetArmTipPosition();
@@ -366,32 +402,40 @@ public partial class Rope : Node2D
 	}
 
 	// Updates the Verlet simulation for the rope.
+	// Verlet integration is a numerical method for computing the motion of particles.
+	// It's used here to simulate the rope's sag and flexibility.
 	private void UpdateVerlet(double delta)
 	{
 		float dt = Mathf.Clamp((float)delta, 0.0f, 0.033f);
 
+		// Update positions based on previous positions and velocity.
 		for (int i = 0; i <= MaxSegments; i++)
 		{
-			Vector2 vel = (positions[i] - previousPositions[i]) * 0.96f;
+			Vector2 vel = (positions[i] - previousPositions[i]) * 0.96f; // 0.96 is a damping factor.
 			previousPositions[i] = positions[i];
 
 			if (i > 0)
 			{
+				// Apply gravity to all segments except the anchor.
 				positions[i] += vel + new Vector2(0, RopeGravity) * dt * dt;
 			}
 			else
 			{
+				// The anchor point doesn't have gravity.
 				positions[i] += vel;
 			}
 		}
 
+		// Pin the first segment to the anchor.
 		positions[0] = currentAnchor;
 		previousPositions[0] = currentAnchor;
 
+		// Pin the last segment to the player's arm tip.
 		Vector2 armTip = player.GetArmTipPosition();
 		positions[MaxSegments] = armTip;
 		previousPositions[MaxSegments] = armTip;
 
+		// Iterate to satisfy constraints (maintain segment lengths).
 		int iterations = 15;
 		for (int iter = 0; iter < iterations; iter++)
 		{
@@ -404,25 +448,30 @@ public partial class Rope : Node2D
 
 				if (dist == 0) continue;
 
+				// Calculate the correction needed to maintain the segment length.
 				float error = (dist - SegmentLength) / dist;
 				Vector2 correction = diff * error * 0.5f;
 
 				if (i == 0)
 				{
+					// The anchor point is fixed, so only move the next point.
 					positions[i + 1] -= correction;
 				}
 				else if (i + 1 == MaxSegments)
 				{
+					// The player's arm tip is fixed, so only move the previous point.
 					positions[i] += correction;
 				}
 				else
 				{
+					// Move both points to maintain the segment length.
 					positions[i] += correction;
 					positions[i + 1] -= correction;
 				}
 			}
 		}
 
+		// Convert global positions to local positions for the Line2D node.
 		var localPoints = new Vector2[MaxSegments + 1];
 		for (int i = 0; i <= MaxSegments; i++)
 		{

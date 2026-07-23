@@ -396,19 +396,22 @@ public partial class player : CharacterBody2D
 	}
 
 	// Applies swing physics constraints and forces.
+	// This method is called every physics frame when the player is swinging.
+	// It uses a spring-damper model to constrain the player's distance from the anchor.
 	private void ApplySwingPhysics(ref Vector2 vel, double delta)
 	{
 		Vector2 anchor = rope.GetAnchor();
 		float maxLen = rope.GetMaxRopeLength();
 
+		// Calculate the anchor's velocity for compensation.
 		if (previousAnchor == Vector2.Zero) previousAnchor = anchor;
 		Vector2 anchorVel = (anchor - previousAnchor) / (float)delta;
 		previousAnchor = anchor;
 
-		// Smooth anchor velocity
+		// Smooth anchor velocity to prevent spikes from moving platforms.
 		smoothedAnchorVel = smoothedAnchorVel * 0.8f + anchorVel * 0.2f;
 
-		// Clamp anchor velocity
+		// Clamp anchor velocity to prevent extreme spikes.
 		if (smoothedAnchorVel.Length() > 1000.0f)
 		{
 			smoothedAnchorVel = smoothedAnchorVel.Normalized() * 1000.0f;
@@ -418,7 +421,7 @@ public partial class player : CharacterBody2D
 		Vector2 toPlayer = GlobalPosition - anchor;
 		float dist = toPlayer.Length();
 
-		// Gravity
+		// Apply gravity.
 		vel.Y += gravity * (float)delta;
 
 		bool isRetracting = rope.ropeState == RopeState.Retracting;
@@ -428,9 +431,10 @@ public partial class player : CharacterBody2D
 			Vector2 radialDir = toPlayer / dist;
 			Vector2 tangentDir = new Vector2(radialDir.Y, -radialDir.X);
 
-			// Relative velocity
+			// Convert velocity to relative to the anchor.
 			Vector2 relVel = vel - anchorVelComp;
 
+			// Decompose relative velocity into radial and tangential components.
 			float radialSpeed = relVel.Dot(radialDir);
 			float tangentialSpeed = relVel.Dot(tangentDir);
 			Vector2 radialVel = radialSpeed * radialDir;
@@ -438,7 +442,8 @@ public partial class player : CharacterBody2D
 
 			if (isRetracting)
 			{
-				// Retracting: Direct inward pull
+				// Retracting: Direct inward pull.
+				// Remove radial velocity and apply a strong inward force.
 				float retractForce = 1500.0f;
 				relVel -= radialVel;
 				relVel += tangentialVel;
@@ -446,30 +451,36 @@ public partial class player : CharacterBody2D
 			}
 			else
 			{
-				// Hooked: Spring/Damping Constraint
+				// Hooked: Spring/Damping Constraint.
+				// Only apply constraint if the player is beyond the effective max length and moving outward.
 				float effectiveMaxLen = maxLen + slackBuffer;
 				if (dist > effectiveMaxLen && radialSpeed > 0)
 				{
 					Vector2 radialVelCurrent = radialSpeed * radialDir;
 
+					// Blend factor for smooth transition into the constraint.
 					float blendStart = effectiveMaxLen;
 					float blendEnd = effectiveMaxLen * 1.2f;
 					float blendFactor = Mathf.Clamp((dist - blendStart) / (blendEnd - blendStart), 0.0f, 1.0f);
 
+					// Dynamic spring stiffness.
 					float k = 350.0f;
 					if (dist > effectiveMaxLen * 1.3f)
 					{
 						k *= Mathf.Clamp((dist - effectiveMaxLen * 1.3f) / (effectiveMaxLen * 0.2f), 1.0f, 5.0f);
 					}
+					// Critical damping.
 					float c = 2.0f * Mathf.Sqrt(k);
 					float stretch = dist - maxLen;
 
+					// Calculate spring and damping forces.
 					Vector2 springForce = (-k * stretch) * radialDir;
 					Vector2 dampingForce = -c * radialVelCurrent;
 
+					// Apply forces to relative velocity.
 					relVel += (springForce + dampingForce) * blendFactor * (float)delta;
 
-					// Remove radial velocity if moving outward
+					// Remove radial velocity if moving outward to prevent escape.
 					if (radialSpeed > 0)
 					{
 						relVel -= radialVelCurrent;
@@ -477,13 +488,15 @@ public partial class player : CharacterBody2D
 				}
 			}
 
-			// Tangential Input
+			// Tangential Input: Allow player to influence swing direction.
 			if (dist > 0.1f && !IsOnFloor())
 			{
 				float inputX = Input.GetActionStrength("Right") - Input.GetActionStrength("Left");
 				Vector2 inputDir = new Vector2(inputX, 0);
+				// Project input onto the tangent plane.
 				Vector2 tangentialInput = inputDir - (inputDir.Dot(radialDir) * radialDir);
 
+				// Dampen vertical input when falling.
 				if (relVel.Y > 0)
 				{
 					tangentialInput.Y *= 0.4f;
@@ -492,10 +505,10 @@ public partial class player : CharacterBody2D
 				relVel += tangentialInput * speed * (float)delta * 2.0f;
 			}
 
-			// Convert back to absolute velocity
+			// Convert back to absolute velocity.
 			vel = relVel + anchorVelComp;
 
-			// Surface Friction
+			// Surface Friction: Apply friction if the player is colliding with a surface.
 			if (frictionCast.IsColliding())
 			{
 				Node collider = frictionCast.GetCollider(0) as Node;
@@ -504,9 +517,11 @@ public partial class player : CharacterBody2D
 					Vector2 normal = frictionCast.GetCollisionNormal(0);
 					float frictionCoeff = GetSurfaceFriction(collider);
 
+					// Decompose velocity into perpendicular and parallel components.
 					Vector2 vPerp = normal * vel.Dot(normal);
 					Vector2 vParallel = vel - vPerp;
 
+					// Apply friction damping to the parallel component.
 					if (vParallel.Length() > 10.0f)
 					{
 						float dampFactor = Math.Max(0.0f, 1.0f - frictionCoeff * (float)delta * 60.0f);
