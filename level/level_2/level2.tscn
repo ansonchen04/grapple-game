@@ -14,7 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://f1a2b3c4d5e6" path="res://level/common/Flag.tscn" id="10_u681c"]
 [ext_resource type="PackedScene" uid="uid://cwlbwh5jpabhl" path="res://menu/PauseMenu.tscn" id="11_pause"]
 [ext_resource type="Texture2D" uid="uid://bo4kg6xdqfeml" path="res://sprites/exit_sign.jpg" id="12_c4t85"]
-[ext_resource type="Texture2D" uid="uid://bhe0c0m2hvq28" path="res://sprites/reactor.png" id="13_reactor"]
+[ext_resource type="Texture2D" uid="uid://0y6r2u0gtmd7" path="res://sprites/black.png" id="15_cam7r"]
 [ext_resource type="AudioStream" uid="uid://dkyej7o8yko5g" path="res://music/level.wav" id="15_x28xn"]
 
 [node name="Level4" type="Node2D" unique_id=1003218659]
@@ -125,7 +125,7 @@ color = Color(0, 0, 0, 1)
 [node name="BackgroundSprite" type="Sprite2D" parent="BackgroundLayer" unique_id=2000000013]
 position = Vector2(807.00006, 774)
 scale = Vector2(0.77922463, 0.7792245)
-texture = ExtResource("13_reactor")
+texture = ExtResource("15_cam7r")
 
 [node name="Music" type="AudioStreamPlayer" parent="." unique_id=1568443543]
 stream = ExtResource("15_x28xn")

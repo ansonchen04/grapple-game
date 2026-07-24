@@ -16,8 +16,8 @@
 [ext_resource type="PackedScene" uid="uid://cagn6rblc6286" path="res://level/level_1/Lvl1SmallPlatform.tscn" id="12_jw77s"]
 [ext_resource type="PackedScene" uid="uid://cwlbwh5jpabhl" path="res://menu/PauseMenu.tscn" id="13_pause"]
 [ext_resource type="Texture2D" uid="uid://bo4kg6xdqfeml" path="res://sprites/exit_sign.jpg" id="14_bg8f3"]
-[ext_resource type="Texture2D" uid="uid://bhe0c0m2hvq28" path="res://sprites/reactor.png" id="15_reactor"]
 [ext_resource type="AudioStream" uid="uid://dkyej7o8yko5g" path="res://music/level.wav" id="17_r3fym"]
+[ext_resource type="Texture2D" uid="uid://0y6r2u0gtmd7" path="res://sprites/black.png" id="17_wa2v1"]
 
 [node name="Level3" type="Node2D" unique_id=212584331]
 script = ExtResource("1_wa2v1")
@@ -452,7 +452,7 @@ color = Color(0, 0, 0, 1)
 [node name="BackgroundSprite" type="Sprite2D" parent="BackgroundLayer" unique_id=2000000013]
 position = Vector2(807.00006, 774)
 scale = Vector2(0.77922463, 0.7792245)
-texture = ExtResource("15_reactor")
+texture = ExtResource("17_wa2v1")
 
 [node name="Music" type="AudioStreamPlayer" parent="." unique_id=347507871]
 stream = ExtResource("17_r3fym")

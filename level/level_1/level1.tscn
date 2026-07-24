@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://checkpoint123" path="res://level/common/Checkpoint.tscn" id="9_checkpoint"]
 [ext_resource type="Texture2D" uid="uid://bo4kg6xdqfeml" path="res://sprites/exit_sign.jpg" id="10_hjicb"]
 [ext_resource type="PackedScene" uid="uid://cwlbwh5jpabhl" path="res://menu/PauseMenu.tscn" id="10_pause"]
-[ext_resource type="Texture2D" uid="uid://bhe0c0m2hvq28" path="res://sprites/reactor.png" id="13_h4geu"]
+[ext_resource type="Texture2D" uid="uid://0y6r2u0gtmd7" path="res://sprites/black.png" id="13_h4geu"]
 [ext_resource type="AudioStream" uid="uid://dkyej7o8yko5g" path="res://music/level.wav" id="13_rovgo"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ldy2b"]
