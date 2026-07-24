@@ -35,6 +35,6 @@ I decided to run my own local LLM for a few reasons:
 - It struggled more with very abstract or open-ended problems. Getting the Verlet rope simulation stable took significantly longer than a well-scoped bug fix would have. In situations where it needed to iteratively try things until it actually worked, it seemed to struggle a lot more, since it's a lot more open-ended.
 - Aider commits after every change, which made it easy to roll back anything I didn't like. Occasionally, though, this rapid commit/read cycle exposed real git issues on my end — a few times I had to clear out corrupted pack files and re-fetch from origin to get the repo healthy again.
 
-## Game Dev Notes (brief)
+## Game Dev Notes
 
 - Rope/swing physics: the visual rope uses Verlet integration for the sag/flex you actually see, but the player's swing motion is governed separately by a unidirectional, critically-damped spring-damper constraint with some slack tolerance — the two systems are deliberately decoupled so the visual rope doesn't have to double as the actual gameplay constraint. I found this was the most fun to play, so that's why it's like this.
