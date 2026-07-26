@@ -121,3 +121,6 @@ position = Vector2(-557, 27)
 
 [node name="StaticPlatform5" parent="." unique_id=835452145 instance=ExtResource("1_18mqm")]
 position = Vector2(-906, 31)
+
+[node name="StaticPlatform6" parent="." unique_id=436462571 instance=ExtResource("1_18mqm")]
+position = Vector2(-481, -408)
