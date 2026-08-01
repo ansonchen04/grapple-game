@@ -1,49 +1,52 @@
-[gd_scene load_steps=3 format=3 uid="uid://e5f6a7b8c9d0"]
+[gd_scene format=3 uid="uid://e5f6a7b8dad0"]
 
-[ext_resource type="Script" path="res://menu/LevelComplete.cs" id="1_script"]
-[ext_resource type="AudioStream" path="res://music/victory.wav" id="2_victory_music"]
+[ext_resource type="Script" uid="uid://dbyixd2s06pfc" path="res://menu/LevelComplete.cs" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://batiwomrihoee" path="res://Game Victory Page Backdrop.png" id="2_b7m73"]
+[ext_resource type="AudioStream" uid="uid://j3kml6dh3sif" path="res://music/victory.wav" id="2_victory_music"]
 
-[node name="LevelComplete" type="Control"]
+[node name="LevelComplete" type="Control" unique_id=125539837]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("1_script")
 
-[node name="Background" type="ColorRect" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-color = Color(0.1, 0.1, 0.12, 1)
+[node name="Background" type="Sprite2D" parent="." unique_id=786672077]
+texture = ExtResource("2_b7m73")
+centered = false
 
-[node name="MenuContainer" type="VBoxContainer" parent="."]
-layout_mode = 2
-anchors_preset = 8
-anchor_top = 0.5
+[node name="MenuContainer" type="VBoxContainer" parent="." unique_id=1018191245]
+layout_mode = 0
 anchor_left = 0.5
-anchor_bottom = 0.5
+anchor_top = 0.5
 anchor_right = 0.5
+anchor_bottom = 0.5
 offset_left = -150.0
 offset_top = -100.0
 offset_right = 150.0
 offset_bottom = 100.0
 alignment = 2
 
-[node name="Title" type="Label" parent="MenuContainer"]
+[node name="Title" type="Label" parent="MenuContainer" unique_id=198490270]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
 text = "Level Complete!"
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 48
 
-[node name="NextLevelButton" type="Button" parent="MenuContainer"]
+[node name="NextLevelButton" type="Button" parent="MenuContainer" unique_id=2131288046]
 custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
 text = "Next Level"
 
-[node name="ReplayButton" type="Button" parent="MenuContainer"]
+[node name="ReplayButton" type="Button" parent="MenuContainer" unique_id=1413421120]
 custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
 text = "Replay"
 
-[node name="MenuButton" type="Button" parent="MenuContainer"]
+[node name="MenuButton" type="Button" parent="MenuContainer" unique_id=447741675]
 custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
 text = "Main Menu"
 
-[node name="VictoryMusic" type="AudioStreamPlayer" parent="."]
+[node name="VictoryMusic" type="AudioStreamPlayer" parent="." unique_id=730168130]
 stream = ExtResource("2_victory_music")

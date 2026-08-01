@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://checkpoint123" path="res://level/common/Checkpoint.tscn" id="9_checkpoint"]
 [ext_resource type="Texture2D" uid="uid://bo4kg6xdqfeml" path="res://sprites/exit_sign.jpg" id="10_hjicb"]
 [ext_resource type="PackedScene" uid="uid://cwlbwh5jpabhl" path="res://menu/PauseMenu.tscn" id="10_pause"]
-[ext_resource type="Texture2D" uid="uid://0y6r2u0gtmd7" path="res://sprites/black.png" id="13_h4geu"]
+[ext_resource type="Texture2D" uid="uid://gpbrvr1d323h" path="res://Level 1 backdrop.png" id="13_50kxv"]
 [ext_resource type="AudioStream" uid="uid://dkyej7o8yko5g" path="res://music/level.wav" id="13_rovgo"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ldy2b"]
@@ -98,9 +98,9 @@ layer = -1
 script = ExtResource("1_bg_scaler")
 
 [node name="BackgroundSprite" type="Sprite2D" parent="BackgroundLayer" unique_id=2000000013]
-position = Vector2(1288.4365, 673.5938)
-scale = Vector2(1.671286, 1.5495515)
-texture = ExtResource("13_h4geu")
+position = Vector2(729.0753, 578.88666)
+scale = Vector2(1.1119248, 1.3127836)
+texture = ExtResource("13_50kxv")
 
 [node name="Label" type="Label" parent="." unique_id=1602539779]
 offset_left = 264.0
