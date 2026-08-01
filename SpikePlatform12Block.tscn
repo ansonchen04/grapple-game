@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://st1mh8g7hm34"]
+
+[ext_resource type="PackedScene" uid="uid://behe5gd0wwyu5" path="res://level/common/SpikePlatform.tscn" id="1_qgpym"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_se6tp"]
+size = Vector2(346.25, 3.1750002)
+
+[node name="StaticBody2D" type="StaticBody2D" unique_id=547219234]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="." unique_id=1166342519]
+position = Vector2(0.5000305, -0.24999833)
+scale = Vector2(20, 20)
+shape = SubResource("RectangleShape2D_se6tp")
+
+[node name="SpikePlatform" parent="." unique_id=837018305 instance=ExtResource("1_qgpym")]
+position = Vector2(300, 0)
+
+[node name="SpikePlatform2" parent="." unique_id=685250595 instance=ExtResource("1_qgpym")]
+position = Vector2(877, 0)
+
+[node name="SpikePlatform3" parent="." unique_id=63759420 instance=ExtResource("1_qgpym")]
+position = Vector2(1454, 0)
+
+[node name="SpikePlatform4" parent="." unique_id=264770376 instance=ExtResource("1_qgpym")]
+position = Vector2(2031, 0)
+
+[node name="SpikePlatform5" parent="." unique_id=1891139524 instance=ExtResource("1_qgpym")]
+position = Vector2(2608, 0)
+
+[node name="SpikePlatform6" parent="." unique_id=1235111154 instance=ExtResource("1_qgpym")]
+position = Vector2(3185, 0)
+
+[node name="SpikePlatform7" parent="." unique_id=1892823817 instance=ExtResource("1_qgpym")]
+position = Vector2(-3162, 0)
+
+[node name="SpikePlatform8" parent="." unique_id=1892209028 instance=ExtResource("1_qgpym")]
+position = Vector2(-2585, 0)
+
+[node name="SpikePlatform9" parent="." unique_id=1647955631 instance=ExtResource("1_qgpym")]
+position = Vector2(-2008, 0)
+
+[node name="SpikePlatform10" parent="." unique_id=1000129756 instance=ExtResource("1_qgpym")]
+position = Vector2(-1431, 0)
+
+[node name="SpikePlatform11" parent="." unique_id=2031906983 instance=ExtResource("1_qgpym")]
+position = Vector2(-854, 0)
+
+[node name="SpikePlatform12" parent="." unique_id=1867985121 instance=ExtResource("1_qgpym")]
+position = Vector2(-277, 0)

@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://ccl1mwmvvwaat"]
+
+[ext_resource type="PackedScene" uid="uid://behe5gd0wwyu5" path="res://level/common/SpikePlatform.tscn" id="1_fog0g"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_se6tp"]
+size = Vector2(4618, 63)
+
+[node name="StaticBody2D" type="StaticBody2D" unique_id=943247294]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=930173158]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_se6tp")
+
+[node name="SpikePlatform" parent="." unique_id=837018305 instance=ExtResource("1_fog0g")]
+position = Vector2(300, 0)
+
+[node name="SpikePlatform2" parent="." unique_id=1080445286 instance=ExtResource("1_fog0g")]
+position = Vector2(877, 0)
+
+[node name="SpikePlatform3" parent="." unique_id=24023188 instance=ExtResource("1_fog0g")]
+position = Vector2(1454, 0)
+
+[node name="SpikePlatform4" parent="." unique_id=40340199 instance=ExtResource("1_fog0g")]
+position = Vector2(2031, 0)
+
+[node name="SpikePlatform5" parent="." unique_id=1990436678 instance=ExtResource("1_fog0g")]
+position = Vector2(-2009, 0)
+
+[node name="SpikePlatform6" parent="." unique_id=533024012 instance=ExtResource("1_fog0g")]
+position = Vector2(-1432, 0)
+
+[node name="SpikePlatform7" parent="." unique_id=588222244 instance=ExtResource("1_fog0g")]
+position = Vector2(-855, 0)
+
+[node name="SpikePlatform8" parent="." unique_id=836509200 instance=ExtResource("1_fog0g")]
+position = Vector2(-278, 0)

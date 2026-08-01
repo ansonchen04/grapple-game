@@ -1,14 +1,11 @@
 [gd_scene format=3 uid="uid://behljti4s2ic1"]
 
-[sub_resource type="ConcavePolygonShape2D" id="ConcavePolygonShape2D_dplat"]
-points = PackedVector2Array(0, -64, -256, -64, -256, 64, 0, 128, 256, 64, 256, -64)
-
-[node name="Lvl3DPlatform" type="StaticBody2D"]
+[node name="Lvl3DPlatform" type="StaticBody2D" unique_id=1930295148]
 collision_mask = 5
 
-[node name="Visual" type="Polygon2D" parent="."]
+[node name="Visual" type="Polygon2D" parent="." unique_id=1127928137]
 color = Color(1, 0.5, 0, 1)
 polygon = PackedVector2Array(0, -64, -256, -64, -256, 64, 0, 128, 256, 64, 256, -64)
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1809984623]
 polygon = PackedVector2Array(0, -64, -256, -64, -256, 64, 0, 128, 256, 64, 256, -64)

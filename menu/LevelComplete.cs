@@ -17,6 +17,8 @@ public partial class LevelComplete : Control
 
 		victoryMusic = GetNode<AudioStreamPlayer>("VictoryMusic");
 		victoryMusic.Play();
+		victoryMusic.Finished += () => victoryMusic.Play();
+
 
 		// Determine if there is a next level
 		string currentLevel = player.CurrentLevelPath;

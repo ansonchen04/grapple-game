@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://rbp1vtccb70g"]
+
+[ext_resource type="PackedScene" uid="uid://cuscicrw48iu0" path="res://SpikePlatform4Block.tscn" id="1_mf8rn"]
+[ext_resource type="PackedScene" uid="uid://behe5gd0wwyu5" path="res://level/common/SpikePlatform.tscn" id="2_uqg76"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_se6tp"]
+size = Vector2(43.3125, 64)
+
+[node name="StaticBody2D" type="StaticBody2D" unique_id=474207197]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=159596151]
+position = Vector2(-1.4999084, 0)
+scale = Vector2(80, 1)
+shape = SubResource("RectangleShape2D_se6tp")
+
+[node name="StaticBody2D" parent="." unique_id=1204041187 instance=ExtResource("1_mf8rn")]
+position = Vector2(-579, 0)
+
+[node name="SpikePlatform" parent="." unique_id=837018305 instance=ExtResource("2_uqg76")]
+position = Vector2(876, 0)
+
+[node name="SpikePlatform2" parent="." unique_id=1776623789 instance=ExtResource("2_uqg76")]
+position = Vector2(1453, 0)
